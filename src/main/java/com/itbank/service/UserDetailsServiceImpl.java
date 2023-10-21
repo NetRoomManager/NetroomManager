@@ -24,15 +24,17 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     private UserRepository userRepository;
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        log.info(username + "님의 정보를 불러옵니다");
-        com.itbank.model.User customUser= userRepository.findByUsername(username);
-        if(customUser == null) throw new UsernameNotFoundException(username + "님의 정보를 찾을 수 없습니다");
+
+        System.out.println(username + "님의 정보를 불러옵니다");
+
+        com.itbank.model.User customUser= userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(username + "님의 정보를 찾을 수 없습니다"));
 
         return new User(customUser.getUsername(), customUser.getPassword(), getAuthorities(customUser));
     }
 
     private static Collection<? extends GrantedAuthority> getAuthorities(com.itbank.model.User customUser) {
-        log.info(customUser.getUsername() + "님의 권한을 불러옵니다");
+        System.out.println(customUser.getUsername() + "님의 권한을 불러옵니다");
         return customUser.getUserRoles().stream().map(role -> new SimpleGrantedAuthority(role.getRole().getName())).collect(Collectors.toList());
     }
 }

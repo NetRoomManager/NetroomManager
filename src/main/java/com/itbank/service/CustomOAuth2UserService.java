@@ -4,6 +4,7 @@ import com.itbank.config.UserPrincipal;
 import com.itbank.model.User;
 import com.itbank.repository.RoleRepository;
 import com.itbank.repository.UserRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 
 @Service
+@Slf4j
 public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     @Autowired
@@ -24,6 +26,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+        System.out.println("loadUser!!!!!!!!!!!!");
 
         OAuth2User oAuthUser = super.loadUser(userRequest);
 
@@ -33,11 +36,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         // 소셜 or 일반 유저를 User객체에 저장해서 불러옴
         User user = findOrCreate(attributes);
 
+        log.info(attributes.toString());
+
         return UserPrincipal.create(user, attributes);
     }
 
+    
     private User findOrCreate(Map<String, Object> attributes) {
-
         return null;
     }
 

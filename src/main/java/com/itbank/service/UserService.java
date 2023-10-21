@@ -11,6 +11,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.Date;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -32,14 +33,11 @@ public class UserService {
         System.out.println("유저를 생성합니다...");
 
         // USER 권한 찾기 또는 생성
-        Role role = roleRepository.findByName("ROLE_USER");
-
-        if(role == null){
-            role = new Role();
-            role.setName("ROLE_USER");
-            // Role 정보 먼저 저장
-            roleRepository.save(role);
-        }
+        Role role = roleRepository.findByName("ROLE_USER").orElseGet(() -> {
+            Role newRole = new Role();
+            newRole.setName("ROLE_USER");
+            return roleRepository.save(newRole);
+        });
 
         // User 객체 생성
         User user = new User();
