@@ -9,12 +9,43 @@
 			<param name="ConversionPattern" value="%-5p: %c - %m%n" />
 		</layout>
 	</appender>
-	
+
 	<!-- Application Loggers -->
 	<logger name="com.itbank.controller">
 		<level value="info" />
 	</logger>
-	
+
+	<!-- Application Loggers -->
+	<logger name="com.itbank.service">
+		<level value="info" />
+	</logger>
+
+
+	<!-- Application Loggers -->
+	<logger name="com.itbank.config">
+		<level value="info" />
+	</logger>
+
+
+	<!-- Application Loggers -->
+	<logger name="com.itbank.model">
+		<level value="info" />
+	</logger>
+
+
+	<!-- Application Loggers -->
+	<logger name="com.itbank.repository">
+		<level value="info" />
+	</logger>
+
+
+	<!-- Application Loggers -->
+	<logger name="com.itbank.handler">
+		<level value="info" />
+	</logger>
+
+
+
 	<!-- 3rdparty Loggers -->
 	<logger name="org.springframework.core">
 		<level value="info" />

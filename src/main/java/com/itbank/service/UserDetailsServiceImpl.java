@@ -3,6 +3,7 @@ package com.itbank.service;
 import com.itbank.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
@@ -29,6 +30,10 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         com.itbank.model.User customUser= userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username + "님의 정보를 찾을 수 없습니다"));
+
+        if (customUser.getDropOutUser() != null) {
+            throw new AuthenticationServiceException("탈퇴된 계정입니다");
+        }
 
         return new User(customUser.getUsername(), customUser.getPassword(), getAuthorities(customUser));
     }

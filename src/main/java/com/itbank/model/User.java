@@ -26,33 +26,21 @@ public class User {
     @Column(nullable = false)
     private String mobile;
 
-    @Column(nullable = false)
-    private String name;
-
     @Column(nullable = false, unique = true)
     private String email;
-
-    @CreationTimestamp
-    private Date loginAt;
-
-    @CreationTimestamp
-    private Date logoutAt;
-
-    @CreationTimestamp
-    private Date createdAt;
-
-    @CreationTimestamp
-    private Date updateAt;
 
     @Column(nullable = false)
     private Date birth;
 
     @Column(nullable = false)
-    private Date remainTime;
+    private String name;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private Set<UserRole> userRoles;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private Set<SocialLogin> socialLogins;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private DropOutUser dropOutUser;
 }

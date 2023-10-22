@@ -65,7 +65,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public ClientRegistrationRepository clientRegistrationRepository() {
         List<ClientRegistration> registrations = new ArrayList<>();
-
         // Google의 경우:
         registrations.add(ClientRegistration.withRegistrationId("google")
                         .clientId("439669195010-hi0k3aip9pgqc2amkjdbre403c198asi.apps.googleusercontent.com")
@@ -79,20 +78,36 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                         .clientName("Google")
                         .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                         .scope("openid", "profile", "email")
-                // Scopes are the permissions that are being requested from the user for his/her profile information.
-                // For example, if you want to show users' profile pictures, then you need to request a 'profile' scope.
-                // If you want to access users' email addresses and basic profile info (first name, last name),
-                // then request an 'email' scope.
-                // If your application needs access to other parts of the user's account or data (like Google Drive or Calendar),
-                // then request those scopes as well.
-                //
-                // Note: The exact way scopes are requested and how they're used depends on the provider.
-                //
-                //
-                //.userInfoAuthenticationMethod(AuthenticationMethod.HEADER)
-//                .userNameAttributeName(StandardClaimNames.SUB)
-                .build()
+                        .build()
         );
+        // 네이버
+        registrations.add(ClientRegistration.withRegistrationId("naver")
+                .clientId("WWwFXLwl3tyqfT06xnMN")
+                .clientSecret("KLHosuYDrJ")
+                .tokenUri("https://nid.naver.com/oauth2.0/token")
+                .authorizationUri("https://nid.naver.com/oauth2.0/authorize")
+                .redirectUri("http://localhost:8080/login/oauth2/code/naver")
+                .userInfoUri("https://openapi.naver.com/v1/nid/me")
+                .userNameAttributeName("response")
+//                .jwkSetUri("")
+                .clientName("Naver")
+                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+                .scope("profile", "email")
+                .build());
+        // 카카오
+        registrations.add(ClientRegistration.withRegistrationId("kakao")
+                .clientId("WWwFXLwl3tyqfT06xnMN")
+                .clientSecret("KLHosuYDrJ")
+                .tokenUri("https://kauth.kakao.com/oauth/token")
+                .authorizationUri("https://kauth.kakao.com/oauth/authorize")
+                .redirectUri("http://localhost:8080/login/oauth2/code/kakao")
+                .userInfoUri("https://kapi.kakao.com/v2/user/me")
+                .userNameAttributeName("id")
+//                .jwkSetUri("")
+                .clientName("Kakao")
+                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+                .scope("profile", "email")
+                .build());
 
         return new InMemoryClientRegistrationRepository(registrations);
     }
