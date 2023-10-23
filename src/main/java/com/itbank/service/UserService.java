@@ -33,7 +33,7 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    public void createUsers() {
+    public void createUsers(User paramUser) {
 
         log.info("유저를 생성합니다");
 
@@ -48,21 +48,22 @@ public class UserService {
 
             // User 객체 생성
             User user = new User();
-            user.setUsername("username");
-            user.setPassword(passwordEncoder.encode("password"));
-            user.setMobile("mobileNumber");
-            user.setName("name");
-            user.setEmail("email@example.com");
-            user.setBirth(new Date(System.currentTimeMillis()));
-            userRepository.save(user);
+            user.setUsername(paramUser.getUsername());
+            user.setPassword(passwordEncoder.encode(paramUser.getPassword()));
+            user.setMobile(paramUser.getMobile());
+            user.setName(paramUser.getName());
+            user.setEmail(paramUser.getEmail());
+            user.setBirth(paramUser.getBirth());
+            User savedUser = userRepository.save(user);
 
             // User와 Role 정보가 담긴 객체 생성
             UserRole userRole = new UserRole();
             userRole.setRole(role);
             userRole.setUser(user);
             userRoleRepository.save(userRole);
+
         }
-        // 중복 가입 처
+        // 중복 가입 처리
         catch (DataIntegrityViolationException e) {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "이미 가입된 정보입니다",  e);

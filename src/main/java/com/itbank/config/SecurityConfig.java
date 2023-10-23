@@ -1,5 +1,6 @@
 package com.itbank.config;
 
+import com.itbank.handler.CustomAuthenticationFailureHandler;
 import com.itbank.handler.OAuth2LoginSuccessHandler;
 import com.itbank.service.CustomOAuth2UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,16 +39,37 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 
     @Autowired
+    private CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable();
+
         http.authorizeRequests()
-                .antMatchers("/","/test","/aaa").permitAll()
+                .antMatchers("/", "/auth/login", "/auth/join", "/img/**").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("/user/**").hasAnyRole("USER", "ADMIN")
                 .anyRequest().authenticated()
-                .and().formLogin()
+                .and()
+
+                .formLogin().disable()
+                .logout().disable()
+
+                .formLogin()
+                .loginPage("/auth/login")
+                .failureHandler(customAuthenticationFailureHandler)
+                .defaultSuccessUrl("/")
+                .loginProcessingUrl("/auth/login")
+                .and()
+                .logout()
+                .logoutUrl("/auth/logout")
+                .logoutSuccessUrl("/")
+                .invalidateHttpSession(true)
+                .deleteCookies("JSESSIONID")
+//                .failureUrl("/auth/login?error=true")
                 .and().oauth2Login()
                 .successHandler(oAuth2LoginSuccessHandler)
                 .userInfoEndpoint()
@@ -67,18 +89,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         List<ClientRegistration> registrations = new ArrayList<>();
         // Google의 경우:
         registrations.add(ClientRegistration.withRegistrationId("google")
-                        .clientId("439669195010-hi0k3aip9pgqc2amkjdbre403c198asi.apps.googleusercontent.com")
-                        .clientSecret("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")
-                        .tokenUri("https://oauth2.googleapis.com/token")
-                        .authorizationUri("https://accounts.google.com/o/oauth2/auth")
-                        .redirectUri("http://localhost:8080/login/oauth2/code/google")
-                        .userInfoUri("https://www.googleapis.com/oauth2/v3/userinfo")
-                        .userNameAttributeName(IdTokenClaimNames.SUB)
-                        .jwkSetUri("https://www.googleapis.com/oauth2/v3/certs")
-                        .clientName("Google")
-                        .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                        .scope("openid", "profile", "email")
-                        .build()
+                .clientId("439669195010-hi0k3aip9pgqc2amkjdbre403c198asi.apps.googleusercontent.com")
+                .clientSecret("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")
+                .tokenUri("https://oauth2.googleapis.com/token")
+                .authorizationUri("https://accounts.google.com/o/oauth2/auth")
+                .redirectUri("http://localhost:8080/login/oauth2/code/google")
+                .userInfoUri("https://www.googleapis.com/oauth2/v3/userinfo")
+                .userNameAttributeName(IdTokenClaimNames.SUB)
+                .jwkSetUri("https://www.googleapis.com/oauth2/v3/certs")
+                .clientName("Google")
+                .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
+                .scope("openid", "profile", "email")
+                .build()
         );
         // 네이버
         registrations.add(ClientRegistration.withRegistrationId("naver")
@@ -96,21 +118,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .build());
         // 카카오
         registrations.add(ClientRegistration.withRegistrationId("kakao")
-                .clientId("WWwFXLwl3tyqfT06xnMN")
-                .clientSecret("KLHosuYDrJ")
+                .clientId("a051bc66b61e4ddcc2d1df8142573cdd")
+//                .clientSecret("RC9zsO3ahACbZ7b17ChJFB3VNStFtjrC")
                 .tokenUri("https://kauth.kakao.com/oauth/token")
                 .authorizationUri("https://kauth.kakao.com/oauth/authorize")
                 .redirectUri("http://localhost:8080/login/oauth2/code/kakao")
                 .userInfoUri("https://kapi.kakao.com/v2/user/me")
-                .userNameAttributeName("id")
+                .userNameAttributeName("kakao_account")
 //                .jwkSetUri("")
                 .clientName("Kakao")
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                .scope("profile", "email")
+                .scope("account_email")
                 .build());
 
         return new InMemoryClientRegistrationRepository(registrations);
     }
+
 
     @Bean
     public OAuth2AuthorizedClientService authorizedClientService(ClientRegistrationRepository clientRegistrationRepository) {

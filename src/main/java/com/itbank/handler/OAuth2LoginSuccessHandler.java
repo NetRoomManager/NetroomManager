@@ -148,7 +148,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
                 return socialLoginRepository.save(newSocialUser);
             });
 
-            response.sendRedirect("/");
+            response.sendRedirect("/auth/loginSuccess");
         }
     }
 }

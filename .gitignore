@@ -46,3 +46,4 @@ build/
 ### DB정보 ###
 src/main/webapp/WEB-INF/spring/root-context.xml
 /target/jpa-1.0.0-BUILD-SNAPSHOT/WEB-INF/spring/root-context.xml
+/src/main/java/com/itbank/config/SecurityConfig.java

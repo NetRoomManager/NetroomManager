@@ -24,28 +24,4 @@ public class HomeController {
 		log.info("home");
 		return "home";
 	}
-	
-	@GetMapping("/test")
-	public String test() {
-		System.out.println("테스트");
-		userService.createUsers();
-		return "ㅎㅇ";
-	}
-	@GetMapping("/test2")
-	public String test2() {
-		Optional<SocialLogin> optionalSocialLogin = socialLoginRepository.findByProviderId("113139697013462458250");
-		if(optionalSocialLogin.isPresent()) {
-			System.out.println("성공");
-			System.out.println(optionalSocialLogin.get().getProviderId());
-		} else {
-			System.out.println("실패");
-		}
-		return "/login";
-	}
-
-	@GetMapping("/success")
-	public String success() {
-		return "로그인 성공";
-	}
-	
 }

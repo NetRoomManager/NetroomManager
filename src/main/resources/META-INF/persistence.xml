@@ -6,6 +6,11 @@
 		<class>com.itbank.model.SocialLogin</class>
 		<class>com.itbank.model.Role</class>
 		<class>com.itbank.model.DropOutUser</class>
+		<class>com.itbank.model.OrderDetail</class>
+		<class>com.itbank.model.OrderList</class>
+		<class>com.itbank.model.ProductCategory</class>
+		<class>com.itbank.model.Product</class>
+
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.Oracle12cDialect" />
 			<property name="hibernate.show_sql" value="true" />
