@@ -76,15 +76,12 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
             String providerId;
             if("naver".equals(provider)){
                 // 네이버는 고유번호 key가 id
-                providerId = oauth2User.getAttribute("id");
+                providerId = provider + "_" + oauth2User.getAttribute("id");
             }
             else if("google".equals(provider)){
                 // 구글 고유번호 key : sub
-                providerId = oauth2User.getAttribute("sub");
+                providerId = provider + "_" + oauth2User.getAttribute("sub");
             }
-         /*   else if("kakao".equals(provider)){
-                // 카카오 고유번호 key :
-            }*/
             else {
                 providerId = null;
                 throw new ProviderException("알 수 없는 서비스 입니다");

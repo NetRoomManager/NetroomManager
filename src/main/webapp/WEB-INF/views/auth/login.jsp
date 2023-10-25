@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" type="text/css" href="/css/style.css" />
     <link
+    <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
             rel="stylesheet"
     />
@@ -91,7 +92,7 @@
         </div>
         <div class="mt-3 mb-3">
             <h3>이용권 구매</h3>
-            <a href="buyTicket.jsp">
+            <a href="../auth/buyTicket.html">
                 <button
                         type="button"
                         class="btn btn-primary w-100 p-3 mt-3"
