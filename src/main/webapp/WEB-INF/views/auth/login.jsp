@@ -92,7 +92,7 @@
         </div>
         <div class="mt-3 mb-3">
             <h3>이용권 구매</h3>
-            <a href="../auth/buyTicket.html">
+            <a href="buyTicket.jsp">
                 <button
                         type="button"
                         class="btn btn-primary w-100 p-3 mt-3"

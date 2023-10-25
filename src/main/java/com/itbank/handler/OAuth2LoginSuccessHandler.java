@@ -82,7 +82,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
                 // 구글 고유번호 key : sub
                 providerId = provider + "_" + oauth2User.getAttribute("sub");
             }
-            else {
+             else {
                 providerId = null;
                 throw new ProviderException("알 수 없는 서비스 입니다");
             }

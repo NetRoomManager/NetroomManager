@@ -29,7 +29,8 @@ public class AuthController {
     private UserDetailsServiceImpl userDetailsService;
 
     @RequestMapping("/login")
-    public void login() {}
+    public void login() {
+    }
 
     @PostMapping("/join")
     public String join(User user, HttpServletRequest request) {
@@ -59,5 +60,6 @@ public class AuthController {
     public void loginSuccess() {
     }
 
-
+    @GetMapping("/buyTicket")
+    public void buyTicket() {}
 }
