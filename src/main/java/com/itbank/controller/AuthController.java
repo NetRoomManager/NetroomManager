@@ -59,5 +59,8 @@ public class AuthController {
     public void loginSuccess() {
     }
 
+    @GetMapping("/buyTicket")
+    public void buyTicket() {}
+
 
 }
