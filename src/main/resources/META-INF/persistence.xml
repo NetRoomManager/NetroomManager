@@ -10,6 +10,10 @@
 		<class>com.itbank.model.OrderList</class>
 		<class>com.itbank.model.ProductCategory</class>
 		<class>com.itbank.model.Product</class>
+		<class>com.itbank.model.PaymentMethod</class>
+		<class>com.itbank.model.Payment</class>
+		<class>com.itbank.model.Ticket</class>
+		<class>com.itbank.model.TicketDetail</class>
 
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.Oracle12cDialect" />

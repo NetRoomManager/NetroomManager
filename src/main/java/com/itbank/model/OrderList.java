@@ -13,16 +13,19 @@ public  class OrderList {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long orderId;
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User userId;
 
-    @Column(nullable = false)
-    private String orderMethod;
+    @OneToOne
+    @JoinColumn(name = "payment_id")
+    @MapsId
+    private Payment paymentId;
 
-    // null -> 상세주문 입력 후 가져옴
+    // 결제정보에서 가져옴
+    @Column(nullable = false)
     private Integer orderTotalPrice;
 }
 

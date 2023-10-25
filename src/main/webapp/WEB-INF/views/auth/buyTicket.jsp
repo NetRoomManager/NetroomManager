@@ -60,21 +60,21 @@
         </thead>
         <tbody>
         <tr>
-            <div class="form-group mb-2 d-flex" id="1">
+            <div class="form-group mb-2 d-flex">
                 <td>
-                    <input type="text" class="form-control " name="name" id="name_1" value="신짱구" readonly>
+                    <input type="text" class="form-control " name="name" value="신짱구" readonly>
                 </td>
                 <td>
-                    <input type="date" class="form-control " name="birth" id="birth_1" value="2003-03-04"
+                    <input type="date" class="form-control " name="birth" value="2003-03-04"
                            readonly>
                 </td>
                 <td>
-                    <input type="email" class="form-control " name="users_email" id="email_1"
+                    <input type="email" class="form-control " name="users_email"
                            value="march03@naver.com" readonly>
                 </td>
 
                 <td>
-                    <input type="button" class="btn btn-primary" value="선택하기" data-bs-toggle="offcanvas"
+                    <input id="0" name="userSelector" type="button" class="btn btn-primary" value="선택하기" data-bs-toggle="offcanvas"
                            data-bs-target="#ticket">
                 </td>
             </div>
@@ -94,10 +94,9 @@
                 </td>
 
                 <td>
-                    <input type="button" class="btn btn-primary" value="선택하기" readonly>
+                    <input id="1" name="userSelector" type="button" class="btn btn-primary" value="선택하기" readonly>
                 </td>
             </div>
-            </td>
         </tr>
         <tr>
             <div class="form-group mb-2 d-flex">
@@ -113,12 +112,11 @@
                                readonly>
                     </td>
                     <td>
-                        <input type="button" class="btn btn-primary" value="선택하기" readonly
+                        <input id="2" name="userSelector" type="button" class="btn btn-primary" value="선택하기" readonly
                                data-bs-toggle="modal" data-bs-target="#myModal">
                     </td>
                 </form>
             </div>
-            </td>
         </tr>
         </tbody>
     </table>

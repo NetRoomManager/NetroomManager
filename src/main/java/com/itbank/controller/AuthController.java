@@ -1,6 +1,8 @@
 package com.itbank.controller;
 
+import com.itbank.model.PaymentResponse;
 import com.itbank.model.User;
+import com.itbank.service.PaymentService;
 import com.itbank.service.UserDetailsServiceImpl;
 import com.itbank.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -10,9 +12,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -27,6 +27,9 @@ public class AuthController {
 
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
+
+    @Autowired
+    private PaymentService paymentService;
 
     @RequestMapping("/login")
     public void login() {
@@ -52,7 +55,6 @@ public class AuthController {
         HttpSession session = request.getSession(true);
         session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
 
-
         return "redirect:/";
     }
 
@@ -62,4 +64,16 @@ public class AuthController {
 
     @GetMapping("/buyTicket")
     public void buyTicket() {}
+
+    @PostMapping("/buyTicket")
+    @ResponseBody
+    public String buyTicket(@RequestBody PaymentResponse paymentResponse) throws IllegalAccessException {
+
+        if (paymentResponse.isSuccess()) {
+            paymentService.buyTicket(paymentResponse);
+        } else {
+            throw new IllegalAccessException("결제 실패");
+        }
+        return "success";
+    }
 }

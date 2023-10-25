@@ -1,11 +1,7 @@
-
-
-// 구매자 정보
-const user_email = 'noah3521@icloud.com'
-const username = '송근욱'
-
+// 아임포트 모듈 불러오기
 var IMP = window.IMP;
 
+// 랜덤문자열 대신 millisecound로 대체
 const today = new Date();
 const hours = today.getHours(); // 시
 const minutes = today.getMinutes();  // 분
@@ -13,18 +9,15 @@ const seconds = today.getSeconds();  // 초
 const milliseconds = today.getMilliseconds();
 const makeMerchantUid = `${hours}` + `${minutes}` + `${seconds}` + `${milliseconds}`;
 
-// 결제창 함수 넣어주기
+// 버튼 불러오기
 const kakaoButton = document.getElementById('kakaoBtn')
-kakaoButton.setAttribute('onclick', `pay('${user_email}', '${username}', 0)`)
-
 const tossButton = document.getElementById('tossBtn')
-tossButton.setAttribute('onclick', `pay('${user_email}', '${username}', 1)`)
-
 const inicisButton = document.getElementById(('inicisBtn'))
-inicisButton.setAttribute('onclick', `pay('${user_email}', '${username}', 2)`)
 
+// 서비스 목록
 pgList = ['kakaopay.TC0ONETIME', 'tosspay.tosstest', 'html5_inicis']
 
+// 결제하기
 function pay(useremail, username, payId) {
     // if (confirm("구매 하시겠습니까?")) { // 구매 클릭시 한번 더 확인하기
     // if (localStorage.getItem("access")) { // 회원만 결제 가능
@@ -44,26 +37,60 @@ function pay(useremail, username, payId) {
         // buyer_addr : '서울특별시 강남구 삼성동',
         // buyer_postcode : '123-456'
     }, async function (rsp) { // callback
-        if (rsp.success) { //결제 성공시
+        if (rsp.success) { // 결제 성공시
             console.log(rsp);
-            //결제 성공시 프로젝트 DB저장 요청
+            // 결제 성공시 프로젝트 DB저장 요청
 
-            if (response.status == 200) { // DB저장 성공시
-                alert('결제 완료!')
-                window.location.reload();
-            } else { // 결제완료 후 DB저장 실패시
-                alert(`error:[${response.status}]\n결제요청이 승인된 경우 관리자에게 문의바랍니다.`);
-                // DB저장 실패시 status에 따라 추가적인 작업 가능성
+            try {
+                const response = await fetch("/auth/buyTicket", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(rsp),
+                });
+                if (response.status === 200) { // DB저장 성공시
+                    alert('결제 완료!');
+                    window.location.reload();
+                } else { // 결제완료 후 DB저장 실패시
+                    alert(`error:[${response.status}]결제요청이 승인된 경우 관리자에게 문의바랍니다.`);
+                }
+            } catch (error) {
+                console.error("DB 저장 요청 중 오류가 발생했습니다:", error);
             }
-        } else if (rsp.success == false) { // 결제 실패시
+        } else { // 결제 실패시 (아임포트에서 받는 메시지)
             alert(rsp.error_msg)
         }
     });
-    // }
-    // else { // 비회원 결제 불가
-    //     alert('로그인이 필요합니다!')
-    // }
-    // } else { // 구매 확인 알림창 취소 클릭시 돌아가기
-    //     return false;
-    // }
+}
+
+const selectorList = document.querySelectorAll('input[name="userSelector"]');
+selectorList.forEach(btn => btn.onclick = () => { userLoad(btn.id) });
+
+
+function userLoad(id) {
+    const row = document.getElementById(id).parentNode.parentNode;  // 부모의 부모 불러오기
+    const tdList = row.querySelectorAll('td')
+    let name;
+    let birth;
+    let email;
+    for(let i = 0; i < tdList.length; i++){
+        const value = tdList[i].querySelector('input').value;
+        switch (i){
+            case 0:
+                name = value;
+                break;
+            case 1:
+                birth = value;
+                break;
+            case 2:
+                email = value;
+                break;
+        }
+    }
+
+    // 구매자 정보
+    kakaoButton.setAttribute('onclick', `pay('${email}', '${name}', 0)`)
+    tossButton.setAttribute('onclick', `pay('${email}', '${name}', 1)`)
+    inicisButton.setAttribute('onclick', `pay('${email}', '${name}', 2)`)
 }
