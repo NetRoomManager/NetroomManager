@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -59,18 +60,19 @@
         </tr>
         </thead>
         <tbody>
+        <c:forEach var="user" items="${list}">
         <tr>
             <div class="form-group mb-2 d-flex">
                 <td>
-                    <input type="text" class="form-control " name="name" value="신짱구" readonly>
+                    <input type="text" class="form-control " name="name" value="${user.name}" readonly>
                 </td>
                 <td>
-                    <input type="date" class="form-control " name="birth" value="2003-03-04"
+                    <input type="date" class="form-control " name="birth" value="${user.birth}"
                            readonly>
                 </td>
                 <td>
-                    <input type="email" class="form-control " name="users_email"
-                           value="march03@naver.com" readonly>
+                    <input type="email" class="form-control " name="email"
+                           value="${user.email}" readonly>
                 </td>
 
                 <td>
@@ -79,45 +81,12 @@
                 </td>
             </div>
         </tr>
-        <tr>
-            <div class="form-group mb-2 d-flex">
-                <td>
-                    <input type="text" class="form-control " name="name" id="name_4" value="홍길동" readonly>
-                </td>
-                <td>
-                    <input type="date" class="form-control " name="birth" id="birth_4" value="1999-04-12"
-                           readonly>
-                </td>
-                <td>
-                    <input type="email" class="form-control " name="users_email" id="email_4"
-                           value="hong321@naver.com" readonly>
-                </td>
-
-                <td>
-                    <input id="1" name="userSelector" type="button" class="btn btn-primary" value="선택하기" readonly>
-                </td>
-            </div>
-        </tr>
-        <tr>
-            <div class="form-group mb-2 d-flex">
-                <form>
-                    <td>
-                        <input type="text" class="form-control " id="name_31" value="김석국" readonly>
-                    </td>
-                    <td>
-                        <input type="date" class="form-control " id="birth_31" value="2007-12-03" readonly>
-                    </td>
-                    <td>
-                        <input type="email" class="form-control " id="email_31" value="phycho321@naver.com"
-                               readonly>
-                    </td>
-                    <td>
-                        <input id="2" name="userSelector" type="button" class="btn btn-primary" value="선택하기" readonly
-                               data-bs-toggle="modal" data-bs-target="#myModal">
-                    </td>
-                </form>
-            </div>
-        </tr>
+        </c:forEach>
+       <c:if test="${empty list}">
+           <tr>
+            <td><h3>유저가 존재하지 않습니다</h3></td>
+           </tr>
+       </c:if>
         </tbody>
     </table>
 </div>
@@ -131,8 +100,8 @@
         <button id="kakaoBtn" class="btn"><img class="img-fluid" src="/img/kakaopay.jpg" alt="New York" width="1100"
                                  height="500"></button>
         <button id="tossBtn" class="btn"><img class="img-fluid w-100" src="/img/tosspay.png" alt="New York"></button>
-        <button id="inicisBtn" class="btn"><img class="img-fluid" src="/img/naverpay.png" alt="New York" width="1100"
-                                 height="500"></button>
+        <button id="inicisBtn" class="btn"><img class="img-fluid" src="/img/KG_pay_button.png   " alt="New York" width="1100"
+                                                height="500"></button>
         <button class="btn btn-secondary " data-bs-dismiss="offcanvas" type="button">
             구매취소
         </button>

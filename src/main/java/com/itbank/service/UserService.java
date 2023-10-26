@@ -15,10 +15,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.sql.Date;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 @Slf4j
+// 일반 유저 생성, 삭제, 조회 등이 이루어 지는 클래스
 public class UserService {
 
     @Autowired
@@ -68,5 +70,14 @@ public class UserService {
             throw new ResponseStatusException(
                     HttpStatus.BAD_REQUEST, "이미 가입된 정보입니다",  e);
         }
+    }
+
+
+    public List<User> findAll() {
+        return userRepository.findAll();
+    }
+
+    public Optional<User> checkId(String username) {
+        return userRepository.findByUsername(username);
     }
 }

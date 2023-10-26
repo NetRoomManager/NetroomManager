@@ -49,6 +49,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private RoleRepository roleRepository;
 
     @Override
+    // 소셜유저 로그인, 회원가입 시 정보를 불러오는 메서드
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
         DefaultOAuth2UserService delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2user = delegate.loadUser(userRequest);
@@ -59,7 +60,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             // response로 감싸진 정보를 가져옴
             oAuth2user = processNaverOauth(oAuth2user);
 
-            // 탈퇴회원 조회하기 위해 가져옴 / naver_username1234 형식
+            // 탈퇴회원 조회하기 위해 가져옴 / username1234 형식
             String providerId = registrationId + "_" + (String)oAuth2user.getAttributes().get("id");
 
             // 탈퇴 검증 로직

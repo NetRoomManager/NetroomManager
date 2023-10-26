@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional
 @Slf4j
+// 이용권, 음식 구매를 위한 클래스
 public class PaymentService {
 
     @Autowired

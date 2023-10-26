@@ -16,12 +16,15 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @Controller
 @Slf4j
@@ -69,16 +72,25 @@ public class AuthController {
     }
 
     @GetMapping("/buyTicket")
-    public void buyTicket() {}
+    public ModelAndView buyTicket() {
+        ModelAndView mav = new ModelAndView("/auth/buyTicket");
+
+        List<User> list = userService.findAll();
+
+        mav.addObject("list", list);
+
+        return mav;
+    }
 
     @PostMapping("/buyTicket")
     @ResponseBody
-    public String buyTicket(@RequestBody PaymentResponse paymentResponse) throws UsernameNotFoundException {
+    public Map<String, Boolean> buyTicket(@RequestBody PaymentResponse paymentResponse) throws UsernameNotFoundException {
 
         paymentService.buyTicket(paymentResponse);
 
-
-        return "success";
+        Map<String, Boolean> result = new HashMap<>();
+        result.put("success", true);
+        return result;
     }
 
     @ExceptionHandler(UsernameNotFoundException.class)
@@ -89,6 +101,16 @@ public class AuthController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+    }
+
+    @PostMapping("/checkId")
+    @ResponseBody
+    public Map<String, Boolean> checkId(@RequestBody User user) {
+        // 받은 유저 아이디로 검색해서 중복이면 true 아니면 false
+        boolean duplicate = userService.checkId(user.getUsername()).isEmpty();
+        Map<String, Boolean> result = new HashMap<>();
+        result.put("duplicate", duplicate);
+        return result;
     }
 
 }

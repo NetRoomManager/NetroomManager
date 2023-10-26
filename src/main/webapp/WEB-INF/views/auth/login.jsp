@@ -36,7 +36,7 @@
                 <input
                         type="text"
                         class="form-control"
-                        id="username"
+                        id="login_username"
                         placeholder="Enter username"
                         name="username"
                         required
@@ -92,7 +92,7 @@
         </div>
         <div class="mt-3 mb-3">
             <h3>이용권 구매</h3>
-            <a href="buyTicket.jsp">
+            <a href="buyTicket">
                 <button
                         type="button"
                         class="btn btn-primary w-100 p-3 mt-3"
@@ -137,19 +137,14 @@
                                 <input
                                         type="text"
                                         class="form-control"
-                                        id="username"
+                                        id="join_username"
                                         placeholder="Enter username"
                                         name="username"
                                         required
                                 />
                                 <label for="username">아이디</label>
 
-                                <span class="text-danger"
-                                >유효하지 않은 아이디입니다.</span
-                                >
-                                <span class="text-primary"
-                                >사용가능한 아이디입니다.</span
-                                >
+                                <span id="check_msg"></span>
                             </div>
 
                             <div class="form-floating mt-3 mb-3">
@@ -197,6 +192,7 @@
                                         value="010"
                                         name="mobile"
                                         required
+                                        oninput="oninputPhone(this)"
                                 />
                                 <label for="mobile">전화번호</label>
                             </div>
@@ -255,6 +251,39 @@
             "width=800,height=650,left=500,top=200"
         );
     }
+
+    function oninputPhone(target) {
+        target.value = target.value
+            .replace(/[^0-9]/g, '')
+            .replace(/(^02.{0}|^01.{1}|[0-9]{3,4})([0-9]{3,4})([0-9]{4})/g, "$1-$2-$3");
+    }
+
+    document.getElementById('join_username').addEventListener('keyup', function() {
+        const username = document.getElementById('join_username').value;
+
+        fetch('/auth/checkId', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({username: username}),
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.duplicate) {
+                    document.getElementById('check_msg').classList.add("text-primary")
+                    document.getElementById('check_msg').classList.remove("text-danger")
+                    document.getElementById('check_msg').innerText = "유효한 아이디 입니다";
+                } else {
+                    document.getElementById('check_msg').classList.remove("text-primary")
+                    document.getElementById('check_msg').classList.add("text-dangerz")
+                    document.getElementById('check_msg').innerText = "중복된 아이디입니다.";
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    });
 </script>
 </body>
 </html>

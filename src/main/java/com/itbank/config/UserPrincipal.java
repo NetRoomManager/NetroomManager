@@ -11,6 +11,11 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * 일반유저랑 소셜유저 묶는 클래스
+ * User는 직접 구현한 Entity임
+ */
+
 public class UserPrincipal implements OAuth2User, UserDetails {
     private final User user;
     private final Map<String, Object> attributes;

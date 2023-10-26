@@ -49,10 +49,12 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
     private UserRepository userRepository;
 
     @Override
+    // 소셜유저 로그인, 회원가입 성공시 들어오는 핸들러
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
         System.out.println("성공 핸들러");
-        
+
+        // 유저 정보가 담겨있다면
         if (authentication.getPrincipal() instanceof OAuth2User) {
 
             // 인증된 유저의 상세정보가 담겨있음 / 서비스 이름, 유저 상세정보가 담겨있음

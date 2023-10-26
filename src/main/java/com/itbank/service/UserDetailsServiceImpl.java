@@ -17,6 +17,8 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
+// UserDetailsService는 시큐리티에서 관리하는 User를 제어하는 클래스
+// 이를 구현해서 User Entity를 제어하기 위해 만든 클래스
 public class UserDetailsServiceImpl implements UserDetailsService {
 
 

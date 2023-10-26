@@ -44,14 +44,23 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    // 스프링 시큐리티 설정
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
 
         http.authorizeRequests()
-                .antMatchers("/", "/auth/**", "/img/**", "/css/**", "/js/**").permitAll()
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/user/**").hasAnyRole("USER", "ADMIN")
+                .antMatchers("/", "/auth/**", "/img/**", "/css/**", "/js/**")
+                // 위 경로는 로그인 안해도 ㄱㄴ
+                .permitAll()
+
+                .antMatchers("/admin/**")
+                // ADMIN만 가능
+                .hasRole("ADMIN")
+
+                .antMatchers("/user/**")
+                // ADMIN, USER가능
+                .hasAnyRole("USER", "ADMIN")
                 .anyRequest().authenticated()
                 .and()
 
@@ -59,32 +68,44 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .logout().disable()
 
                 .formLogin()
+                // 로그인 페이지 지정
                 .loginPage("/auth/login")
+                // 실패시 핸들러
                 .failureHandler(customAuthenticationFailureHandler)
+                // 성공시 URL
                 .defaultSuccessUrl("/")
+                // 로그인 처리 담당할 주소
                 .loginProcessingUrl("/auth/login")
                 .and()
                 .logout()
+                // 로그아웃 URL
                 .logoutUrl("/auth/logout")
+                // 로그아웃 성공 URL
                 .logoutSuccessUrl("/")
+                // 로그아웃시 세션 날림
                 .invalidateHttpSession(true)
+                // 쿠키도 날림
                 .deleteCookies("JSESSIONID")
 //                .failureUrl("/auth/login?error=true")
+                // 소셜 활성화
                 .and().oauth2Login()
+                // 성공 핸들러
                 .successHandler(oAuth2LoginSuccessHandler)
                 .userInfoEndpoint()
+                // 서비스 클래스 지정
                 .userService(customOAuth2UserService);
     }
 
     @Override
+    // 유저 비밀번호 암호화
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userDetailsService).passwordEncoder(passwordEncoder);
-        // 여기서 passwordEncoder를 사용하여 비밀번호를 인코딩합니다. 스프링 시큐리티에서 제공하는 BCryptPasswordEncoder를 사용하였습니다.
     }
 
 
 
     @Bean
+    // 소셜 API 정보
     public ClientRegistrationRepository clientRegistrationRepository() {
         List<ClientRegistration> registrations = new ArrayList<>();
         // Google의 경우:
@@ -135,6 +156,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
 
+    // 저장한 정보를 메모리에 저장
     @Bean
     public OAuth2AuthorizedClientService authorizedClientService(ClientRegistrationRepository clientRegistrationRepository) {
         return new InMemoryOAuth2AuthorizedClientService(clientRegistrationRepository);

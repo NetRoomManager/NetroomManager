@@ -42,19 +42,23 @@ function pay(useremail, username, payId) {
             // 결제 성공시 프로젝트 DB저장 요청
 
             try {
-                const response = await fetch("/auth/buyTicket", {
+                await fetch("/auth/buyTicket", {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json",
                     },
                     body: JSON.stringify(rsp),
-                });
-                if (response.status === 200) { // DB저장 성공시
-                    alert('결제 완료!');
-                    window.location.reload();
-                } else { // 결제완료 후 DB저장 실패시
-                    alert(`error:[${response.status}]결제요청이 승인된 경우 관리자에게 문의바랍니다.`);
-                }
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if(data.success) {
+                            alert('결제 완료!');
+                            window.location.reload();
+                        }
+                        else {
+                            alert(`error:[${data.status}]결제요청이 승인된 경우 관리자에게 문의바랍니다.`);
+                        }
+                    })
             } catch (error) {
                 console.error("DB 저장 요청 중 오류가 발생했습니다:", error);
             }
@@ -65,10 +69,9 @@ function pay(useremail, username, payId) {
 }
 
 const selectorList = document.querySelectorAll('input[name="userSelector"]');
-selectorList.forEach(btn => btn.onclick = () => { userLoad(btn.id) });
+selectorList.forEach(btn => btn.onclick = () => { userSelect(btn.id) });
 
-
-function userLoad(id) {
+function userSelect(id) {
     const row = document.getElementById(id).parentNode.parentNode;  // 부모의 부모 불러오기
     const tdList = row.querySelectorAll('td')
     let name;
@@ -94,3 +97,30 @@ function userLoad(id) {
     tossButton.setAttribute('onclick', `pay('${email}', '${name}', 1)`)
     inicisButton.setAttribute('onclick', `pay('${email}', '${name}', 2)`)
 }
+
+// 검색 이벤트 리스너
+window.addEventListener("DOMContentLoaded", function () {
+    const searchInput = document.getElementById("name");
+    searchInput.addEventListener("keyup", function () {
+        const searchText = searchInput.value.toLowerCase();
+        filterTable(searchText);
+    });
+
+    function filterTable(searchText) {
+        const table = document.querySelector(".table");
+        const rows = table.getElementsByTagName("tr");
+
+        for (let i = 1; i < rows.length; i++) { // 첫 번째 행은 헤더이므로 i를 1부터 시작합니다.
+            const row = rows[i];
+            const nameCell = row.querySelector("td:first-child");
+            const name = nameCell.querySelector("input").value
+                .toLowerCase();
+
+            if (name.indexOf(searchText) === -1) {
+                row.style.display = "none";
+            } else {
+                row.style.display = "";
+            }
+        }
+    }
+});
