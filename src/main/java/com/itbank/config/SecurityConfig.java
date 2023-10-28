@@ -58,7 +58,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // ADMIN만 가능
                 .hasRole("ADMIN")
 
-                .antMatchers("/user/**")
+                .antMatchers("/customer/**")
                 // ADMIN, USER가능
                 .hasAnyRole("USER", "ADMIN")
                 .anyRequest().authenticated()

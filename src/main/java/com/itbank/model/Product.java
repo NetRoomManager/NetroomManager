@@ -15,17 +15,15 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long productId;	// 제품 아이디
+    private Long id;	// 제품 아이디
 
 
     @ManyToOne
-    @JoinColumn(name = "productCateId")
-    private ProductCategory productCateId;	// 상품 카테고리 아이디
-
-
+    @JoinColumn(name = "product_category_id")
+    private ProductCategory productCategory;	// 상품 카테고리 아이디
 
     @Column(nullable = false)
-    private String productName; // 상품명
+    private String name; // 상품명
 
     @Column(nullable = false)
     private Integer price;   // 가격
@@ -42,9 +40,5 @@ public class Product {
     private String img; // 제품 이미지 파일
 
     private Integer count;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "productCategoryId")
-    private ProductCategory category;
 }
 
