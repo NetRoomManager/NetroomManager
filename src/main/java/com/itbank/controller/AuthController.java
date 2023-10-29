@@ -40,8 +40,27 @@ public class AuthController {
     @Autowired
     private PaymentService paymentService;
 
-    @RequestMapping("/login")
+    @GetMapping("/login")
     public void login() {
+    }
+
+    @PostMapping("/login")
+    public String login(User user, HttpServletRequest request) {
+
+        log.info("로그인중");
+
+        // 사용자의 이름과 권한을 가져와서 Authentication 객체를 만듭니다.
+        UserDetails userDetails = userDetailsService.loadUserByUsernameAndPassword(user.getUsername(), user.getPassword());
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+
+        // 만든 Authentication 객체를 SecurityContext에 설정합니다.
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        // 세션에 SPRING_SECURITY_CONTEXT라는 키 값으로 SecurityContext를 저장합니다.
+        HttpSession session = request.getSession(true);
+        session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
+
+        return "redirect:/";
     }
 
     @PostMapping("/join")

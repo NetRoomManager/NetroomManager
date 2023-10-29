@@ -33,7 +33,7 @@
         <!-- 로그인 폼 -->
         <form method="POST" class="w-25">
             <div class="form-floating mb-3 mt-3">
-                <input
+                <%--@declare id="username"--%><input
                         type="text"
                         class="form-control"
                         id="login_username"
@@ -49,7 +49,7 @@
                         class="form-control"
                         id="users_password"
                         placeholder="Enter password"
-                        name="users_password"
+                        name="password"
                         required
                 />
                 <label for="users_password">Password</label>

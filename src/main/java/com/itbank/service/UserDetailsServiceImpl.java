@@ -40,9 +40,25 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         return new User(customUser.getUsername(), customUser.getPassword(), getAuthorities(customUser));
     }
 
+    public UserDetails loadUserByUsernameAndPassword(String username, String password) {
+
+        System.out.println(username + "님의 정보를 불러옵니다");
+
+        com.itbank.model.User customUser= userRepository.findByUsernameAndPassword(username, password)
+                .orElseThrow(() -> new UsernameNotFoundException(username + "님의 정보를 찾을 수 없습니다"));
+
+        if (customUser.getDropOutUser() != null) {
+            throw new AuthenticationServiceException("탈퇴된 계정입니다");
+        }
+
+        return new User(customUser.getUsername(), customUser.getPassword(), getAuthorities(customUser));
+    }
+
     private static Collection<? extends GrantedAuthority> getAuthorities(com.itbank.model.User customUser) {
         System.out.println(customUser.getUsername() + "님의 권한을 불러옵니다");
         return customUser.getUserRoles().stream().map(role -> new SimpleGrantedAuthority(role.getRole().getName())).collect(Collectors.toList());
     }
+
+
 }
 
