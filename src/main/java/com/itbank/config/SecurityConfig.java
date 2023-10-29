@@ -22,8 +22,12 @@ import org.springframework.security.oauth2.client.registration.InMemoryClientReg
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.oidc.IdTokenClaimNames;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Configuration
@@ -47,7 +51,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // 스프링 시큐리티 설정
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
+        // 웹소켓 메시지를 위한 설정
+        http.cors().and().  // CORS 허용
+                csrf().disable()
+                .headers().frameOptions().sameOrigin();
 
         http.authorizeRequests()
                 .antMatchers("/", "/auth/**", "/img/**", "/css/**", "/js/**")
@@ -169,5 +176,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return restTemplate;
     }
 
+    // CORS 허용
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("*"));  // 모든 도메인에서의 요청 허용
+        configuration.setAllowedMethods(Arrays.asList("GET","POST"));  // GET, POST 요청 허용
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 
 }

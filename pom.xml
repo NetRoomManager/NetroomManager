@@ -204,13 +204,16 @@
 			<version>2.12.5</version> <!-- Use the appropriate version -->
 		</dependency>
 
-		<!-- Nimbus JOSE + JWT -->
 		<dependency>
-			<groupId>com.nimbusds</groupId>
-			<artifactId>nimbus-jose-jwt</artifactId>
-			<version>9.8.1</version><!-- 이 버전은 예시이며, 실제 프로젝트에 맞게 조정해야 합니다 -->
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-websocket</artifactId>
+			<version>5.3.30</version>
 		</dependency>
-
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-messaging</artifactId>
+			<version>5.3.30</version>
+		</dependency>
 
 	</dependencies>
     <build>
