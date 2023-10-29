@@ -23,13 +23,11 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
     private String mobile;
 
     @Column(nullable = false, unique = true)
     private String email;
 
-    @Column(nullable = false)
     private Date birth;
 
     @Column(nullable = false)
@@ -38,7 +36,7 @@ public class User {
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private Set<UserRole> userRoles;
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<SocialLogin> socialLogins;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)

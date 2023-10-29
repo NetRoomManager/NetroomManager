@@ -3,6 +3,7 @@ package com.itbank.config;
 import com.itbank.handler.CustomAuthenticationFailureHandler;
 import com.itbank.handler.OAuth2LoginSuccessHandler;
 import com.itbank.service.CustomOAuth2UserService;
+import com.itbank.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -34,7 +35,7 @@ import java.util.List;
 @EnableWebSecurity(debug = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
-    private UserDetailsService userDetailsService;
+    private UserDetailsServiceImpl userDetailsService;
 
     @Autowired
     private CustomOAuth2UserService customOAuth2UserService;
@@ -80,7 +81,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 실패시 핸들러
                 .failureHandler(customAuthenticationFailureHandler)
                 // 성공시 URL
-                .defaultSuccessUrl("/")
+//                .defaultSuccessUrl("/")
                 // 로그인 처리 담당할 주소
                 .loginProcessingUrl("/auth/login")
                 .and()
@@ -95,7 +96,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .deleteCookies("JSESSIONID")
 //                .failureUrl("/auth/login?error=true")
                 // 소셜 활성화
-                .and().oauth2Login()
+                .and()
+                .oauth2Login()
                 // 성공 핸들러
                 .successHandler(oAuth2LoginSuccessHandler)
                 .userInfoEndpoint()
@@ -127,7 +129,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .jwkSetUri("https://www.googleapis.com/oauth2/v3/certs")
                 .clientName("Google")
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                .scope("openid", "profile", "email")
+                .scope("profile", "email")
                 .build()
         );
         // 네이버

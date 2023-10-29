@@ -1,7 +1,6 @@
 package com.itbank.handler;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.itbank.model.Chat;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -25,11 +24,8 @@ public class MyWebSocketHandler extends TextWebSocketHandler {
         // 예를 들어, Redis에 메시지를 저장하거나 다른 클라이언트에게 메시지를 브로드캐스트할 수 있습니다.
 
         // 메시지 전송 예시
-        Chat chat = new Chat();
-        chat.setSender("서버1");
-        chat.setContent("서버에서 보내는 응답 메시지");
         ObjectMapper objectMapper = new ObjectMapper();
-        String response = objectMapper.writeValueAsString(chat);
+        String response = objectMapper.writeValueAsString("서버에서 보내는 메시지");
         session.sendMessage(new TextMessage(response));
     }
 

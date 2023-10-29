@@ -1,5 +1,6 @@
 package com.itbank.service;
 
+import com.itbank.config.UserPrincipal;
 import com.itbank.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,7 +38,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new AuthenticationServiceException("탈퇴된 계정입니다");
         }
 
-        return new User(customUser.getUsername(), customUser.getPassword(), getAuthorities(customUser));
+        return new UserPrincipal(customUser);
     }
 
     public UserDetails loadUserByUsernameAndPassword(String username, String password) {
@@ -50,15 +51,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         if (customUser.getDropOutUser() != null) {
             throw new AuthenticationServiceException("탈퇴된 계정입니다");
         }
-
-        return new User(customUser.getUsername(), customUser.getPassword(), getAuthorities(customUser));
+        return new UserPrincipal(customUser);
     }
-
-    private static Collection<? extends GrantedAuthority> getAuthorities(com.itbank.model.User customUser) {
-        System.out.println(customUser.getUsername() + "님의 권한을 불러옵니다");
-        return customUser.getUserRoles().stream().map(role -> new SimpleGrantedAuthority(role.getRole().getName())).collect(Collectors.toList());
-    }
-
-
 }
 

@@ -4,12 +4,14 @@ import com.itbank.model.Role;
 import com.itbank.model.User;
 import com.itbank.model.UserRole;
 import com.itbank.repository.RoleRepository;
+import com.itbank.repository.SocialLoginRepository;
 import com.itbank.repository.UserRepository;
 import com.itbank.repository.UserRoleRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -33,6 +35,9 @@ public class UserService {
     private UserRoleRepository userRoleRepository;
 
     @Autowired
+    private SocialLoginRepository socialLoginRepository;
+
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
     public void createUsers(User paramUser) {
@@ -40,12 +45,10 @@ public class UserService {
         log.info("유저를 생성합니다");
 
         try {
-
             // USER 권한 찾기 또는 생성
-            log.info("테스트용으로 ADMIN권한 설정함");
-            Role role = roleRepository.findByName("ROLE_ADMIN").orElseGet(() -> {
+            Role role = roleRepository.findByName("ROLE_USER").orElseGet(() -> {
                 Role newRole = new Role();
-                newRole.setName("ROLE_ADMIN");
+                newRole.setName("ROLE_USER");
                 return roleRepository.save(newRole);
             });
 
@@ -57,7 +60,7 @@ public class UserService {
             user.setName(paramUser.getName());
             user.setEmail(paramUser.getEmail());
             user.setBirth(paramUser.getBirth());
-            User savedUser = userRepository.save(user);
+            userRepository.save(user);
 
             // User와 Role 정보가 담긴 객체 생성
             UserRole userRole = new UserRole();

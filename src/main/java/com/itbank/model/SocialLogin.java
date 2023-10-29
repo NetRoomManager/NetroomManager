@@ -30,7 +30,7 @@ public class SocialLogin {
     @UpdateTimestamp
     private Date updateAt;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
 }

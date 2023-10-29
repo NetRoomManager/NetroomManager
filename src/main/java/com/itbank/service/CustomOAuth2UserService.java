@@ -1,36 +1,25 @@
 package com.itbank.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itbank.config.UserPrincipal;
-import com.itbank.model.DropOutUser;
-import com.itbank.model.SocialLogin;
-import com.itbank.model.User;
-import com.itbank.repository.DropOutUserRepository;
-import com.itbank.repository.RoleRepository;
-import com.itbank.repository.SocialLoginRepository;
-import com.itbank.repository.UserRepository;
+import com.itbank.model.*;
+import com.itbank.repository.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
-import org.springframework.security.oauth2.client.userinfo.OAuth2UserService;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestClientException;
-import org.springframework.web.client.RestTemplate;
 
+import java.security.ProviderException;
+import java.sql.Date;
 import java.util.Collections;
 import java.util.Map;
-import java.util.Optional;
+import java.util.UUID;
 
 @Service
 @Slf4j
@@ -43,45 +32,36 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
     private SocialLoginRepository socialLoginRepository;
 
     @Autowired
-    private DropOutUserRepository dropOutUserRepository;
+    private RoleRepository roleRepository;
 
     @Autowired
-    private RoleRepository roleRepository;
+    private UserRoleRepository userRoleRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Override
     // 소셜유저 로그인, 회원가입 시 정보를 불러오는 메서드
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+
+        System.out.println("떠라 ㅅㅂ");
+
+        log.info("소셜유저를 불러옵니다");
+
         DefaultOAuth2UserService delegate = new DefaultOAuth2UserService();
         OAuth2User oAuth2user = delegate.loadUser(userRequest);
 
-        String registrationId = userRequest.getClientRegistration().getRegistrationId();
-        if ("naver".equals(registrationId)) {
+        // 소셜 서비스 이름 ex)naver
+        String provider = userRequest.getClientRegistration().getRegistrationId();
 
-            // response로 감싸진 정보를 가져옴
+        log.info("서비스: " + provider);
+
+        if("naver".equals(provider)) {
             oAuth2user = processNaverOauth(oAuth2user);
-
-            // 탈퇴회원 조회하기 위해 가져옴 / username1234 형식
-            String providerId = registrationId + "_" + (String)oAuth2user.getAttributes().get("id");
-
-            // 탈퇴 검증 로직
-            Optional<SocialLogin> socialLoginOptional = socialLoginRepository.findByProviderAndProviderId(registrationId, providerId);
-
-            if(socialLoginOptional.isPresent()){
-                SocialLogin socialLogin= socialLoginOptional.get();
-                User user=socialLogin.getUser();
-
-                Optional<DropOutUser> dropOutUserOptional=dropOutUserRepository.findById(user.getId());
-
-                if(dropOutUserOptional.isPresent()){
-                    throw new AuthenticationServiceException("탈퇴된 계정입니다");
-                }
-
-            }
-
-            // 탈퇴 회원 아 아니라면 -> 로그인 or 회원가입
-            return oAuth2user;
         }
-        return oAuth2user;
+
+        // 일반유저와 통합관리하기위해 연동된 유저를 반환함
+        return new UserPrincipal(findOrCreate(oAuth2user, provider));
     }
 
     // 네이버는 response로 한번 더 감싸져있음 ㅅㅂ
@@ -89,6 +69,98 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         Map<String,Object> attributes = (Map<String,Object>)oAuth2User.getAttributes().get("response");
         log.info("네이버 정보를 불러옵니다." + attributes);
         return new DefaultOAuth2User(Collections.singleton(new SimpleGrantedAuthority("ROLE_USER")),attributes,"id");
+    }
+
+    private User findOrCreate(OAuth2User oauth2User, String provider) {
+
+        // attributes에 유저 상세정보를 출력함
+        Map<String, Object> attributes = oauth2User.getAttributes();
+
+        // ~~~~~~~~~~~~~~테스트용~~~~~~~~~~~~~~~~
+        // 불러온 유저 정보를 콘솔에 출력함
+        for (Map.Entry<String, Object> entry : attributes.entrySet()) {
+            System.out.println(entry.getKey() + ": " + entry.getValue());
+        }
+
+        // 소셜 고유 아이디 불러오기
+        String providerId = getProviderId(oauth2User, provider);
+
+        SocialLogin socialLogin = socialLoginRepository.findByProviderId(providerId).orElseGet(() -> {
+
+            // 고유아이디
+            String username = providerId;
+            // 비밀번호 UUID넣기
+            String password = passwordEncoder.encode(UUID.randomUUID().toString());
+            // 폰번호
+//            String mobile = oauth2User.getAttribute("mobile");
+            String mobile = null;
+            // 생일
+//            Date birth = oauth2User.getAttribute("birth");
+            Date birth = null;
+            // 이름
+            String name = oauth2User.getAttribute("name");
+            // 이메일
+            String email = oauth2User.getAttribute("email");
+
+            log.info("소셜유저 생성...");
+
+            // USER 권한 찾기 또는 생성 / 기본으로 USER권한을 설정함
+            Role role = roleRepository.findByName("ROLE_USER").orElseGet(() -> {
+                Role newRole = new Role();
+                newRole.setName("ROLE_USER");
+                return roleRepository.save(newRole);
+            });
+
+            // User 객체 생성 or 불러오기 / 만약 불러와진다면 해당 계정은 소셜유저와 연동됨
+            User user = userRepository.findByEmailOrMobile(email, mobile).orElseGet(() -> {
+                User newUser = new User();
+                newUser.setUsername(username);
+                newUser.setPassword(password); // 소셜로그인 유저는 비밀번호가 없음 -> UUID를 해싱처리해서 일반유저로 로그인 X
+                newUser.setMobile(mobile);
+                newUser.setName(name);
+                newUser.setEmail(email);
+                newUser.setBirth(birth);
+                return userRepository.save(newUser);
+            });
+
+            // 탈퇴유저 검증
+            if(user.getDropOutUser() != null){
+                throw new UsernameNotFoundException("탈퇴된 유저입니다.");
+            }
+
+            // User와 Role 정보가 담긴 객체 생성
+            userRoleRepository.findByUser(user).orElseGet(() -> {
+                UserRole newUserRole = new UserRole();
+                newUserRole.setRole(role);
+                newUserRole.setUser(user);
+                return userRoleRepository.save(newUserRole);
+            });
+
+            SocialLogin newSocialUser = new SocialLogin();
+            newSocialUser.setUser(user);
+            newSocialUser.setProvider(provider);
+            newSocialUser.setProviderId(providerId);
+
+            return socialLoginRepository.save(newSocialUser);
+        });
+
+        return socialLogin.getUser();
+    }
+
+    private String getProviderId(OAuth2User oauth2User, String provider){
+        String providerId = null;
+        if("naver".equals(provider)){
+            // 네이버는 고유번호 key가 id
+            providerId = oauth2User.getAttribute("id");
+        }
+        else if("google".equals(provider)){
+            // 구글 고유번호 key : sub
+            providerId = oauth2User.getAttribute("sub");
+        }
+        else {
+            throw new ProviderException("알 수 없는 서비스 입니다");
+        }
+        return providerId;
     }
 
 }
