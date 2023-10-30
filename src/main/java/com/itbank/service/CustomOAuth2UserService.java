@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.security.ProviderException;
 import java.sql.Date;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.UUID;
 
@@ -129,12 +130,16 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             }
 
             // User와 Role 정보가 담긴 객체 생성
-            userRoleRepository.findByUser(user).orElseGet(() -> {
+            UserRole userRole = userRoleRepository.findByUser(user).orElseGet(() -> {
                 UserRole newUserRole = new UserRole();
                 newUserRole.setRole(role);
                 newUserRole.setUser(user);
                 return userRoleRepository.save(newUserRole);
             });
+
+            // 유저권한 세팅
+            user.setUserRoles(new HashSet<UserRole>());
+            user.getUserRoles().add(userRole);
 
             SocialLogin newSocialUser = new SocialLogin();
             newSocialUser.setUser(user);
