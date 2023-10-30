@@ -87,7 +87,6 @@ public class AuthController {
     public Map<String, Boolean> buyTicket(@RequestBody PaymentResponse paymentResponse) throws UsernameNotFoundException {
 
         paymentService.buyTicket(paymentResponse);
-
         Map<String, Boolean> result = new HashMap<>();
         result.put("success", true);
         return result;
