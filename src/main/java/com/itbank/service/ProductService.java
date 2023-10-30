@@ -33,4 +33,9 @@ public class ProductService {
         productRepository.save(product);
 
     }
+
+    // 관리자
+    public void addProduct() {
+
+    }
 }

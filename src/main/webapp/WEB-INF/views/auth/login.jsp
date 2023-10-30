@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" type="text/css" href="/css/style.css" />
     <link
-    <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
             rel="stylesheet"
     />
@@ -276,7 +275,7 @@
                     document.getElementById('check_msg').innerText = "유효한 아이디 입니다";
                 } else {
                     document.getElementById('check_msg').classList.remove("text-primary")
-                    document.getElementById('check_msg').classList.add("text-dangerz")
+                    document.getElementById('check_msg').classList.add("text-danger")
                     document.getElementById('check_msg').innerText = "중복된 아이디입니다.";
                 }
             })
