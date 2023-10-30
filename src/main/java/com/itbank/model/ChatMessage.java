@@ -1,17 +1,19 @@
-package com.itbank.model;
+    package com.itbank.model;
+
+    import lombok.Getter;
+    import lombok.Setter;
+
+    @Getter
+    @Setter
+    public class ChatMessage {
+
+        private String from;
+        private String content;
+        private String roomId;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-
-@Setter
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
-public class ChatMessage {
-    private String sender;
-    private String receiver;
-    private String message;
-}
+        @Override
+        public String toString() {
+            return "받은 메시지: " + from + content;
+        }
+    }
