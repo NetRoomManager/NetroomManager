@@ -11,10 +11,10 @@
 <c:set var="principal" value="${authentication.principal}" />
 
 <!-- Principal에서 사용자의 이름을 가져옵니다. -->
-<%--<c:set var="username" value="${principal.username}" />--%>
+<c:set var="username" value="${principal.username}" />
 
 <!-- username을 출력합니다. -->
-<p>사용자 이름: ${principal}</p>
+<p>사용자 : ${principal}</p>
 
 
 <html>
@@ -36,7 +36,8 @@
 </ul>
 
 <!-- 메시지 입력 폼 -->
-<input type="text" id="messageInput" placeholder="메시지를 입력하세요">
+<input type="text" id="receiverInput" placeholder="받는사람 입력하세요" required>
+<input type="text" id="messageInput" placeholder="메시지를 입력하세요" required>
 <button onclick="sendMessage()">전송</button>
 
 <!-- 메시지 출력 영역 -->
@@ -46,7 +47,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script>
-	const socket = new WebSocket('ws://localhost:8080/websocket');
+	const socket = new WebSocket('ws://localhost:8080/websocket?username=${username}');
 
 	// 웹소켓이 연결되었을 때 실행되는 로직
 	socket.onopen = function() {
@@ -72,10 +73,22 @@
 	// 메시지 전송 함수
 	function sendMessage() {
 		const messageInput = document.getElementById('messageInput');
+		const receiverInput = document.getElementById('receiverInput');
+
+		const sender = '${username}'; // You may need to get the actual username here
+		const receiver = receiverInput.value;
+		const messageContent = messageInput.value;
+
+		// Base64로 인코딩
+		const encodedSender = btoa(sender);
+		const encodedReceiver = btoa(receiver);
+
 		const message = {
-			sender: '클라이언트1',
-			content: messageInput.value
+			sender: encodedSender,
+			receiver: encodedReceiver,
+			message: messageContent
 		};
+
 		socket.send(JSON.stringify(message));
 		messageInput.value = '';
 	}
