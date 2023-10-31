@@ -56,7 +56,7 @@ public class UserService {
             userRepository.save(paramUser);
 
             // User와 Role 정보가 담긴 객체 생성
-                UserRole userRole = new UserRole();
+            UserRole userRole = new UserRole();
             userRole.setRole(role);
             userRole.setUser(paramUser);
             userRoleRepository.save(userRole);

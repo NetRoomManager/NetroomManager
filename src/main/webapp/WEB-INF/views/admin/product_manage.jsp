@@ -23,10 +23,15 @@
 		<ul class="navbar-nav me-auto mb-2 mb-lg-0 pt-1">
 			<li class="nav-item"><a class="nav-link active navbar-brand"
 				aria-current="page" href="#">NetRoom</a></li>
-			<li class="nav-item pe-3"><a class="nav-link" href="#">재고현황</a>
+			<li class="nav-item pe-3"><a class="nav-link"
+		 	    data-bs-toggle="modal" data-bs-target="#productUpdate">상품등록</a>
 			</li>
 			<li class="nav-item pe-3"><a class="nav-link"
-				data-bs-toggle="modal" data-bs-target="#productUpdate">상품등록</a></li>
+			   data-bs-toggle="modal" data-bs-target="#categoryUpdate">카테고리등록</a>
+			</li>
+			<li class="nav-item pe-3"><a class="nav-link"
+			   data-bs-toggle="modal" data-bs-target="#ticketUpdate">이용권등록</a>
+			</li>
 		</ul>
 		<ul class="navbar-nav">
 			<li class="nav-item pe-2">
@@ -63,70 +68,138 @@
 		</ul>
 	</div>
 	<div class="modal fade" id="productUpdate" data-bs-backdrop="static"
-		data-bs-keyboard="false" tabindex="-1"
-		aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		 data-bs-keyboard="false" tabindex="-1"
+		 aria-labelledby="staticBackdropLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<form action="">
 					<div class="modal-header">
 						<h3 class="modal-title">상품등록</h3>
 						<button type="button" class="btn-close" data-bs-dismiss="modal"
-							aria-label="Close"></button>
+								aria-label="Close"></button>
 					</div>
 					<div class="modal-body container">
 						<div class="row justify-content-center align-items-center mb-3">
 							<div class="col-6 text-center">
 								<img id="preview" class="img-thumbnail mb-2"
-									src="../img/1422005677144.png" alt="예시 이미지"
-									style="max-width: 200px; max-height: 200px;"> <input
-									class="form-control form-control-sm" id="image" name="image"
-									accept="image/*" type="file">
+									 src="../img/1422005677144.png" alt="예시 이미지"
+									 style="max-width: 200px; max-height: 200px;">
+								<input class="form-control form-control-sm" id="image" name="image" accept="image/*" type="file">
 							</div>
 						</div>
 						<table class="table table-borderless">
 							<tbody>
-								<tr>
-									<th>제품/이용권</th>
-									<td><select class="form-select"
-										aria-label="Default select example">
-											<option selected>이용권 선택 시 시간 필수</option>
-											<option value="1">제품</option>
-											<option value="2">이용권</option>
-									</select></td>
-									<th>사용시간</th>
-									<td><input class="form-control" type="text"
-										placeholder="Default input" aria-label="default input example">
-									</td>
-								</tr>
-								<tr>
-									<th>상품분류</th>
-									<td><input class="form-control" type="text"
-										placeholder="Default input" aria-label="default input example">
-									</td>
-									<th colspan="2">상품설명</th>
-								</tr>
-								<tr>
-									<th>상품명</th>
-									<td><input class="form-control" type="text"
-										placeholder="Default input" aria-label="default input example">
-									</td>
-									<td colspan="2" rowspan="2" class="form-floating"><textarea
-											class="form-control" placeholder="Leave a comment here"
-											id="floatingTextarea" style="height: 90px;"></textarea> <label
-										for="floatingTextarea">Comments</label></td>
-								</tr>
-								<tr>
-									<th>가격</th>
-									<td><input class="form-control" type="text"
-										placeholder="Default input" aria-label="default input example">
-									</td>
-								</tr>
+							<tr>
+								<th>상품명</th>
+								<td>
+									<input class="form-control" type="text" placeholder="Default input" aria-label="default input example">
+								</td>
+								<th>상품분류</th>
+								<td>
+									<select class="form-select"
+											aria-label="Default select example">
+										<option selected>이용권 선택 시 시간 필수</option>
+										<option value="1">먹거리</option>
+										<option value="2">음료</option>
+									</select>
+								</td>
+							</tr>
+							<tr>
+								<th>상품가격</th>
+								<td>
+									<input class="form-control" type="text" placeholder="1,000" aria-label="default input example">
+								</td>
+								<th>상품수량</th>
+								<td>
+									<input class="form-control" type="number" placeholder="1" aria-label="default input example">
+								</td>
+							</tr>
+							<tr>
+								<th colspan="2">제품설명</th>
+								<th>할인율</th>
+								<td>
+									<input class="form-control" type="number" placeholder="%" aria-label="default input example">
+								</td>
+							</tr>
+							<tr>
+								<td colspan="4" rowspan="4" class="form-floating">
+									<textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea" style="height: 90px;"></textarea>
+									<label for="floatingTextarea">Comments</label>
+								</td>
+							</tr>
 							</tbody>
 						</table>
 					</div>
 					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary"
-							data-bs-dismiss="modal">취소</button>
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+						<button type="button" class="btn btn-primary">등록</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="categoryUpdate" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<form action="">
+					<div class="modal-header">
+						<h3 class="modal-title">카테고리등록</h3>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body container">
+						<table class="table table-borderless">
+							<tbody>
+							<tr>
+								<th>카테고리이름</th>
+								<td>
+									<input class="form-control" type="text" placeholder="Default input" aria-label="default input example">
+								</td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+						<button type="button" class="btn btn-primary">등록</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="modal fade" id="ticketUpdate" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<form action="">
+					<div class="modal-header">
+						<h3 class="modal-title">이용권등록</h3>
+						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+					</div>
+					<div class="modal-body container">
+						<table class="table table-borderless">
+							<tbody>
+							<tr>
+								<th>이용권이름</th>
+								<td>
+									<input class="form-control" type="text" placeholder="Default input" aria-label="default input example">
+								</td>
+							</tr>
+							<tr>
+								<th>이용권시간</th>
+								<td>
+									<input class="form-control" type="number" placeholder="분" aria-label="default input example">
+								</td>
+							</tr>
+							<tr>
+								<th>이용권가격</th>
+								<td>
+									<input class="form-control" type="number" placeholder="1,000" aria-label="default input example">
+								</td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
 						<button type="button" class="btn btn-primary">등록</button>
 					</div>
 				</form>
