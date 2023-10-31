@@ -1,8 +1,8 @@
 package com.itbank.controller;
 
-import com.itbank.model.ChatMessage;
+import com.itbank.model.Message;
 import org.springframework.messaging.handler.annotation.MessageMapping;
-import org.springframework.messaging.handler.annotation.SendTo;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 
@@ -15,16 +15,8 @@ public class ChatController {
         this.messagingTemplate = messagingTemplate;
     }
 
-    @MessageMapping("/enter/{roomId}")
-    @SendTo("/broker/room/{roomId}")
-    public ChatMessage sendMessage(ChatMessage chatMessage) {
-
-
-
-        return chatMessage;
+    @MessageMapping("/chat")
+    public void send(@Payload Message message) {
+        messagingTemplate.convertAndSendToUser(message.getUsername(), "/queue/messages", message);
     }
-
-
-
-
 }
