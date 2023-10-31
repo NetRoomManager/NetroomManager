@@ -1,7 +1,19 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<c:set var="cpath" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html>
 <html lang="ko">
+<!-- 세션에서 SecurityContext를 가져옵니다. -->
+<c:set var="securityContext" value="${sessionScope.SPRING_SECURITY_CONTEXT}" />
+
+<!-- SecurityContext에서 Authentication 객체를 가져옵니다. -->
+<c:set var="authentication" value="${securityContext.authentication}" />
+
+<!-- Authentication 객체에서 Principal(사용자) 정보를 가져옵니다. -->
+<c:set var="principal" value="${authentication.principal}" />
+
+<!-- Principal에서 사용자의 이름을 가져옵니다. -->
+<c:set var="username" value="${principal.username}" />
 
 <head>
     <meta charset="UTF-8" />
@@ -34,7 +46,10 @@
         </button>
         <div class="d-flex text-light">
             <div>
-                <h4>홍길동님</h4>
+                <!-- username을 출력합니다. -->
+                <c:if test="${not empty principal}">
+                    <h4>${principal.username}</h4>
+                </c:if>
             </div>
         </div>
     </div>
@@ -91,14 +106,13 @@
     </table>
 </div>
 
-<div class="offcanvas offcanvas-end" id="demo">
+<div class="offcanvas offcanvas-end" id="payments">
     <div class="offcanvas-header">
         <h1 class="offcanvas-title">결제하기</h1>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
     </div>
     <div class="offcanvas-body d-flex flex-wrap">
-        <button id="kakaoBtn" class="btn"><img class="img-fluid" src="/img/kakaopay.jpg" alt="New York" width="1100"
-                                 height="500"></button>
+        <button id="kakaoBtn" class="btn"><img class="img-fluid" src="/img/kakaopay.jpg" alt="New York" width="1100" height="500"></button>
         <button id="tossBtn" class="btn"><img class="img-fluid w-100" src="/img/tosspay.png" alt="New York"></button>
         <button id="inicisBtn" class="btn"><img class="img-fluid" src="/img/KG_pay_button.png   " alt="New York" width="1100"
                                                 height="500"></button>
@@ -108,73 +122,90 @@
     </div>
 </div>
 
-<div class="w-100 bg-light container d-flex flex-wrap mt-3 mb-3 offcanvas offcanvas-bottom" id="ticket"
-     style="overflow-x: auto;">
-    <div class="text-lg-center mx-5" style="width: 300px;">
-        <div class="card mt-3 mb-3 fw-bold border-black border-1" id="ticket_item"
+<div
+        class="w-100 bg-light container d-flex flex-wrap mt-3 mb-3 h-50 offcanvas offcanvas-bottom"
+        id="ticket" style="overflow-x: auto; margin: auto">
+    <div class="ticket_item text-lg-center mx-5" style="width: 20%;">
+        <div class="card mt-3 mb-3 fw-bold border-black border-1 ticket_item"
              style="background-color: #ffbb3f">
-            <div class="card-header text-dark">1시간 이용권</div>
+            <div class="card-header text-dark">회원 1시간 이용권</div>
             <div class="card-body text-danger">[1,000원]</div>
             <div class="card-footer">
-                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#demo">
-                    구매하기
-                </button>
-            </div>
-        </div>
-    </div>
-    <div class="text-lg-center mx-5 view overlay zoom" style="width: 300px">
-        <div class="card mt-3 mb-3 fw-bold border-black border-1" style="background-color: #ffbb3f">
-            <div class="card-header text-dark">2시간 이용권</div>
-            <div class="card-body text-danger">[2,000원]</div>
-            <div class="card-footer">
-                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#demo">
-                    구매하기
-                </button>
-            </div>
-        </div>
-    </div>
-    <div class="text-lg-center mx-5" style="width: 300px">
-        <div class="card mt-3 mb-3 fw-bold border-black border-1" style="background-color: #ffbb3f">
-            <div class="card-header text-dark">3시간 이용권</div>
-            <div class="card-body text-danger">[3,000원]</div>
-            <div class="card-footer">
-                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#demo">
-                    구매하기
-                </button>
-            </div>
-        </div>
-    </div>
-    <div class="text-lg-center mx-5" style="width: 300px">
-        <div class="card mt-3 mb-3 fw-bold border-black border-1" style="background-color: #ffbb3f">
-            <div class="card-header text-dark">5시간 이용권</div>
-            <div class="card-body text-danger">[4,000원]</div>
-            <div class="card-footer">
-                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#demo">
-                    구매하기
-                </button>
+                <button class="btn btn-primary" type="button"
+                        data-bs-toggle="offcanvas" data-bs-target="#payments">구매하기</button>
             </div>
         </div>
     </div>
 
-    <div class="text-lg-center mx-5" style="width: 300px">
-        <div class="card mt-3 mb-3 fw-bold border-black border-1" style="background-color: #ffbb3f">
-            <div class="card-header text-dark">12시간이용권</div>
-            <div class="card-body text-danger">[10,000원]</div>
+    <div class="ticket_item text-lg-center mx-5" style="width: 20%">
+        <div
+                class="card mt-3 mb-3 fw-bold border-black border-1 "
+                style="background-color: #ffbb3f">
+            <div class="card-header text-dark">회원 2시간 이용권</div>
+            <div class="card-body text-danger">[2,000원]</div>
             <div class="card-footer">
-                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#demo">
-                    구매하기
-                </button>
+                <button class="btn btn-primary" type="button"
+                        data-bs-toggle="offcanvas" data-bs-target="#payments">구매하기</button>
             </div>
         </div>
     </div>
-    <div class="text-lg-center mx-5" style="width: 300px">
-        <div class="card mt-3 mb-3 fw-bold border-black border-1" style="background-color: #ffbb3f">
-            <div class="card-header text-dark">24시간이용권</div>
-            <div class="card-body text-danger">[15,000원]</div>
+
+    <div class="ticket_item text-lg-center mx-5" style="width: 20%">
+        <div class="card mt-3 mb-3 fw-bold border-black border-1"
+             style="background-color: #ffbb3f">
+            <div class="card-header text-dark">회원 3시간 이용권</div>
+            <div class="card-body text-danger">[3,000원]</div>
             <div class="card-footer">
-                <button class="btn btn-primary" type="button" data-bs-toggle="offcanvas" data-bs-target="#demo">
-                    구매하기
-                </button>
+                <button class="btn btn-primary" type="button"
+                        data-bs-toggle="offcanvas" data-bs-target="#payments">구매하기</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="ticket_item text-lg-center mx-5" style="width: 20%">
+        <div class="card mt-3 mb-3 fw-bold border-black border-1"
+             style="background-color: #ffbb3f">
+            <div class="card-header text-dark">회원 5시간 이용권</div>
+            <div class="card-body text-danger">[4,000원]</div>
+            <div class="card-footer">
+                <button class="btn btn-primary" type="button"
+                        data-bs-toggle="offcanvas" data-bs-target="#payments">구매하기</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="ticket_item text-lg-center mx-5" style="width: 20%">
+        <div class="card mt-3 mb-3 fw-bold border-black border-1"
+             style="background-color: #ffbb3f">
+            <div class="card-header text-dark">회원 10시간+1시간 이용권</div>
+            <div class="card-body text-danger">[10,000원]</div>
+            <div class="card-footer">
+                <button class="btn btn-primary" type="button"
+                        data-bs-toggle="offcanvas" data-bs-target="#payments">구매하기</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="ticket_item text-lg-center mx-5" style="width: 20%">
+        <div class="card mt-3 mb-3 fw-bold border-black border-1"
+             style="background-color: #ffbb3f">
+            <div class="card-header text-dark">회원 20시간 + 3시간이용권</div>
+            <div class="card-body text-danger">[20,000원]</div>
+            <div class="card-footer">
+                <button class="btn btn-primary" type="button"
+                        data-bs-toggle="offcanvas" data-bs-target="#payments">구매하기</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="ticket_item text-lg-center mx-5" style="width: 20%">
+        <div class="card mt-3 mb-3 fw-bold border-black border-1"
+             style="background-color: #ffbb3f">
+            <div class="card-header text-dark">회원 50시간 + 10시간 이용권</div>
+            <div class="card-body text-danger">[50,000원]</div>
+            <div class="card-footer">
+                <button class="btn btn-primary" type="button"
+                        data-bs-toggle="offcanvas" data-bs-target="#payments">구매하기</button>
             </div>
         </div>
     </div>

@@ -3,6 +3,7 @@ package com.itbank.config;
 import com.itbank.handler.CustomAuthenticationFailureHandler;
 import com.itbank.handler.OAuth2LoginSuccessHandler;
 import com.itbank.service.CustomOAuth2UserService;
+import com.itbank.service.UserDetailsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,15 +23,19 @@ import org.springframework.security.oauth2.client.registration.InMemoryClientReg
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.oidc.IdTokenClaimNames;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @Configuration
 @EnableWebSecurity(debug = true)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
-    private UserDetailsService userDetailsService;
+    private UserDetailsServiceImpl userDetailsService;
 
     @Autowired
     private CustomOAuth2UserService customOAuth2UserService;
@@ -47,7 +52,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // 스프링 시큐리티 설정
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable();
+        // 웹소켓 메시지를 위한 설정
+        http.cors().and().  // CORS 허용
+                csrf().disable()
+                .headers().frameOptions().sameOrigin();
 
         http.authorizeRequests()
                 .antMatchers("/", "/auth/**", "/img/**", "/css/**", "/js/**")
@@ -73,7 +81,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 실패시 핸들러
                 .failureHandler(customAuthenticationFailureHandler)
                 // 성공시 URL
-                .defaultSuccessUrl("/")
+//                .defaultSuccessUrl("/")
                 // 로그인 처리 담당할 주소
                 .loginProcessingUrl("/auth/login")
                 .and()
@@ -88,7 +96,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .deleteCookies("JSESSIONID")
 //                .failureUrl("/auth/login?error=true")
                 // 소셜 활성화
-                .and().oauth2Login()
+                .and()
+                .oauth2Login()
                 // 성공 핸들러
                 .successHandler(oAuth2LoginSuccessHandler)
                 .userInfoEndpoint()
@@ -120,7 +129,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .jwkSetUri("https://www.googleapis.com/oauth2/v3/certs")
                 .clientName("Google")
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                .scope("openid", "profile", "email")
+                .scope("profile", "email")
                 .build()
         );
         // 네이버
@@ -169,5 +178,15 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return restTemplate;
     }
 
+    // CORS 허용
+    @Bean
+    public CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowedOrigins(Arrays.asList("*"));  // 모든 도메인에서의 요청 허용
+        configuration.setAllowedMethods(Arrays.asList("GET","POST"));  // GET, POST 요청 허용
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
+    }
 
 }

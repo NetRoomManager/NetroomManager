@@ -8,6 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -20,13 +21,14 @@ public class UserPrincipal implements OAuth2User, UserDetails {
     private final User user;
     private final Map<String, Object> attributes;
 
+    public UserPrincipal(User user) {
+        this.user = user;
+        this.attributes = null;
+    }
+
     public UserPrincipal(User user, Map<String, Object> attributes) {
         this.user = user;
         this.attributes = attributes;
-    }
-
-    public static UserPrincipal create(User user, Map<String, Object> attributes) {
-        return new UserPrincipal(user, attributes);
     }
 
     @Override
@@ -66,11 +68,20 @@ public class UserPrincipal implements OAuth2User, UserDetails {
 
     @Override
     public Map<String, Object> getAttributes() {
-        return attributes;
+        return attributes != null ? Collections.unmodifiableMap(attributes) : Collections.emptyMap();
     }
 
     @Override
     public String getName() {
         return user.getName();
+    }
+
+    @Override
+    public String toString() {
+        return "UserPrincipal{" +
+                "username='" + user.getUsername() + '\'' +
+                ", name='" + user.getName() + '\'' +
+                ", authorities=" + getAuthorities() +
+                '}';
     }
 }

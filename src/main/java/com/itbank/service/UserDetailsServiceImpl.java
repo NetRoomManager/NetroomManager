@@ -1,19 +1,14 @@
 package com.itbank.service;
 
+import com.itbank.config.UserPrincipal;
 import com.itbank.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationServiceException;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-
-import java.util.Collection;
-import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -37,12 +32,20 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new AuthenticationServiceException("탈퇴된 계정입니다");
         }
 
-        return new User(customUser.getUsername(), customUser.getPassword(), getAuthorities(customUser));
+        return new UserPrincipal(customUser);
     }
 
-    private static Collection<? extends GrantedAuthority> getAuthorities(com.itbank.model.User customUser) {
-        System.out.println(customUser.getUsername() + "님의 권한을 불러옵니다");
-        return customUser.getUserRoles().stream().map(role -> new SimpleGrantedAuthority(role.getRole().getName())).collect(Collectors.toList());
+    public UserDetails loadUserByUsernameAndPassword(String username, String password) {
+
+        System.out.println(username + "님의 정보를 불러옵니다");
+
+        com.itbank.model.User customUser= userRepository.findByUsernameAndPassword(username, password)
+                .orElseThrow(() -> new UsernameNotFoundException(username + "님의 정보를 찾을 수 없습니다"));
+
+        if (customUser.getDropOutUser() != null) {
+            throw new AuthenticationServiceException("탈퇴된 계정입니다");
+        }
+        return new UserPrincipal(customUser);
     }
 }
 
