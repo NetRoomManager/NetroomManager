@@ -151,16 +151,6 @@ public class AuthController {
         return result;
     }
 
-    @ExceptionHandler(UsernameNotFoundException.class)
-    @ResponseBody
-    public ResponseEntity<Object> handle(Exception ex,
-                                         HttpServletRequest request, HttpServletResponse response) {
-        if (ex instanceof NullPointerException) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
-    }
-
     @PostMapping("/checkId")
     @ResponseBody
     public Map<String, Boolean> checkId(@RequestBody User user) {
