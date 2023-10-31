@@ -11,10 +11,10 @@
 <c:set var="principal" value="${authentication.principal}" />
 
 <!-- Principal에서 사용자의 이름을 가져옵니다. -->
-<%--<c:set var="username" value="${principal.username}" />--%>
+<c:set var="username" value="${principal.username}" />
 
 <!-- username을 출력합니다. -->
-<p>사용자 이름: ${principal}</p>
+<p>사용자 : ${principal}</p>
 
 
 <html>
@@ -36,8 +36,18 @@
 </ul>
 
 <!-- 메시지 입력 폼 -->
-<input type="text" id="messageInput" placeholder="메시지를 입력하세요">
-<button onclick="sendMessage()">전송</button>
+
+<p id="status">연결안됨</p>
+
+<input type="text" id="room_id">
+<button onclick="connect()">방 만들기</button>
+<br><br>
+
+<input type="text" id="message">
+<button onclick="send()">보내기</button>
+
+<div id="test"></div>
+
 
 <!-- 메시지 출력 영역 -->
 <div id="messageArea"></div>
@@ -46,39 +56,57 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script>
-	const socket = new WebSocket('ws://localhost:8080/websocket');
 
-	// 웹소켓이 연결되었을 때 실행되는 로직
-	socket.onopen = function() {
-		console.log('웹소켓 연결 성공');
-	};
+	let socket;
+	let stompClient;
 
-	// 서버로부터 메시지를 받았을 때 실행되는 로직
-	socket.onmessage = function(event) {
-		const message = JSON.parse(event.data);
-		console.log('서버로부터 메시지 수신:', message);
+	let roomId;
 
-		// 받은 메시지를 화면에 표시하는 로직
-		const messageElement = document.createElement('p');
-		messageElement.textContent = message.content;
-		document.getElementById('messageArea').appendChild(messageElement);
-	};
 
-	// 웹소켓 연결이 종료되었을 때 실행되는 로직
-	socket.onclose = function(event) {
-		console.log('웹소켓 연결 종료:', event);
-	};
+	function connect() {
 
-	// 메시지 전송 함수
-	function sendMessage() {
-		const messageInput = document.getElementById('messageInput');
-		const message = {
-			sender: '클라이언트1',
-			content: messageInput.value
-		};
-		socket.send(JSON.stringify(message));
-		messageInput.value = '';
+		socket = new SockJS('/chat');
+		stompClient = Stomp.over(socket);
+		roomId = document.getElementById('room_id').value;
+
+		stompClient.connect({}, (frame) => {
+
+
+			const status = document.getElementById('status');
+			status.innerText = '연결됨';
+
+
+			console.log('Connected: ' + frame);
+
+			// '/broker/receive' 주소를 구독하여 메시지를 받음
+			stompClient.subscribe('/broker/room/' + roomId, onReceive);
+		})
+
+		function onReceive(chat){
+			const param = JSON.parse(chat.body);
+			const from = param.from;
+			const content = param.content;
+
+			const test = document.getElementById('test');
+			const sender = document.createElement('p');
+			sender.innerText = '<p>보낸사람: ' + from + '</p>';
+			const msg = document.createElement('p');
+			msg.innerText = '<p>메시지: ' + content + '</p>';
+			test.appendChild(sender);
+			test.appendChild(msg);
+		}
 	}
+
+	function send() {
+		const message = document.getElementById('message');
+
+		stompClient.send('/app/enter', {}, JSON.stringify({
+			from: '${username}',
+			content: message.value,
+			roomId: roomId
+		}));
+	}
+
 </script>
 </body>
 </html>
