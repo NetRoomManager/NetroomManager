@@ -1,10 +1,5 @@
 Manifest-Version: 1.0
 Created-By: IntelliJ IDEA
-<<<<<<< HEAD
-Built-By: jenny
-Build-Jdk: Oracle OpenJDK version 11.0.20
-=======
 Built-By: sean7
 Build-Jdk: 11.0.20
->>>>>>> handler
 
