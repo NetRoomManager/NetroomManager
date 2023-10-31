@@ -40,6 +40,42 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    public void createAdmin(User paramUser) {
+
+        log.info("관리자를 생성합니다");
+
+        try {
+            // USER 권한 찾기 또는 생성
+            Role role = roleRepository.findByName("ROLE_ADMIN").orElseGet(() -> {
+                Role newRole = new Role();
+                newRole.setName("ROLE_ADMIN");
+                return roleRepository.save(newRole);
+            });
+
+            // User 객체 생성
+            User user = new User();
+            user.setUsername(paramUser.getUsername());
+            user.setPassword(passwordEncoder.encode(paramUser.getPassword()));
+            user.setMobile(paramUser.getMobile());
+            user.setName(paramUser.getName());
+            user.setEmail(paramUser.getEmail());
+            user.setBirth(paramUser.getBirth());
+            userRepository.save(user);
+
+            // User와 Role 정보가 담긴 객체 생성
+            UserRole userRole = new UserRole();
+            userRole.setRole(role);
+            userRole.setUser(user);
+            userRoleRepository.save(userRole);
+
+        }
+        // 중복 가입 처리
+        catch (DataIntegrityViolationException e) {
+            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "이미 가입된 정보입니다",  e);
+        }
+    }
+
     public void createUsers(User paramUser) {
 
         log.info("유저를 생성합니다");
