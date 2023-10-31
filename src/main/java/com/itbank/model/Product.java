@@ -17,7 +17,6 @@ public class Product {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;	// 제품 아이디
 
-
     @ManyToOne
     @JoinColumn(name = "product_category_id")
     private ProductCategory productCategory;	// 상품 카테고리 아이디
@@ -39,6 +38,6 @@ public class Product {
 
     private String img; // 제품 이미지 파일
 
-    private Integer count;
+    private Integer count;  // 제품 수량
 }
 

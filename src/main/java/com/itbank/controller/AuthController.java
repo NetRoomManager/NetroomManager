@@ -13,6 +13,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -21,15 +22,17 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 @Controller
 @Slf4j
 @RequestMapping("/auth")
 public class AuthController {
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private UserService userService;
@@ -59,6 +62,21 @@ public class AuthController {
         // 세션에 SPRING_SECURITY_CONTEXT라는 키 값으로 SecurityContext를 저장합니다.
         HttpSession session = request.getSession(true);
         session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
+
+        return "redirect:/";
+    }
+
+    @GetMapping("/create_admin")
+    public String join() {
+        log.info("관리자 생성");
+        User user = new User();
+        user.setUsername("admin");
+        user.setMobile("010-9999-9999");
+        user.setPassword(passwordEncoder.encode("1234"));
+        user.setName("admin");
+        user.setEmail("admin@naver.com");
+        user.setBirth(null);
+        userService.createAdmin(user);
 
         return "redirect:/";
     }

@@ -2,19 +2,88 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" type="text/css" href="/css/style.css" />
-    <link
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link rel="stylesheet" type="text/css" href="/css/style.css"/>
     <link
             href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
             rel="stylesheet"
     />
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
     <title>로그인</title>
+    <style type="text/css">
+        html {
+            font-family: "AppleSDGothicNeoR00", "Noto Sans KR", "맑은 고딕";
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @charset "utf-8";
+        /* ---- reset ---- */
+        body {
+            margin: 0;
+            font: normal 75% Arial, Helvetica, sans-serif;
+        }
+
+        canvas {
+            display: block;
+            vertical-align: bottom;
+        }
+
+        /* ---- particles.js container ---- */
+        #particles-js {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: #28455f;
+            background-image: url("");
+            background-repeat: no-repeat;
+            background-size: cover;
+            background-position: 50% 50%;
+        }
+
+        /* ---- stats.js ---- */
+        .count-particles {
+            background: #000022;
+            position: absolute;
+            top: 48px;
+            left: 0;
+            width: 80px;
+            color: #13E8E9;
+            font-size: .8em;
+            text-align: left;
+            text-indent: 4px;
+            line-height: 14px;
+            padding-bottom: 2px;
+            font-family: Helvetica, Arial, sans-serif;
+            font-weight: bold;
+        }
+
+        .js-count-particles {
+            font-size: 1.1em;
+        }
+
+        #stats, .count-particles {
+            -webkit-user-select: none;
+            margin-top: 5px;
+            margin-left: 5px;
+        }
+
+        #stats {
+            border-radius: 3px 3px 0 0;
+            overflow: hidden;
+        }
+
+        .count-particles {
+            border-radius: 0 0 3px 3px;
+        }
+    </style>
 </head>
 <!-- 바디에 다크모드 -->
 <body data-bs-theme="dark">
+<div id="particles-js" style="z-index: -1"></div>
 <!-- 좌석이미지 -->
 <div
         class="container"
@@ -34,13 +103,13 @@
         <form method="POST" class="w-25">
             <div class="form-floating mb-3 mt-3">
                 <%--@declare id="username"--%><input
-                        type="text"
-                        class="form-control"
-                        id="login_username"
-                        placeholder="Enter username"
-                        name="username"
-                        required
-                />
+                    type="text"
+                    class="form-control"
+                    id="login_username"
+                    placeholder="Enter username"
+                    name="username"
+                    required
+            />
                 <label for="username">유저아이디</label>
             </div>
             <div class="form-floating mt-3 mb-3">
@@ -197,6 +266,12 @@
                                 <label for="mobile">전화번호</label>
                             </div>
 
+                            <div class="form-floating mb-3 mt-3">
+                                <input type="text" class="form-control" id="lol_nick"
+                                       placeholder="리그오브레전드 닉네임" name="lol_nick"/> <label
+                                    for="lol_nick">리그오브레전드 닉네임(선택)</label>
+                            </div>
+
                             <button
                                     type="submit"
                                     class="btn btn-primary"
@@ -232,6 +307,7 @@
             "width=800,height=650,left=500,top=200"
         );
     }
+
     function kakaoLogin() {
         const url =
             "/oauth2/authorization/kakao";
@@ -258,7 +334,7 @@
             .replace(/(^02.{0}|^01.{1}|[0-9]{3,4})([0-9]{3,4})([0-9]{4})/g, "$1-$2-$3");
     }
 
-    document.getElementById('join_username').addEventListener('keyup', function() {
+    document.getElementById('join_username').addEventListener('keyup', function () {
         const username = document.getElementById('join_username').value;
 
         fetch('/auth/checkId', {
@@ -276,7 +352,7 @@
                     document.getElementById('check_msg').innerText = "유효한 아이디 입니다";
                 } else {
                     document.getElementById('check_msg').classList.remove("text-primary")
-                    document.getElementById('check_msg').classList.add("text-dangerz")
+                    document.getElementById('check_msg').classList.add("text-danger")
                     document.getElementById('check_msg').innerText = "중복된 아이디입니다.";
                 }
             })
