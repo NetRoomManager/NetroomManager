@@ -136,13 +136,13 @@
 </nav>
 <nav id="menu_bar" class="nav nav-pills flex-column py-3 text-center"
 	style="position: absolute; height: 100%;">
-	<a class="nav-link py-3" href="${cpath }/admin/order_manage.jsp">주문</a>
-	<a class="nav-link py-3" href="${cpath }/admin/product_manage.jsp">재고</a>
+	<a class="nav-link py-3" href="${cpath }/admin/order">주문</a>
+	<a class="nav-link py-3" href="${cpath }/admin/product">재고</a>
 	<a class="nav-link py-3" 
-		aria-current="page" href="${cpath }/admin/sales_manage.jsp">매출</a> <a
-		class="nav-link py-3" href="${cpath }/admin/user_manage.jsp">회원</a> <a
-		class="nav-link py-3" href="${cpath }/admin/seat_manage.jsp">좌석</a> <a
-		class="nav-link py-3 active" href="${cpath }/admin/ticket_manage.jsp" style="background-color: #FF8339;">이용권</a>
+		aria-current="page" href="${cpath }/admin/sales">매출</a> <a
+		class="nav-link py-3" href="${cpath }/admin/user">회원</a> <a
+		class="nav-link py-3" href="${cpath }/admin/seat">좌석</a> <a
+		class="nav-link py-3 active" href="${cpath }/admin/ticket" style="background-color: #FF8339;">이용권</a>
 </nav>
 
 <div class="container pt-4">

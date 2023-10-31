@@ -43,17 +43,17 @@ html {
 				<li class="nav-item"><a class="nav-link active"
 					href="${cpath }/">Home</a></li>
 				<li class="nav-item"><a class="nav-link"
-					href="${cpath }/admin/seat_manage.jsp">좌석관리</a></li>
+					href="${cpath }/admin/seat">좌석관리</a></li>
 				<li class="nav-item"><a class="nav-link"
-					href="${cpath }/admin/product_manage.jsp">상품관리</a></li>
+					href="${cpath }/admin/product">상품관리</a></li>
 				<li class="nav-item"><a class="nav-link"
-					href="${cpath }/admin/sales_manage.jsp">매출관리</a></li>
+					href="${cpath }/admin/sales">매출관리</a></li>
 				<li class="nav-item"><a class="nav-link"
-					href="${cpath }/admin/ticket_manage.jsp">이용권관리</a></li>
+					href="${cpath }/admin/ticket">이용권관리</a></li>
 				<li class="nav-item"><a class="nav-link"
-					href="${cpath }/admin/user_manage.jsp">회원관리</a></li>
+					href="${cpath }/admin/user">회원관리</a></li>
 				<li class="nav-item"><a class="nav-link"
-					href="${cpath }/admin/order_manage.jsp">주문관리</a></li>
+					href="${cpath }/admin/order">주문관리</a></li>
 			</ul>
 		</div>
 	</nav>
