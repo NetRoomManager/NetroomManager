@@ -33,6 +33,8 @@
 	<li><a href="/auth/login">로그인</a></li>
 	<li><a href="/auth/logout">로그아웃</a></li>
 	<li><a href="/auth/buyTicket">티켓구매</a></li>
+	<li><a href="/auth/create_admin">관리자 생성하기</a></li>
+	<li><a href="/admin/product">관리자 상품 관리</a></li>
 </ul>
 
 <div>

@@ -24,13 +24,27 @@ public class ProductService {
 
         Product product = new Product();
         product.setProductCategory(productCategory);
-        product.setName("제발제발제발제발제발제발제발제발제발제발제발제발제발제발제발제발제발제발제발제발제발제발");
-        product.setImg("test");
-        product.setDetail("test");
-        product.setCount(1);
-        product.setPrice(12345);
-        product.setDcRate(0);
+        product.setName("사이다");
+        product.setImg("20230921204024_akmu.webp");
+        product.setDetail("시원한 사이다 255ml 캔");
+        product.setCount(50);
+        product.setPrice(1000);
+        product.setDcRate(10);
         productRepository.save(product);
+
+        Product product2 = new Product();
+        product.setProductCategory(productCategory);
+        product.setName("너구리");
+        product.setImg("20230921204355_bts_e.png");
+        product.setDetail("맛있다!");
+        product.setCount(50);
+        product.setPrice(100);
+        product.setDcRate(0);
+        productRepository.save(product2);
+    }
+
+    // 관리자
+    public void addProduct() {
 
     }
 }

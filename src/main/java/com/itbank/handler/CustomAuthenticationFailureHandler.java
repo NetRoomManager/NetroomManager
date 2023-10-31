@@ -24,6 +24,6 @@ public class CustomAuthenticationFailureHandler implements AuthenticationFailure
 ;        log.info("로그인 실패");
         request.setAttribute("errorMessage", "Invalid username or password.");
         // 포워드해주거나 리다이렉트
-            request.getRequestDispatcher("/auth/login").forward(request, response);
+        response.sendRedirect("/auth/login");
     }
 }
