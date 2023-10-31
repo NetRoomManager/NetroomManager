@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="cpath" value="${pageContext.request.contextPath }" />
+
 <!--로그인/회원가입 폼 페이지 -->
 <!DOCTYPE html>
 <html lang="ko">

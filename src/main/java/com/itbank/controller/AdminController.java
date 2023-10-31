@@ -17,8 +17,9 @@ public class AdminController {
 
     @GetMapping("/product")
     public String product() {
-        productService.createProduct();
-        return "redirect:/";
+//        productService.createProduct();
+        return "/admin/product_manage";
     }
+
 
 }
