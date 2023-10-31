@@ -66,6 +66,11 @@ public class AuthController {
         return "redirect:/";
     }
 
+    @RequestMapping("/logout")
+    public void logout() {
+        System.out.println("하요이용");
+    }
+
     @GetMapping("/test")
     public String test() {
         userService.testAdmin();

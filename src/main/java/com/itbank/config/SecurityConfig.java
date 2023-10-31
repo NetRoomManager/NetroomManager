@@ -1,6 +1,7 @@
 package com.itbank.config;
 
 import com.itbank.handler.CustomAuthenticationFailureHandler;
+import com.itbank.handler.CustomLogoutSuccessHandler;
 import com.itbank.handler.OAuth2LoginSuccessHandler;
 import com.itbank.service.CustomOAuth2UserService;
 import com.itbank.service.UserDetailsServiceImpl;
@@ -49,6 +50,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
+    private CustomLogoutSuccessHandler customLogoutSuccessHandler;
+
     // 스프링 시큐리티 설정
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -94,6 +98,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .invalidateHttpSession(true)
                 // 쿠키도 날림
                 .deleteCookies("JSESSIONID")
+                .logoutSuccessHandler(customLogoutSuccessHandler) // 로그아웃 성공 핸들러 설정
 //                .failureUrl("/auth/login?error=true")
                 // 소셜 활성화
                 .and()

@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -41,4 +42,7 @@ public class User {
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private DropOutUser dropOutUser;
+
+    @OneToMany(mappedBy = "user",  fetch = FetchType.EAGER)
+    private List<UserLog> userLogs;
 }
