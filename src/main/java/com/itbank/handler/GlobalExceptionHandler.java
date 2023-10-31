@@ -3,6 +3,7 @@ package com.itbank.handler;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -102,5 +103,14 @@ public class GlobalExceptionHandler {
         return mav;
     }
 
+    @ExceptionHandler(HttpClientErrorException.Forbidden.class)
+    public ModelAndView handleForbiddenException(HttpClientErrorException.Forbidden e) {
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("/auth/error");
+        mav.setStatus(HttpStatus.FORBIDDEN);
+        mav.addObject("message", "Forbidden: Acess is denied");
+
+        return mav;
+    }
 
 }
