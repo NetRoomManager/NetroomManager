@@ -14,7 +14,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
         config.setApplicationDestinationPrefixes("/app");
 
         // STOMP 메시지를 처리할 주소 prefix 설정
-        config.enableSimpleBroker("/broker");
+        config.enableSimpleBroker("/broker", "/queue");
     }
 
     @Override

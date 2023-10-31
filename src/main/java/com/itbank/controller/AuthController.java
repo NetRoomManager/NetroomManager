@@ -51,7 +51,7 @@ public class AuthController {
     public String login(User user, HttpServletRequest request) {
 
         log.info("로그인중");
-
+        System.out.println("로그인");
         // 사용자의 이름과 권한을 가져와서 Authentication 객체를 만듭니다.
         UserDetails userDetails = userDetailsService.loadUserByUsernameAndPassword(user.getUsername(), user.getPassword());
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
@@ -66,8 +66,15 @@ public class AuthController {
         return "redirect:/";
     }
 
+    @GetMapping("/test")
+    public String test() {
+        userService.testAdmin();
+        return "redirect:/auth/login";
+    }
+
     @GetMapping("/create_admin")
-    public String join() {
+    public String create_admin(HttpServletRequest request) {
+
         log.info("관리자 생성");
         User user = new User();
         user.setUsername("admin");
@@ -76,7 +83,21 @@ public class AuthController {
         user.setName("admin");
         user.setEmail("admin@naver.com");
         user.setBirth(null);
+
         userService.createAdmin(user);
+
+        log.info("유저 생성 완료!!");
+
+        // 사용자의 이름과 권한을 가져와서 Authentication 객체를 만듭니다.
+        UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+
+        // 만든 Authentication 객체를 SecurityContext에 설정합니다.
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+
+        // 세션에 SPRING_SECURITY_CONTEXT라는 키 값으로 SecurityContext를 저장합니다.
+        HttpSession session = request.getSession(true);
+        session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
 
         return "redirect:/";
     }

@@ -4,7 +4,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    background: url(images/bg.png) no-repeat;
+    background: url('/img/bg.png') no-repeat;
 } 
 a{
     text-decoration: none;

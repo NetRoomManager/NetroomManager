@@ -39,6 +39,7 @@ target/
 ### Gradle ###
 .gradle/
 build/
+target/jpa-1.0.0-BUILD-SNAPSHOT.war
 
 ### macOS ###
 .DS_Store
