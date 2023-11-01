@@ -76,6 +76,10 @@ public class UserService {
                 return roleRepository.save(newRole);
             });
 
+            // 남은 시간에 유저의 시간을 0 으로 저장
+            RemainingTime remainingTime = new RemainingTime();
+            remainingTime.setRemainingTime(0);
+
             // User 객체 생성
             User user = new User();
             user.setUsername(paramUser.getUsername());
@@ -84,6 +88,10 @@ public class UserService {
             user.setName(paramUser.getName());
             user.setEmail(paramUser.getEmail());
             user.setBirth(paramUser.getBirth());
+
+            remainingTime.setUser(user);
+            user.setRemainingTime(remainingTime);
+
             userRepository.save(user);
 
             // User와 Role 정보가 담긴 객체 생성
