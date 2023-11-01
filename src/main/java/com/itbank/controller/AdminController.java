@@ -49,8 +49,19 @@ public class AdminController {
         return "/admin/ticket_manage";
     }
 
-    // 회원관리
+    // 상품 매출
+    @GetMapping("/productsales")
+    public String productSale() {
+        return "/admin/product_sales_manage";
+    }
+    
+    // 이용권 매출
+    @GetMapping("/ticketsales")
+    public String ticketSale() {
+        return"/admin/ticket_sales_manage";
+    }
 
+    // 회원관리
     @GetMapping("/user")
     public ModelAndView user(String type, String keyword) {
         log.info("유형: " + type);
@@ -64,7 +75,6 @@ public class AdminController {
         }
         return mav;
     }
-
 
 
     // 주문관리

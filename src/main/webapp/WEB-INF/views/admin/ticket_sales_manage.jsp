@@ -22,10 +22,10 @@
                     <a class="nav-link active navbar-brand" aria-current="page" href="#">NetRoom</a>
                   </li>
                   <li class="nav-item pe-3">
-                    <a class="nav-link" href="#">상품매출</a>
+                    <a class="nav-link" href="${cpath}/admin/productsales">상품매출</a>
                   </li>
                   <li class="nav-item pe-3">
-                    <a class="nav-link" href="#">이용권매출</a>
+                    <a class="nav-link" href="${cpath}/admin/ticketsale">이용권매출</a>
                   </li>
                 </ul>
                 <ul class="navbar-nav">
@@ -81,9 +81,9 @@
         <nav id="menuBar" class="nav nav-pills flex-column py-3" style="position: absolute; height: 91.6%;">
             <a class="nav-link py-3" href="${cpath }/admin/order">주문</a>
             <a class="nav-link py-3" href="${cpath }/admin/product">재고</a>
-            <a class="nav-link py-3 active" style="background-color: #FF8339;" aria-current="page" href="${cpath }/admin/sales">매출</a>
-            <a class="nav-link py-3" href="">회원</a>
-            <a class="nav-link py-3" href="">좌석</a>
+            <a class="nav-link py-3 active" style="background-color: #FF8339;" aria-current="page" href="${cpath }/admin/productsales">매출</a>
+            <a class="nav-link py-3" href="${cpath}/admin/user">회원</a>
+            <a class="nav-link py-3" href="${cpath}/admin/seat">좌석</a>
         </nav>
         <div class="container pt-4">
             <form class="d-flex">
@@ -95,80 +95,14 @@
                   <input type="number" class="form-control" id="searchRangeTwo">
                 </div>
                 <div>
-                    <button type="submit" class="btn btn-secondary" >기간검색</button>
+                    <button type="submit" class="btn btn-secondary">기간검색</button>
                 </div>
             </form>
         </div>
         <div class="container">
-            <table class="table table-hover">
-                <thead>
-                    <tr class="table-dark text-center">
-                        <th scope="col">#</th>
-                        <th scope="col">상품매출번호</th>
-                        <th scope="col">결제방식</th>
-                        <th scope="col">결제품목</th>
-                        <th scope="col">결제금액</th>
-                        <th scope="col">판매시간</th>
-                        <th scope="col">구매회원아이디</th>
-                        <th scope="col">주문번호</th>
-                        <th scope="col" colspan="2">관리</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="text-center">
-                        <th class="pt-3 " scope="row">
-                            <div class="form-check d-flex justify-content-center">
-                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                            </div>
-                        </th>
-                        <td class="pt-3" >Mark</td>
-                        <td class="pt-3" >Otto</td>
-                        <td class="pt-3" >@mdo</td>
-                        <td class="pt-3" >Mark</td>
-                        <td class="pt-3" >Otto</td>
-                        <td class="pt-3" >@mdo</td>
-                        <td class="pt-3" >Mark</td>
-                        <td><button type="button" class="btn btn-outline-danger" disabled>삭제</button></td>
-                        <td><button type="button" class="btn btn-outline-warning" disabled>조회</button></td>
-                    </tr>
-                    <tr class="text-center">
-                        <th class="pt-3" scope="row">
-                            <div class="form-check d-flex justify-content-center">
-                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                            </div>
-                        </th>
-                        <td class="pt-3" >Mark</td>
-                        <td class="pt-3" >Otto</td>
-                        <td class="pt-3" >@mdo</td>
-                        <td class="pt-3" >Mark</td>
-                        <td class="pt-3" >Otto</td>
-                        <td class="pt-3" >@mdo</td>
-                        <td class="pt-3" >Mark</td>
-                        <td><button type="button" class="btn btn-outline-danger">삭제</button></td>
-                        <td><button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#detail_check_modal">조회</button></td>
-                    </tr>
-                </tbody>
-                <tfoot>
-                    <tr class="text-center table-primary">
-                        <th class="pt-3" scope="row">
-                            총합
-                        </th>
-                        <td class="pt-3" >Mark</td>
-                        <td class="pt-3" >Otto</td>
-                        <td class="pt-3" >@mdo</td>
-                        <td class="pt-3" >Mark</td>
-                        <td class="pt-3" >Otto</td>
-                        <td class="pt-3" >@mdo</td>
-                        <td class="pt-3" >Mark</td>
-                        <td class="pt-3" ></td>
-                        <td class="pt-3" ></td>
-                    </tr>
-                </tfoot>
-              </table>
               <table class="table table-hover">
                 <thead>
                     <tr class="table-dark text-center">
-                        <th scope="col">#</th>
                         <th scope="col">이용권매출번호</th>
                         <th scope="col">결제방식</th>
                         <th scope="col">결제시간</th>
@@ -181,11 +115,6 @@
                 </thead>
                 <tbody>
                     <tr class="text-center">
-                        <th class="pt-3 " scope="row">
-                            <div class="form-check d-flex justify-content-center">
-                                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
-                            </div>
-                        </th>
                         <td class="pt-3" >Mark</td>
                         <td class="pt-3" >Otto</td>
                         <td class="pt-3" >@mdo</td>
@@ -231,16 +160,5 @@
                 </tfoot>
               </table>
         </div>
-        <script>
-            $(document).ready(function () {
-                $.ajax({
-                    url: "header.html",
-                    dataType: "html",
-                    success: function (response) {
-                        $("#headerContent").html(response);
-                    },
-                });
-            });
-        </script>
     </body>
 </html>
