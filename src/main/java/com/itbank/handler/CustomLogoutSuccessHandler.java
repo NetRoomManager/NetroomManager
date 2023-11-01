@@ -35,9 +35,8 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
         if (authentication != null && authentication.getPrincipal() instanceof UserPrincipal) {
             UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
-            Pageable pageable = PageRequest.of(0, 1, Sort.Direction.DESC, "id");
-            Page<UserLog> userLogs = userLogService.findLatestByUser(userPrincipal.getUser(), pageable);
-            Optional<UserLog> userLog = userLogs.getContent().stream().findFirst();
+            // 해당하는 유저의 최근 로그를 불러옴
+            Optional<UserLog> userLog = userLogService.findLatestByUser(userPrincipal.getUser());
 
             if (userLog.isPresent()) {
                 UserLog log = userLog.get();

@@ -1,8 +1,10 @@
 package com.itbank.service;
 
 import com.itbank.model.User;
+import com.itbank.model.UserAndLastLog;
 import com.itbank.model.UserLog;
 import com.itbank.repository.UserLogRepository;
+import com.itbank.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,12 +22,17 @@ public class UserLogService {
     @Autowired
     private UserLogRepository userLogRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     public UserLog save(UserLog userLog) {
         return userLogRepository.save(userLog);
     }
 
-    public Page<UserLog> findLatestByUser(User user, Pageable pageable) {
-        return userLogRepository.findLatestByUser(user, pageable);
+    public Optional<UserLog> findLatestByUser(User user) {
+        Pageable pageable = PageRequest.of(0, 1, Sort.Direction.DESC, "id");
+        Page<UserLog> userLogs = userLogRepository.findLatestByUser(user, pageable);
+        return userLogs.getContent().stream().findFirst();
     }
 
 }

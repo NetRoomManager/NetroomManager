@@ -3,14 +3,19 @@ package com.itbank.controller;
 import com.itbank.model.Product;
 import com.itbank.service.ProductService;
 import com.itbank.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 import oracle.jdbc.proxy._Proxy_;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import java.util.Objects;
 
 @Controller
 @RequestMapping("/admin")
+@Slf4j
 public class AdminController {
 
     @Autowired
@@ -45,13 +50,22 @@ public class AdminController {
     }
 
     // 회원관리
+
     @GetMapping("/user")
-    public String user() {
-
-
-
-        return "/admin/user_manage";
+    public ModelAndView user(String type, String keyword) {
+        log.info("유형: " + type);
+        log.info("검색어: "+keyword);
+        ModelAndView mav = new ModelAndView("/admin/user_manage");
+        if( type==null && keyword==null){
+            mav.addObject("list", userService.findUserAndLastLog());
+        }
+        else {
+            mav.addObject("list",userService.findUserAndLastLog(Objects.requireNonNull(type), keyword));
+        }
+        return mav;
     }
+
+
 
     // 주문관리
     @GetMapping("/order")

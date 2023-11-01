@@ -1,8 +1,6 @@
 package com.itbank.service;
 
-import com.itbank.model.Role;
-import com.itbank.model.User;
-import com.itbank.model.UserRole;
+import com.itbank.model.*;
 import com.itbank.repository.RoleRepository;
 import com.itbank.repository.SocialLoginRepository;
 import com.itbank.repository.UserRepository;
@@ -17,8 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.sql.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -35,7 +32,7 @@ public class UserService {
     private UserRoleRepository userRoleRepository;
 
     @Autowired
-    private SocialLoginRepository socialLoginRepository;
+    private UserLogService userLogService;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -135,9 +132,57 @@ public class UserService {
     }
 
 
+    public List<UserAndLastLog> findUserAndLastLog() {
+        log.info("검색어 X");
+        return findUserAndLastLog("", null);
+    }
+    public List<UserAndLastLog> findUserAndLastLog(String type, String keyword) {
+
+        log.info("유형: " + type);
+        log.info("검색어: "+keyword);
+
+        List<UserAndLastLog> list = new ArrayList<>();
+        List<User> users = null;
+
+        switch (type) {
+            // 전체검색
+            case "" :
+                users = userRepository.findAllByKeyword(keyword==null ? "" : keyword);
+                break;
+            case "name":
+                users = userRepository.findAllByNameContaining(keyword);
+                break;
+            case "username":
+                users = userRepository.findAllByUsernameContaining(keyword);
+                break;
+            case "mobile":
+                users = userRepository.findAllByMobileContaining(keyword);
+                break;
+            case "email":
+                users = userRepository.findAllByEmailContaining(keyword);
+                break;
+            default:
+                users = userRepository.findAll();
+                break;
+        }
+
+        for(User user : users) {
+            UserAndLastLog userAndLastLog = new UserAndLastLog();
+            userAndLastLog.setUser(user);
+            Optional<UserLog> optionalUserLog = userLogService.findLatestByUser(user);
+            if(optionalUserLog.isPresent()) {
+                UserLog log = optionalUserLog.get();
+                userAndLastLog.setLastLog(log);
+            }
+            list.add(userAndLastLog);
+        }
+        return list;
+    }
+
     public List<User> findAll() {
         return userRepository.findAll();
     }
+
 
     public Optional<User> checkId(String username) {
         return userRepository.findByUsername(username);
