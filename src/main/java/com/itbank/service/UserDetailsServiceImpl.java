@@ -1,6 +1,9 @@
 package com.itbank.service;
 
 import com.itbank.config.UserPrincipal;
+import com.itbank.model.User;
+import com.itbank.model.UserLog;
+import com.itbank.repository.UserLogRepository;
 import com.itbank.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,16 +24,21 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
 
+    @Autowired
+    private UserLogRepository userLogRepository;
+
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         System.out.println(username + "님의 정보를 불러옵니다");
 
-        com.itbank.model.User customUser= userRepository.findByUsername(username)
+        User customUser= userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username + "님의 정보를 찾을 수 없습니다"));
 
         if (customUser.getDropOutUser() != null) {
             throw new AuthenticationServiceException("탈퇴된 계정입니다");
         }
+
+        createUserLog(customUser);
 
         return new UserPrincipal(customUser);
     }
@@ -39,13 +47,22 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         System.out.println(username + "님의 정보를 불러옵니다");
 
-        com.itbank.model.User customUser= userRepository.findByUsernameAndPassword(username, password)
+        User customUser= userRepository.findByUsernameAndPassword(username, password)
                 .orElseThrow(() -> new UsernameNotFoundException(username + "님의 정보를 찾을 수 없습니다"));
 
         if (customUser.getDropOutUser() != null) {
             throw new AuthenticationServiceException("탈퇴된 계정입니다");
         }
+
+        createUserLog(customUser);
+
         return new UserPrincipal(customUser);
+    }
+
+    private void createUserLog(User user) {
+        UserLog log = new UserLog();
+        log.setUser(user);
+        userLogRepository.save(log);
     }
 }
 

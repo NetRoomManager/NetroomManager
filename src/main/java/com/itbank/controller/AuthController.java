@@ -51,7 +51,7 @@ public class AuthController {
     public String login(User user, HttpServletRequest request) {
 
         log.info("로그인중");
-
+        System.out.println("로그인");
         // 사용자의 이름과 권한을 가져와서 Authentication 객체를 만듭니다.
         UserDetails userDetails = userDetailsService.loadUserByUsernameAndPassword(user.getUsername(), user.getPassword());
         UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
@@ -65,6 +65,17 @@ public class AuthController {
 
         return "redirect:/";
     }
+    @GetMapping("/test")
+    public String test() {
+        userService.testAdmin();
+        return "redirect:/auth/login";
+    }
+
+    @RequestMapping("/logout")
+    public void logout() {
+        System.out.println("하요이용");
+    }
+
     @GetMapping("/test")
     public String test() {
         userService.testAdmin();
@@ -148,16 +159,6 @@ public class AuthController {
         Map<String, Boolean> result = new HashMap<>();
         result.put("success", true);
         return result;
-    }
-
-    @ExceptionHandler(UsernameNotFoundException.class)
-    @ResponseBody
-    public ResponseEntity<Object> handle(Exception ex,
-                                         HttpServletRequest request, HttpServletResponse response) {
-        if (ex instanceof NullPointerException) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
     }
 
     @PostMapping("/checkId")

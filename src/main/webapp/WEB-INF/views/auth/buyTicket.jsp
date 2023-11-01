@@ -106,14 +106,13 @@
     </table>
 </div>
 
-<div class="offcanvas offcanvas-end" id="demo">
+<div class="offcanvas offcanvas-end" id="payments">
     <div class="offcanvas-header">
         <h1 class="offcanvas-title">결제하기</h1>
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
     </div>
     <div class="offcanvas-body d-flex flex-wrap">
-        <button id="kakaoBtn" class="btn"><img class="img-fluid" src="/img/kakaopay.jpg" alt="New York" width="1100"
-                                 height="500"></button>
+        <button id="kakaoBtn" class="btn"><img class="img-fluid" src="/img/kakaopay.jpg" alt="New York" width="1100" height="500"></button>
         <button id="tossBtn" class="btn"><img class="img-fluid w-100" src="/img/tosspay.png" alt="New York"></button>
         <button id="inicisBtn" class="btn"><img class="img-fluid" src="/img/KG_pay_button.png   " alt="New York" width="1100"
                                                 height="500"></button>

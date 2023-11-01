@@ -10,7 +10,9 @@
 <body>
 
 <script type="text/javascript">
-    window.opener.location.href = "/";
+    const urlParams = new URLSearchParams(window.location.search);
+    const targetUrl = urlParams.get('targetUrl');
+    window.opener.location.href = targetUrl;
     window.close();
 </script>
 

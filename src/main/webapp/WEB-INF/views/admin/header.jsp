@@ -2,6 +2,19 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <c:set var="cpath" value="${pageContext.request.contextPath }" />
+
+<!-- 세션에서 SecurityContext를 가져옵니다. -->
+<c:set var="securityContext" value="${sessionScope.SPRING_SECURITY_CONTEXT}" />
+
+<!-- SecurityContext에서 Authentication 객체를 가져옵니다. -->
+<c:set var="authentication" value="${securityContext.authentication}" />
+
+<!-- Authentication 객체에서 Principal(사용자) 정보를 가져옵니다. -->
+<c:set var="principal" value="${authentication.principal}" />
+
+<!-- Principal에서 사용자의 이름을 가져옵니다. -->
+<c:set var="username" value="${principal.username}" />
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -21,6 +34,7 @@ html {
 .hidden {
 	display: none;
 }
+
 </style>
 <body>
 	<nav class="navbar navbar-expand-sm bg-info navbar-dark">
@@ -29,17 +43,17 @@ html {
 				<li class="nav-item"><a class="nav-link active"
 					href="${cpath }/">Home</a></li>
 				<li class="nav-item"><a class="nav-link"
-					href="${cpath }/admin/seat_manage.jsp">좌석관리</a></li>
+					href="${cpath }/admin/seat">좌석관리</a></li>
 				<li class="nav-item"><a class="nav-link"
-					href="${cpath }/admin/product_manage.jsp">상품관리</a></li>
+					href="${cpath }/admin/product">상품관리</a></li>
 				<li class="nav-item"><a class="nav-link"
-					href="${cpath }/admin/sales_manage.jsp">매출관리</a></li>
+					href="${cpath }/admin/sales">매출관리</a></li>
 				<li class="nav-item"><a class="nav-link"
-					href="${cpath }/admin/ticket_manage.jsp">이용권관리</a></li>
+					href="${cpath }/admin/ticket">이용권관리</a></li>
 				<li class="nav-item"><a class="nav-link"
-					href="${cpath }/admin/user_manage.jsp">회원관리</a></li>
+					href="${cpath }/admin/user">회원관리</a></li>
 				<li class="nav-item"><a class="nav-link"
-					href="${cpath }/admin/order_manage.jsp">주문관리</a></li>
+					href="${cpath }/admin/order">주문관리</a></li>
 			</ul>
 		</div>
 	</nav>

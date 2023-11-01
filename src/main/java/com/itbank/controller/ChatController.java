@@ -1,9 +1,11 @@
 package com.itbank.controller;
 
-import com.itbank.model.ChatMessage;
+import com.itbank.model.Message;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @Controller
 public class ChatController {
@@ -14,23 +16,8 @@ public class ChatController {
         this.messagingTemplate = messagingTemplate;
     }
 
-//    // stompClient.send
-//    @MessageMapping("/enter")
-//
-//    // 구독링크
-//    @SendTo("/broker/room/{roomId}")
-//    public ChatMessage sendMessage(ChatMessage chatMessage) {
-//
-//        System.out.println(chatMessage.toString());
-//
-//        return chatMessage;
-//    }
-
-    @MessageMapping("/enter")
-    public void sendMessage(ChatMessage chatMessage) {
-        System.out.println(chatMessage.toString());
-        messagingTemplate.convertAndSend("/broker/room/" + chatMessage.getRoomId(), chatMessage);
+    @MessageMapping("/chat")
+    public void send(@Payload Message message) {
+        messagingTemplate.convertAndSendToUser(message.getUsername(), "/queue/messages", message);
     }
-
-
 }
