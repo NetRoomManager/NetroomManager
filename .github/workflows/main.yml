@@ -1,0 +1,30 @@
+name: Deploy
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v3
+
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.4
+      with:
+        ssh-private-key: ${{ secrets.DEPLOY_SSH_KEY }}
+
+    - name: Deploy to Server
+      run: |
+        ssh -p 32121 -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} <<EOF
+          cd NetRoomManager/
+          sudo git pull origin main
+          sudo mvn clean package
+          sudo ../apache-tomcat-9.0.82/bin/shutdown.sh
+          sudo rm -rf ../apache-tomcat-9.0.82/webapps/ROOT*
+          sudo cp target/ROOT.war ../apache-tomcat-9.0.82/webapps/
+          sudo ../apache-tomcat-9.0.82/bin/startup.sh
+        EOF
