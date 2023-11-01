@@ -31,8 +31,16 @@
 
 <ul>
 	<li><a href="/auth/login">로그인</a></li>
+	<li></li>
 	<li><a href="/auth/logout">로그아웃</a></li>
+	<li></li>
 	<li><a href="/auth/buyTicket">티켓구매</a></li>
+	<li></li>
+	<li><a href="/auth/create_admin">관리자 계정 생성</a></li>
+	<li></li>
+	<li><a href="/admin/seat">좌석 생성</a></li>
+	<li></li>
+	<li><a href="/admin/seat_manage">관리자 페이지</a></li>
 </ul>
 
 <!-- 메시지 입력 폼 -->

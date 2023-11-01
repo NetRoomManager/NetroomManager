@@ -89,11 +89,11 @@ canvas {
 				<li class="nav-item"><a class="nav-link active"
 					href="${cpath }/">Home</a></li>
 				<li class="nav-item"><a class="nav-link"
-					href="${cpath }/customer/customer_main.jsp">유저 메인페이지</a></li>
+					href="${cpath }/customer/customer_main">유저 메인페이지</a></li>
 				<li class="nav-item"><a class="nav-link"
-					href="${cpath }/customer/customer_order.jsp">유저 주문 페이지</a></li>
+					href="${cpath }/customer/customer_order">유저 주문 페이지</a></li>
 				<li class="nav-item"><a class="nav-link"
-					href="${cpath }/customer/error.jsp">에러페이지</a></li>
+					href="${cpath }/customer/error">에러페이지</a></li>
 			</ul>
 		</div>
 	</nav>
@@ -248,7 +248,7 @@ canvas {
 							$('#quit_modal').modal('hide');
 							alert('컴퓨터가 종료됩니다.');
 						} else if (countdownValue === -1) {
-							location.href = "${cpath}/auth/login_form.jsp";
+							location.href = "${cpath}/auth/login_form";
 						} else {
 							setTimeout(startCountdown, 1000);
 						}

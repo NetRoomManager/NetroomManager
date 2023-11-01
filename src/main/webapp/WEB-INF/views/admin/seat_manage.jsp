@@ -141,253 +141,6 @@
 		href="${cpath }/admin/ticket_manage.jsp">이용권</a>
 </nav>
 
-<div class="container pt-4 d-flex">
-	<div class="w-50  d-flex flex-wrap">
-		<div class="card bg-primary text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[01]</div>
-			<div class="seat_remain_time card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">사용가능</div>
-		</div>
-		<div class="card bg-primary text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[02]</div>
-			<div class="seat_remain_time card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">사용가능</div>
-		</div>
-		<div class="card bg-primary text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[03]</div>
-			<div class="seat_remain_time card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">사용가능</div>
-		</div>
-		<div class="card bg-secondary text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[04]</div>
-			<div class="seat_remain_time card-body">
-				<pre>남은시간:</pre>
-				<pre>12:03</pre>
-			</div>
-			<div class="card-footer">사용중</div>
-		</div>
-		<div class="card bg-primary text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[05]</div>
-			<div class="seat_remain_time card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">사용가능</div>
-		</div>
-		<div class="card bg-primary text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[06]</div>
-			<div class="card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">사용가능</div>
-		</div>
-		<div class="card bg-primary text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[07]</div>
-			<div class="card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">사용가능</div>
-		</div>
-		<div class="card bg-primary text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[08]</div>
-			<div class="card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">사용가능</div>
-		</div>
-		<div class="card bg-primary text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[09]</div>
-			<div class="card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">사용가능</div>
-		</div>
-		<div class="card bg-primary text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[10]</div>
-			<div class="card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">사용가능</div>
-		</div>
-		<div class="card bg-primary text-white  mx-3 mt-3" style="width: 25%;"
-			data-bs-toggle="modal" data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[11]</div>
-			<div class="card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">사용가능</div>
-		</div>
-		<div class="card bg-primary text-white  mx-3 mt-3" style="width: 25%;"
-			data-bs-toggle="modal" data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[12]</div>
-			<div class="card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">사용가능</div>
-		</div>
-	</div>
-	<!-- 분단 구별  -->
-
-	<div class="w-50  d-flex flex-wrap">
-		<div class="card bg-primary text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[13]</div>
-			<div class="card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">사용가능</div>
-		</div>
-		<div class="card bg-primary text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[14]</div>
-			<div class="card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">사용가능</div>
-		</div>
-		<div class="card bg-primary text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[15]</div>
-			<div class="card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">사용가능</div>
-		</div>
-		<div class="card bg-primary text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[16]</div>
-			<div class="card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">사용가능</div>
-		</div>
-		<div class="card bg-primary text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[17]</div>
-			<div class="card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">사용가능</div>
-		</div>
-		<div class="card bg-primary text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[18]</div>
-			<div class="card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">사용가능</div>
-		</div>
-		<div class="card bg-warning text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[19]</div>
-			<div class="card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">예약석</div>
-		</div>
-		<div class="card bg-warning text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[20]</div>
-			<div class="card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">예약석</div>
-		</div>
-		<div class="card bg-warning text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[21]</div>
-			<div class="card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">예약석</div>
-		</div>
-		<div class="card bg-primary text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[22]</div>
-			<div class="card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">사용가능</div>
-		</div>
-		<div class="card bg-danger text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[23]</div>
-			<div class="card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">사용가능</div>
-		</div>
-		<div class="card bg-danger text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[24]</div>
-			<div class="card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">사용불가</div>
-		</div>
-	</div>
-</div>
-<!-- The Modal -->
 <div class="modal fade" id="seat_detail" aria-hidden="true"
 	data-bs-backdrop="static" data-bs-keyboard="false"
 	aria-labelledby="seat_detailLabel" tabindex="-1">
@@ -435,6 +188,10 @@
 	</div>
 </div>
 
+
+
+
+<!-- 좌석 시간 추가, 상태  Modal -->
 <div class="modal fade" id="seat_chat" aria-hidden="true"
 	data-bs-backdrop="static" data-bs-keyboard="false"
 	aria-labelledby="seat_chatLabel2" tabindex="-1">
@@ -471,6 +228,7 @@
 	</div>
 </div>
 
+<%--채팅 모달--%>
 <script>
 	var popoverTriggerList = [].slice.call(document
 			.querySelectorAll('[data-bs-toggle="popover"]'))
@@ -505,5 +263,50 @@
 		}
 	}
 </script>
+
+<div class="container pt-4 d-flex" >
+
+
+	<c:forEach var="i" begin="1" end="2">
+		<div class="w-50  d-flex flex-wrap" >
+			<c:forEach var="seat" items="${seatList}" begin="${(i-1)*12}" end="${i*12-1}">
+				<c:choose>
+					<c:when test="${seat.seatState == 1 }">
+						<c:set var="bgColor" value="bg-primary"/>
+						<c:set var="stateCmt" value="사용가능"/>
+					</c:when>
+					<c:when test="${seat.seatState == 2 }">
+						<c:set var="bgColor" value="bg-secondary"/>
+						<c:set var="stateCmt" value="사용중"/>
+					</c:when>
+					<c:when test="${seat.seatState == 3 }">
+						<c:set var="bgColor" value="bg-warning"/>
+						<c:set var="stateCmt" value="예약중"/>
+					</c:when>
+					<c:when test="${seat.seatState == 4 }">
+						<c:set var="bgColor" value="bg-danger"/>
+						<c:set var="stateCmt" value="사용불가"/>
+					</c:when>
+				</c:choose>
+				<div class="card ${bgColor} text-white mx-3 mt-3"
+					 style="width: 25%; height: 25%;" data-bs-toggle="modal"
+					 data-bs-target="#seat_detail">
+					<div class="seat_id card-header">좌석번호[ ${seat.seatId} ]</div>
+					<div class="seat_remain_time card-body">
+						<pre>남은시간:</pre>
+						<pre>01:35</pre>
+					</div>
+					<div class="card-footer">
+							${stateCmt}
+					</div>
+				</div>
+			</c:forEach>
+
+		</div>
+	</c:forEach>
+
+
+</div>
+
 </body>
 </html>

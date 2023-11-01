@@ -40,6 +40,36 @@ public class UserService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    public void testAdmin() {
+
+        System.out.println("유저를 생성합니다...");
+
+        // USER 권한 찾기 또는 생성
+        Role role = roleRepository.findByName("ROLE_ADMIN").orElseGet(() -> {
+            Role newRole = new Role();
+            newRole.setName("ROLE_ADMIN");
+            return roleRepository.save(newRole);
+        });
+
+        // User 객체 생성
+        User user = new User();
+        user.setUsername("username");
+        user.setPassword(passwordEncoder.encode("password"));
+        user.setMobile("mobileNumber");
+        user.setName("name");
+        user.setEmail("email@example.com");
+        user.setBirth(new Date(System.currentTimeMillis()));
+        userRepository.save(user);
+
+        // User와 Role 정보가 담긴 객체 생성
+        UserRole userRole = new UserRole();
+        userRole.setRole(role);
+        userRole.setUser(user);
+        userRoleRepository.save(userRole);
+
+    }
+
+    // 관리자 만들기
     public void createAdmin(User paramUser) {
 
         log.info("관리자를 생성합니다");
@@ -53,19 +83,12 @@ public class UserService {
             });
 
             // User 객체 생성
-            User user = new User();
-            user.setUsername(paramUser.getUsername());
-            user.setPassword(passwordEncoder.encode(paramUser.getPassword()));
-            user.setMobile(paramUser.getMobile());
-            user.setName(paramUser.getName());
-            user.setEmail(paramUser.getEmail());
-            user.setBirth(paramUser.getBirth());
-            userRepository.save(user);
+            userRepository.save(paramUser);
 
             // User와 Role 정보가 담긴 객체 생성
             UserRole userRole = new UserRole();
             userRole.setRole(role);
-            userRole.setUser(user);
+            userRole.setUser(paramUser);
             userRoleRepository.save(userRole);
 
         }
@@ -75,6 +98,7 @@ public class UserService {
                     HttpStatus.BAD_REQUEST, "이미 가입된 정보입니다",  e);
         }
     }
+
 
     public void createUsers(User paramUser) {
 
