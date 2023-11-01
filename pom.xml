@@ -244,6 +244,11 @@
 
 	</dependencies>
     <build>
+	<resources>
+		<resource>
+			<directory>src/main/webapp/WEB-INF/spring/</directory>
+		</resource>
+	</resources>
         <plugins>
             <plugin>
                 <artifactId>maven-eclipse-plugin</artifactId>
@@ -271,6 +276,15 @@
                     <showDeprecation>true</showDeprecation>
                 </configuration>
             </plugin>
+	    <plugin>
+           	 <groupId>org.apache.maven.plugins</groupId>
+            	<artifactId>maven-war-plugin</artifactId>
+            	<version>3.3.2</version>
+            <configuration>
+                <!-- WAR 파일 이름 설정 -->
+                <warName>my-application</warName>
+            </configuration>
+        </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -281,13 +295,5 @@
             </plugin>
         </plugins>
 
-		<resources>
-			<resource>
-				<directory>src/main/webapp</directory>
-				<includes>
-					<include>WEB-INF/spring/**/*.xml</include>
-				</includes>
-			</resource>
-		</resources>
     </build>
 </project>
