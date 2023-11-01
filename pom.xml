@@ -271,6 +271,15 @@
                     <showDeprecation>true</showDeprecation>
                 </configuration>
             </plugin>
+		            <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-war-plugin</artifactId>
+            <version>3.3.2</version>
+            <configuration>
+                <!-- WAR 파일 이름 설정 -->
+                <warName>ROOT</warName>
+            </configuration>
+        </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
