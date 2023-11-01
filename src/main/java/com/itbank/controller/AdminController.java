@@ -3,12 +3,12 @@ package com.itbank.controller;
 
 import com.itbank.model.Seat;
 import com.itbank.service.ProductService;
-<<<<<<< HEAD
+
 import com.itbank.service.SeatService;
-=======
+
 import com.itbank.service.UserService;
 import oracle.jdbc.proxy._Proxy_;
->>>>>>> main
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,7 +36,6 @@ public class AdminController {
         return "/admin/product_manage";
     }
 
-<<<<<<< HEAD
 
     @GetMapping("/seat")
     public String seatTest(){
@@ -54,12 +53,7 @@ public class AdminController {
         return mav;
     }
 
-=======
-    // 좌석관리
-    @GetMapping("/seat")
-    public String seat() {
-        return "/admin/seat_manage";
-    }
+
 
     // 매출관리
     @GetMapping("/sales")
@@ -87,5 +81,5 @@ public class AdminController {
     public String order() {
         return "/admin/order_manage";
     }
->>>>>>> main
+
 }

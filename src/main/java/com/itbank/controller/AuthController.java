@@ -65,11 +65,7 @@ public class AuthController {
 
         return "redirect:/";
     }
-    @GetMapping("/test")
-    public String test() {
-        userService.testAdmin();
-        return "redirect:/auth/login";
-    }
+
 
     @RequestMapping("/logout")
     public void logout() {

@@ -149,7 +149,7 @@
 
 			<!-- Modal Header -->
 			<div class="modal-header">
-				<h4 class="modal-title">좌석정보[00]</h4>
+				<h4 class="modal-title">좌석정보[<span id="modal_seat_id"></span>]</h4>
 				<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 			</div>
 
@@ -157,10 +157,12 @@
 			<div class="modal-body">
 				<form action="#add_update">
 					<div class="input-group mb-3">
-						<select class="form-select" id="can_use" name="seat_state">
-							<option selected value="1">사용가능</option>
-							<option value="2">예약석</option>
-							<option value="0">사용불가</option>
+						<select class="form-select" id="can_use" name="seat_state" >
+							<option selected value="0">----좌석상세----</option>
+							<option value="1">사용가능</option>
+							<option value="2">사용중</option>
+							<option value="3">예약석</option>
+							<option value="4">사용불가</option>
 						</select>
 					</div>
 					<!-- 사용중인 좌석인 경우에는 -->
@@ -175,7 +177,7 @@
 							<option value="6">6시간 추가</option>
 						</select>
 					</div>
-					<button class="btn btn-success" type="submit">수정하기</button>
+					<button class="btn btn-success" type="submit" onclick="changeSeatStatus()">수정하기</button>
 				</form>
 			</div>
 			<!-- Modal footer -->
@@ -230,7 +232,8 @@
 
 <%--채팅 모달--%>
 <script>
-	var popoverTriggerList = [].slice.call(document
+
+var popoverTriggerList = [].slice.call(document
 			.querySelectorAll('[data-bs-toggle="popover"]'))
 	var popoverList = popoverTriggerList.map(function(popoverTriggerEl) {
 		return new bootstrap.Popover(popoverTriggerEl)
@@ -264,9 +267,11 @@
 	}
 </script>
 
+
+
+
+<%-- 좌석 --%>
 <div class="container pt-4 d-flex" >
-
-
 	<c:forEach var="i" begin="1" end="2">
 		<div class="w-50  d-flex flex-wrap" >
 			<c:forEach var="seat" items="${seatList}" begin="${(i-1)*12}" end="${i*12-1}">
@@ -281,7 +286,7 @@
 					</c:when>
 					<c:when test="${seat.seatState == 3 }">
 						<c:set var="bgColor" value="bg-warning"/>
-						<c:set var="stateCmt" value="예약중"/>
+						<c:set var="stateCmt" value="예약석"/>
 					</c:when>
 					<c:when test="${seat.seatState == 4 }">
 						<c:set var="bgColor" value="bg-danger"/>
@@ -290,7 +295,9 @@
 				</c:choose>
 				<div class="card ${bgColor} text-white mx-3 mt-3"
 					 style="width: 25%; height: 25%;" data-bs-toggle="modal"
-					 data-bs-target="#seat_detail">
+					 data-bs-target="#seat_detail"
+				     data-bs-id="${seat.seatId}"
+					 onclick="setModalSeatId(this)">
 					<div class="seat_id card-header">좌석번호[ ${seat.seatId} ]</div>
 					<div class="seat_remain_time card-body">
 						<pre>남은시간:</pre>
@@ -305,8 +312,45 @@
 		</div>
 	</c:forEach>
 
-
 </div>
+<script>
+	let seatId;
+	function setModalSeatId(card) {
+		seatId = card.getAttribute('data-bs-id')
+		const modalSeatId = document.getElementById('modal_seat_id')
+		modalSeatId.textContent = seatId;
+	}
+
+	function changeSeatStatus(){
+		const selectElement = document.getElementById('can_use')
+		const selectOption = selectElement.options[selectElement.selectedIndex]
+		const seat = document.querySelector(`[data-bs-id="${seatId}"]`)
+
+		switch (selectOption.value){
+			case 1:
+				seat.classList.remove('bg-secondary','bg-warning','bg-danger')
+				seat.classList.add('bg-primary')
+				seat.querySelector('.card-footer').textContent = '사용가능'
+				break;
+			case 2:
+				seat.classList.remove('bg-primary', 'bg-waring', 'bg-danger')
+				seat.classList.add('bg-secondary')
+				seat.querySelector('.card-footer').textContent = '사용중'
+				break;
+			case 3:
+				seat.classList.remove('bg-secondary','bg-primary','bg-danger')
+				seat.classList.add('bg-warning')
+				seat.querySelector('.card-footer').textContent = '예약석'
+				break;
+			case 4:
+				seat.classList.remove('bg-secondary','bg-primary','bg-warning')
+				seat.classList.add('bg-danger')
+				seat.querySelector('.card-footer').textContent = '사용불가'
+				break;
+		}
+	}
+
+</script>
 
 </body>
 </html>
