@@ -23,6 +23,7 @@ jobs:
           sudo su -
           cd /opt/NetRoomManager/
           git pull origin main
+          mvn clean package
           /opt/apache-tomcat-9.0.82/bin/shutdown.sh
           rm -rf /opt/apache-tomcat-9.0.82/webapps/ROOT*
           cp target/ROOT.war /opt/apache-tomcat-9.0.82/webapps/
