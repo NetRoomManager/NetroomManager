@@ -2,7 +2,10 @@ package com.itbank.service;
 
 import com.itbank.config.UserPrincipal;
 import com.itbank.model.*;
-import com.itbank.repository.*;
+import com.itbank.repository.jpa.RoleRepository;
+import com.itbank.repository.jpa.SocialLoginRepository;
+import com.itbank.repository.jpa.UserRepository;
+import com.itbank.repository.jpa.UserRoleRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

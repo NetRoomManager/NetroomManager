@@ -1,7 +1,7 @@
 package com.itbank.service;
 
 import com.itbank.model.*;
-import com.itbank.repository.*;
+import com.itbank.repository.jpa.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

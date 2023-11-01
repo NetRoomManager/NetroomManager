@@ -1,15 +1,13 @@
 package com.itbank.service;
 
 import com.itbank.model.*;
-import com.itbank.repository.RoleRepository;
-import com.itbank.repository.SocialLoginRepository;
-import com.itbank.repository.UserRepository;
-import com.itbank.repository.UserRoleRepository;
+import com.itbank.repository.jpa.RoleRepository;
+import com.itbank.repository.jpa.UserRepository;
+import com.itbank.repository.jpa.UserRoleRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.parameters.P;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;

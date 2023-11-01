@@ -1,4 +1,4 @@
-package com.itbank.repository;
+package com.itbank.repository.jpa;
 
 import com.itbank.model.User;
 import com.itbank.model.UserRole;

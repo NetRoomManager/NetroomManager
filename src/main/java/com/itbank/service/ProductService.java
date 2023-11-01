@@ -2,8 +2,8 @@ package com.itbank.service;
 
 import com.itbank.model.Product;
 import com.itbank.model.ProductCategory;
-import com.itbank.repository.ProductCategoryRepository;
-import com.itbank.repository.ProductRepository;
+import com.itbank.repository.jpa.ProductCategoryRepository;
+import com.itbank.repository.jpa.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

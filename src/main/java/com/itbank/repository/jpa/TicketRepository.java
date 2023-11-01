@@ -1,4 +1,4 @@
-package com.itbank.repository;
+package com.itbank.repository.jpa;
 
 import com.itbank.model.Ticket;
 import org.springframework.data.jpa.repository.JpaRepository;
