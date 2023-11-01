@@ -7,6 +7,7 @@ import com.itbank.repository.jpa.UserLogRepository;
 import com.itbank.repository.jpa.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -27,6 +28,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private UserLogRepository userLogRepository;
 
+
+
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
         System.out.println(username + "님의 정보를 불러옵니다");
@@ -38,22 +41,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new AuthenticationServiceException("탈퇴된 계정입니다");
         }
 
-        createUserLog(customUser);
-
-        return new UserPrincipal(customUser);
-    }
-
-    public UserDetails loadUserByUsernameAndPassword(String username, String password) {
-
-        System.out.println(username + "님의 정보를 불러옵니다");
-
-        User customUser= userRepository.findByUsernameAndPassword(username, password)
-                .orElseThrow(() -> new UsernameNotFoundException(username + "님의 정보를 찾을 수 없습니다"));
-
-        if (customUser.getDropOutUser() != null) {
-            throw new AuthenticationServiceException("탈퇴된 계정입니다");
-        }
-
+        // 유저 로그 추가
         createUserLog(customUser);
 
         return new UserPrincipal(customUser);
