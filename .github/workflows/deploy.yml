@@ -20,7 +20,11 @@ jobs:
     - name: Deploy to Server
       run: |
         ssh -p 32121 -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} <<EOF
-          cd /path/to/your/project
-          git pull
-          sudo systemctl restart your-service
+          cd NetRoomManager/
+          sudo git pull origin main
+          sudo mvn clean package
+          sudo ../apache-tomcat-9.0.82/bin/shutdown.sh
+          sudo rm -rf ../apache-tomcat-9.0.82/webapps/ROOT*
+          sudo cp target/ROOT.war ../apache-tomcat-9.0.82/webapps/
+          sudo ../apache-tomcat-9.0.82/bin/startup.sh
         EOF
