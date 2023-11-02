@@ -21,7 +21,7 @@
 	<div class="collapse navbar-collapse" id="navbarSupportedContent">
 		<ul class="navbar-nav me-auto mb-2 mb-lg-0 pt-1">
 			<li class="nav-item"><a class="nav-link active navbar-brand"
-				aria-current="page" href="#">NetRoom</a></li>
+				aria-current="page" href="${cpath}/">NetRoom</a></li>
 		</ul>
 		<ul class="navbar-nav">
 			<li class="nav-item pe-2">
@@ -134,7 +134,7 @@
 	<a class="nav-link py-3" href="${cpath }/admin/order">주문</a>
 	<a class="nav-link py-3" href="${cpath }/admin/product">재고</a>
 	<a class="nav-link py-3" aria-current="page"
-		href="${cpath }/admin/sales">매출</a> <a
+		href="${cpath }/admin/productsales">매출</a> <a
 		class="nav-link py-3" href="${cpath }/admin/user">회원</a> <a
 		class="nav-link py-3 active" href="${cpath }/admin/seat"
 		style="background-color: #FF8339;">좌석</a> <a class="nav-link py-3"

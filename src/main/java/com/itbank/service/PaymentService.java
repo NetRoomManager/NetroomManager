@@ -32,7 +32,7 @@ public class PaymentService {
     @Autowired
     private OrderListRepository orderListRepository;
 
-    public void buyTicket(PaymentResponse paymentResponse) {
+    public Payment buyTicket(PaymentResponse paymentResponse) {
         String payMethod = paymentResponse.getPg_provider();
 
         PaymentMethod paymentMethod = paymentMethodRepository.findByName(payMethod).orElseGet(() -> {
@@ -87,6 +87,6 @@ public class PaymentService {
 
         System.out.println("티켓 상세정보 가져옴");
 
-
+        return payment;
     }
 }
