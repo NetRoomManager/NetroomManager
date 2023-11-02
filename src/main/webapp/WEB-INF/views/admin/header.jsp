@@ -47,7 +47,7 @@ html {
 				<li class="nav-item"><a class="nav-link"
 					href="${cpath }/admin/product">상품관리</a></li>
 				<li class="nav-item"><a class="nav-link"
-					href="${cpath }/admin/sales">매출관리</a></li>
+					href="${cpath }/admin/productsale">매출관리</a></li>
 				<li class="nav-item"><a class="nav-link"
 					href="${cpath }/admin/ticket">이용권관리</a></li>
 				<li class="nav-item"><a class="nav-link"

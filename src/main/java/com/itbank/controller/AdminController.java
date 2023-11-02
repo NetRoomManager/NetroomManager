@@ -1,10 +1,8 @@
 package com.itbank.controller;
 
-import com.itbank.model.Product;
 import com.itbank.service.ProductService;
 import com.itbank.service.UserService;
 import lombok.extern.slf4j.Slf4j;
-import oracle.jdbc.proxy._Proxy_;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

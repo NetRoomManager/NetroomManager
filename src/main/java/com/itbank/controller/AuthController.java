@@ -1,14 +1,15 @@
 package com.itbank.controller;
 
-import com.itbank.model.PaymentResponse;
-import com.itbank.model.User;
+import com.itbank.model.*;
+import com.itbank.model.dto.TicketSalesDTO;
+import com.itbank.repository.jpa.OrderListRepository;
+import com.itbank.repository.jpa.TicketSalesRepository;
 import com.itbank.service.PaymentService;
+import com.itbank.service.ProductSalesService;
 import com.itbank.service.UserDetailsServiceImpl;
 import com.itbank.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -20,10 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
@@ -46,6 +44,16 @@ public class AuthController {
     @GetMapping("/login")
     public void login() {
     }
+
+    @Autowired
+    private ProductSalesService productSalesService;
+
+    @Autowired
+    private OrderListRepository orderListRepository;
+
+    @Autowired
+    private TicketSalesRepository ticketSalesRepository;
+
 
     @PostMapping("/login")
     public String login(User user, HttpServletRequest request) {
@@ -149,10 +157,30 @@ public class AuthController {
     @ResponseBody
     public Map<String, Boolean> buyTicket(@RequestBody PaymentResponse paymentResponse) throws UsernameNotFoundException {
 
-        paymentService.buyTicket(paymentResponse);
-
         Map<String, Boolean> result = new HashMap<>();
-        result.put("success", true);
+        if(paymentResponse.isSuccess()){
+
+            Payment payment = paymentService.buyTicket(paymentResponse);
+
+
+            Optional<OrderList> orderList = orderListRepository.findById(payment.getId());
+
+            Integer totalPrice = null;
+            if(orderList.isPresent()) {
+                totalPrice = orderList.get().getOrderTotalPrice();
+            }
+
+            TicketSales ticketSales = new TicketSales();
+            ticketSales.setPaymentId(payment);
+            ticketSales.setTotalPrice(totalPrice);
+            ticketSales.setSalesDate(payment.getTime());
+
+            ticketSalesRepository.save(ticketSales);
+
+            result.put("success", true);
+        }else{
+            result.put("success",false);
+        }
         return result;
     }
 

@@ -22,8 +22,8 @@
 	<div class="collapse navbar-collapse" id="navbarSupportedContent">
 		<ul class="navbar-nav me-auto mb-2 mb-lg-0 pt-1">
 			<li class="nav-item"><a class="nav-link active navbar-brand"
-				aria-current="page" href="#">NetRoom</a></li>
-			<li class="nav-item pe-3"><a class="nav-link" href="#">재고현황</a>
+				aria-current="page" href="${cpath}/">NetRoom</a></li>
+			<li class="nav-item pe-3"><a class="nav-link" href="">재고현황</a>
 			</li>
 			<li class="nav-item pe-3"><a class="nav-link"
 				data-bs-toggle="modal" data-bs-target="#productUpdate">상품등록</a></li>
@@ -139,7 +139,7 @@
 	<a class="nav-link py-3" href="${cpath }/admin/order">주문</a>
 	<a class="nav-link py-3" href="${cpath }/admin/product">재고</a>
 	<a class="nav-link py-3" 
-		aria-current="page" href="${cpath }/admin/sales">매출</a> <a
+		aria-current="page" href="${cpath }/admin/productsales">매출</a> <a
 		class="nav-link py-3" href="${cpath }/admin/user">회원</a> <a
 		class="nav-link py-3" href="${cpath }/admin/seat">좌석</a> <a
 		class="nav-link py-3 active" href="${cpath }/admin/ticket" style="background-color: #FF8339;">이용권</a>

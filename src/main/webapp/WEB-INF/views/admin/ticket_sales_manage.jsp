@@ -1,9 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ include file="header.jsp"%>
-<!-- 상품관리 페이지 -->
+<!-- 상품매출 페이지 -->
 
-<title>매출관리</title>
+<title>티켓매출관리</title>
         <style>
             #menuBar {
                 background-color: #ffa500
@@ -84,6 +84,8 @@
             <a class="nav-link py-3 active" style="background-color: #FF8339;" aria-current="page" href="${cpath }/admin/productsales">매출</a>
             <a class="nav-link py-3" href="${cpath}/admin/user">회원</a>
             <a class="nav-link py-3" href="${cpath}/admin/seat">좌석</a>
+            <a
+                    class="nav-link py-3" href="${cpath }/admin/ticket" style="background-color: #FF8339;">이용권</a>
         </nav>
         <div class="container pt-4">
             <form class="d-flex">

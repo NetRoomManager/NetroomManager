@@ -185,4 +185,8 @@ public class UserService {
     public Optional<User> checkId(String username) {
         return userRepository.findByUsername(username);
     }
+
+    public Optional<User> findByUsername(String buyerName) {
+        return userRepository.findByUsername(buyerName);
+    }
 }
