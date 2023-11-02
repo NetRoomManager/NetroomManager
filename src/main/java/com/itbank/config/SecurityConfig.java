@@ -62,17 +62,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .headers().frameOptions().sameOrigin();
 
         http.authorizeRequests()
-                .antMatchers("/", "/auth/**", "/img/**", "/css/**", "/js/**")
+//                .antMatchers("/", "/auth/**", "/img/**", "/css/**", "/js/**")
+                .antMatchers("/**")
                 // 위 경로는 로그인 안해도 ㄱㄴ
                 .permitAll()
 
-                .antMatchers("/admin/**")
-                // ADMIN만 가능
-                .hasRole("ADMIN")
-
-                .antMatchers("/customer/**")
-                // ADMIN, USER가능
-                .hasAnyRole("USER", "ADMIN")
+//                .antMatchers("/admin/**")
+//                // ADMIN만 가능
+//                .hasRole("ADMIN")
+//
+//                .antMatchers("/customer/**")
+//                // ADMIN, USER가능
+//                .hasAnyRole("USER", "ADMIN")
                 .anyRequest().authenticated()
                 .and()
 

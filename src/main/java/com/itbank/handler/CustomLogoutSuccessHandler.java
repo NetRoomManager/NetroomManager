@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Date;
+import java.util.Objects;
 import java.util.Optional;
 
 @Component
@@ -55,7 +56,9 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
             }
 
             // 레디스에서 남은 시간 불러옴
-            Integer time = (Integer) redisTemplate.opsForValue().get(userPrincipal.getUsername());
+            Long time = (Long) redisTemplate.opsForValue().get(userPrincipal.getUsername());
+
+
 
             log.info(userPrincipal.getUsername() + "의 남은 시간을 불러옵니다");
 
@@ -64,7 +67,7 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
             if(optionalRemainingTime.isPresent()){
                 RemainingTime remainingTime = optionalRemainingTime.get();
                 // 반영하기
-                remainingTime.setRemainingTime(time);
+                remainingTime.setRemainingTime(Objects.requireNonNull(time).intValue());
                 remainingTimeRepository.save(remainingTime);
             }
 
