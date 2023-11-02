@@ -92,18 +92,7 @@ public class AuthController {
 
         log.info("유저 생성 완료!!");
 
-        // 사용자의 이름과 권한을 가져와서 Authentication 객체를 만듭니다.
-        UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-
-        // 만든 Authentication 객체를 SecurityContext에 설정합니다.
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        // 세션에 SPRING_SECURITY_CONTEXT라는 키 값으로 SecurityContext를 저장합니다.
-        HttpSession session = request.getSession(true);
-        session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
-
-        return "redirect:/";
+        return "redirect:/auth/login";
     }
 
     @GetMapping("/loginSuccess")

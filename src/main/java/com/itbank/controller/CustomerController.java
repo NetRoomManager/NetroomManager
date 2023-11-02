@@ -10,4 +10,14 @@ public class CustomerController {
     @GetMapping("/chat")
     public void chat() {
     }
+
+    @GetMapping("/main")
+    public void main() {
+    }
+
+    @GetMapping("/order")
+    public void order() {}
+
+    @GetMapping("/recharge")
+    public void recharge() {}
 }

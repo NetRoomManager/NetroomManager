@@ -66,14 +66,11 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
                 RemainingTime remainingTime = remainingTimeRepository.findById(user.getId()).orElseGet(() -> {
                     RemainingTime newRemainingTime = new RemainingTime();
                     newRemainingTime.setUser(user);
-                    newRemainingTime.setRemainingTime(0);
+                    newRemainingTime.setRemainingTime(1);
                     user.setRemainingTime(newRemainingTime);
 
                     // 업데이트
                     userRepository.save(user);
-
-                    // newRemainingTime를 영속 상태로 만듭니다.
-//                    remainingTimeRepository.save(newRemainingTime);
 
                     return newRemainingTime;
                 });

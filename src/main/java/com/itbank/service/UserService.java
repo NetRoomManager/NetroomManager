@@ -41,19 +41,34 @@ public class UserService {
 
         try {
             // USER 권한 찾기 또는 생성
-            Role role = roleRepository.findByName("ROLE_ADMIN").orElseGet(() -> {
+            Role role = roleRepository.findByName("ROLE_USER").orElseGet(() -> {
                 Role newRole = new Role();
-                newRole.setName("ROLE_ADMIN");
+                newRole.setName("ROLE_USER");
                 return roleRepository.save(newRole);
             });
 
+            // 남은 시간에 유저의 시간을 관리자는 로그인 바로 시키기 위해 1분
+            RemainingTime remainingTime = new RemainingTime();
+            remainingTime.setRemainingTime(1);
+
             // User 객체 생성
-            userRepository.save(paramUser);
+            User user = new User();
+            user.setUsername(paramUser.getUsername());
+            user.setPassword(passwordEncoder.encode(paramUser.getPassword()));
+            user.setMobile(paramUser.getMobile());
+            user.setName(paramUser.getName());
+            user.setEmail(paramUser.getEmail());
+            user.setBirth(paramUser.getBirth());
+
+            remainingTime.setUser(user);
+            user.setRemainingTime(remainingTime);
+
+            userRepository.save(user);
 
             // User와 Role 정보가 담긴 객체 생성
-                UserRole userRole = new UserRole();
+            UserRole userRole = new UserRole();
             userRole.setRole(role);
-            userRole.setUser(paramUser);
+            userRole.setUser(user);
             userRoleRepository.save(userRole);
 
         }

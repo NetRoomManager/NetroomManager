@@ -58,7 +58,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         RemainingTime remainingTime = remainingTimeRepository.findById(customUser.getId()).orElseGet(() -> {
             RemainingTime newRemainingTime = new RemainingTime();
             newRemainingTime.setUser(customUser);
-            newRemainingTime.setRemainingTime(0);
+            newRemainingTime.setRemainingTime(1);
             return remainingTimeRepository.save(newRemainingTime);
         });
 
