@@ -184,12 +184,12 @@
 			<a href="#">PC방 이용권</a>
 		</div>
 		<div class="naverpay">
-			<a href="#"> <img src="../img/naver-pay.png" alt="네이버페이">
+			<a href="#"> <img src="/img/naver-pay.png" alt="네이버페이">
 				<p class="p-0 mx-0 my-0">PAY</p>
 			</a>
 		</div>
 		<div class="kakaopay">
-			<a href="#"> <img src="../img/kakao-pay.png" alt="카카오페이">
+			<a href="#"> <img src="/img/kakao-pay.png" alt="카카오페이">
 			</a>
 		</div>
 
@@ -203,27 +203,27 @@
 	<div class="game_menu_wrap">
 		<div class="game_menu">
 			<div>
-				<img src="../img/game-menu01.ico" alt="냥코대전쟁">
+				<img src="/img/game-menu01.ico" alt="냥코대전쟁">
 				<p class="p-0 mx-0 my-0">냥코대전쟁</p>
 			</div>
 			<div>
-				<img src="../img/game-menu02.ico" alt="로블록스">
+				<img src="/img/game-menu02.ico" alt="로블록스">
 				<p class="p-0 mx-0 my-0">로블록스</p>
 			</div>
 			<div>
-				<img src="../img/game-menu03.ico" alt="마피아42">
+				<img src="/img/game-menu03.ico" alt="마피아42">
 				<p class="p-0 mx-0 my-0">마피아42</p>
 			</div>
 			<div>
-				<img src="../img/game-menu04.ico" alt="피파4M">
+				<img src="/img/game-menu04.ico" alt="피파4M">
 				<p class="p-0 mx-0 my-0">피파4M</p>
 			</div>
 			<div>
-				<img src="../img/game-menu05.ico" alt="어몽어스">
+				<img src="/img/game-menu05.ico" alt="어몽어스">
 				<p class="p-0 mx-0 my-0">어몽어스</p>
 			</div>
 			<div>
-				<img src="../img/game-menu06.ico" alt="메이플스토리">
+				<img src="/img/game-menu06.ico" alt="메이플스토리">
 				<p class="p-0 mx-0 my-0">메이플스토리</p>
 			</div>
 		</div>
@@ -247,11 +247,11 @@
 						<!-- The slideshow/carousel -->
 						<div class="carousel-inner">
 							<div class="carousel-item active">
-								<img src="../img/pc방 광고.jpg" alt="logo1" class="d-block"
+								<img src="/img/pc방 광고.jpg" alt="logo1" class="d-block"
 									style="width: 345px; height: 315px;">
 							</div>
 							<div class="carousel-item">
-								<img src="../img/pc방 광고2.jpg" alt="logo2" class="d-block"
+								<img src="/img/pc방 광고2.jpg" alt="logo2" class="d-block"
 									style="width: 345px; height: 315px;">
 							</div>
 						</div>
@@ -271,8 +271,8 @@
 				</div>
 			</div>
 			<div class="sub_advertisement">
-				<img src="../img/nuguri.webp" alt="너굴맨"> <img
-					src="../img/nuguri.webp" alt="너굴맨">
+				<img src="/img/nuguri.webp" alt="너굴맨"> <img
+					src="/img/nuguri.webp" alt="너굴맨">
 			</div>
 		</div>
 	</div>
@@ -288,25 +288,25 @@
 			<div
 				class="col-sm  text-white p-3 rounded mx-1 my-1 bg-primary  image-container"
 				style="border: 1px solid black;">
-				<img src="../img/lol.jpg" class="w-100" />
+				<img src="/img/lol.jpg" class="w-100" />
 				<div class="text-overlay">인기게임</div>
 			</div>
 			<div
 				class="col-sm  text-white p-3 rounded mx-1 my-1 bg-warning image-container"
 				style="border: 1px solid black;">
-				<img src="../img/rpg.jpg" class="w-100" />
+				<img src="/img/rpg.jpg" class="w-100" />
 				<div class="text-overlay">RPG</div>
 			</div>
 			<div
 				class="col-sm  text-white p-3 rounded mx-1 my-1 bg-danger image-container"
 				style="border: 1px solid black;">
-				<img src="../img/starcraft.jpg" class="w-100" />
+				<img src="/img/starcraft.jpg" class="w-100" />
 				<div class="text-overlay">CD게임</div>
 			</div>
 			<div
 				class="col-sm   text-white p-3 rounded mx-1 my-1 bg-info image-container"
 				style="border: 1px solid black;">
-				<img src="../img/battleground.webp" class="w-100" />
+				<img src="/img/battleground.webp" class="w-100" />
 				<div class="text-overlay">FPS게임</div>
 			</div>
 		</div>
@@ -314,37 +314,37 @@
 	<div class="d-flex h-25">
 		<div
 			class="col-sm bg-dark text-white p-3 rounded mx-1 my-1 image-container2">
-			<img src="../img/archeage.jpg" class="w-100">
+			<img src="/img/archeage.jpg" class="w-100">
 			<div class="text-overlay2">아키에이지</div>
 		</div>
 		<div
 			class="col-sm bg-dark text-white p-3 rounded mx-1 my-1 image-container2">
-			<img src="../img/itemmania.png " class="w-100">
+			<img src="/img/itemmania.png " class="w-100">
 			<div class="text-overlay2">아이템매니아</div>
 		</div>
 		<div
 			class="col-sm bg-dark text-white p-3 rounded mx-1 my-1 image-container2">
-			<img src="../img/itembay.jpg " class="w-100">
+			<img src="/img/itembay.jpg " class="w-100">
 			<div class="text-overlay2">아이템베이</div>
 		</div>
 		<div
 			class="col-sm bg-dark text-white p-3 rounded mx-1 my-1 image-container2">
-			<img src="../img/kartrider.jpg " class="w-100">
+			<img src="/img/kartrider.jpg " class="w-100">
 			<div class="text-overlay2">카트라이더</div>
 		</div>
 		<div
 			class="col-sm bg-dark text-white p-3 rounded mx-1 my-1 image-container2">
-			<img src="../img/poe.png" class="w-100">
+			<img src="/img/poe.png" class="w-100">
 			<div class="text-overlay2">POE</div>
 		</div>
 		<div
 			class="col-sm bg-dark text-white p-3 rounded mx-1 my-1 image-container2">
-			<img src="../img/worldofwarship.jpg" class="w-100">
+			<img src="/img/worldofwarship.jpg" class="w-100">
 			<div class="text-overlay2">월오브워쉽</div>
 		</div>
 		<div
 			class="col-sm bg-dark text-white p-3 rounded mx-1 my-1 image-container2">
-			<img src="../img/netflix.jpg" class="w-100">
+			<img src="/img/netflix.jpg" class="w-100">
 			<div class="text-overlay2">넷플릭스</div>
 		</div>
 	</div>
@@ -440,6 +440,6 @@
             });
         </script>
 <!-- javaScript -->
-<script src="../js/script.js"></script>
+<script src="/js/script.js"></script>
 </body>
 </html>

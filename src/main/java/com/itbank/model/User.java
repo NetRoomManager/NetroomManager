@@ -45,4 +45,8 @@ public class User {
 
     @OneToMany(mappedBy = "user",  fetch = FetchType.EAGER)
     private List<UserLog> userLogs;
+
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private RemainingTime remainingTime;
 }
