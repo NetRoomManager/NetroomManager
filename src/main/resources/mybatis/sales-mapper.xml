@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+        "//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- mapper의 namespace는 연결할 dao 인터페이스의 "풀네임"을 작성한다. -->
+<mapper namespace="com.itbank.repository.mybatis.ProductManageDAO">
+</mapper>

@@ -1,20 +1,20 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
-<%--<!-- 세션에서 SecurityContext를 가져옵니다. -->--%>
-<%--<c:set var="securityContext" value="${sessionScope.SPRING_SECURITY_CONTEXT}" />--%>
+<!-- 세션에서 SecurityContext를 가져옵니다. -->
+<c:set var="securityContext" value="${sessionScope.SPRING_SECURITY_CONTEXT}" />
 
-<%--<!-- SecurityContext에서 Authentication 객체를 가져옵니다. -->--%>
-<%--<c:set var="authentication" value="${securityContext.authentication}" />--%>
+<!-- SecurityContext에서 Authentication 객체를 가져옵니다. -->
+<c:set var="authentication" value="${securityContext.authentication}" />
 
-<%--<!-- Authentication 객체에서 Principal(사용자) 정보를 가져옵니다. -->--%>
-<%--<c:set var="principal" value="${authentication.principal}" />--%>
+<!-- Authentication 객체에서 Principal(사용자) 정보를 가져옵니다. -->
+<c:set var="principal" value="${authentication.principal}" />
 
-<%--<!-- Principal에서 사용자의 이름을 가져옵니다. -->--%>
-<%--<c:set var="username" value="${principal.username}" />--%>
+<!-- Principal에서 사용자의 이름을 가져옵니다. -->
+<c:set var="username" value="${principal.username}" />
 
-<%--<!-- username을 출력합니다. -->--%>
-<%--<p>사용자 : ${principal}</p>--%>
+<!-- username을 출력합니다. -->
+<p>사용자 : ${principal}</p>
 
 
 <html>
@@ -23,7 +23,7 @@
 </head>
 <body>
 
-<%--<h1>${version}</h1>--%>
+<h1>${version}</h1>
 
 
 <ul>
