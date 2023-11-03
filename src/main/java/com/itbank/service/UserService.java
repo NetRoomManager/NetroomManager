@@ -49,7 +49,7 @@ public class UserService {
 
             // 남은 시간에 유저의 시간을 관리자는 로그인 바로 시키기 위해 1분
             RemainingTime remainingTime = new RemainingTime();
-            remainingTime.setRemainingTime(1);
+            remainingTime.setRemainingTime(15);
 
             // User 객체 생성
             User user = new User();
@@ -93,7 +93,9 @@ public class UserService {
 
             // 남은 시간에 유저의 시간을 0 으로 저장
             RemainingTime remainingTime = new RemainingTime();
-            remainingTime.setRemainingTime(0);
+
+            log.info("테스트용으로 15초 설정(삭제해야함)");
+            remainingTime.setRemainingTime(15);
 
             // User 객체 생성
             User user = new User();

@@ -6,6 +6,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
+import java.util.Map;
 
 @Component
 public class ChatComponent {
@@ -25,7 +26,7 @@ public class ChatComponent {
         messagingTemplate.convertAndSendToUser(username, path, message);
     }
 
-    public static void convertAndSendToUser(String username, String path, String alert) {
-        messagingTemplate.convertAndSendToUser(username, path, alert);
+    public static void convertAndSendToUser(String username, String path, Map<String, String> msg) {
+        messagingTemplate.convertAndSendToUser(username, path, msg);
     }
 }
