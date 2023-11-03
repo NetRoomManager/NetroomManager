@@ -1,10 +1,8 @@
 package com.itbank.controller;
 
+import com.itbank.model.Seat;
 import com.itbank.model.Ticket;
-import com.itbank.service.ProductService;
-import com.itbank.service.TicketService;
-import com.itbank.service.TicketSalesService;
-import com.itbank.service.UserService;
+import com.itbank.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -35,6 +33,8 @@ public class AdminController {
 
     @Autowired
     private TicketService ticketService;
+    @Autowired
+    private SeatService seatService;
 
     // 상품관리
     @GetMapping("/product")
@@ -45,8 +45,19 @@ public class AdminController {
 
     // 좌석관리
     @GetMapping("/seat")
-    public String seat() {
-        return "/admin/seat_manage";
+    public String seatTest(){
+        seatService.createSeat();
+        return "redirect:/";
+    }
+
+
+    @GetMapping("/seat_manage")
+    public ModelAndView seat() {
+        ModelAndView mav = new ModelAndView("/admin/seat_manage");
+
+        List<Seat> seatList = seatService.selectSeatList();
+        mav.addObject("seatList",seatList);
+        return mav;
     }
 
     // 매출관리

@@ -9,12 +9,5 @@
       <jdbc-url>jdbc:oracle:thin:@125.179.187.31:8787:XE</jdbc-url>
       <working-dir>$ProjectFileDir$</working-dir>
     </data-source>
-    <data-source source="LOCAL" name="0@125.179.187.31" uuid="19df855c-6659-4dd9-9055-2fec9408e25e">
-      <driver-ref>redis</driver-ref>
-      <synchronize>true</synchronize>
-      <jdbc-driver>jdbc.RedisDriver</jdbc-driver>
-      <jdbc-url>jdbc:redis://125.179.187.31:33389/0</jdbc-url>
-      <working-dir>$ProjectFileDir$</working-dir>
-    </data-source>
   </component>
 </project>
