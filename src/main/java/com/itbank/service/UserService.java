@@ -41,9 +41,9 @@ public class UserService {
 
         try {
             // USER 권한 찾기 또는 생성
-            Role role = roleRepository.findByName("ROLE_USER").orElseGet(() -> {
+            Role role = roleRepository.findByName("ROLE_ADMIN").orElseGet(() -> {
                 Role newRole = new Role();
-                newRole.setName("ROLE_USER");
+                newRole.setName("ROLE_ADMIN");
                 return roleRepository.save(newRole);
             });
 
