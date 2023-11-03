@@ -22,8 +22,6 @@ import java.util.Objects;
 @Slf4j
 public class AdminController {
 
-    @Autowired
-    private ProductService productService;
 
     @Autowired
     private TicketSalesService ticketSalesService;
@@ -33,6 +31,7 @@ public class AdminController {
 
     @Autowired
     private TicketService ticketService;
+
     @Autowired
     private SeatService seatService;
 
@@ -43,15 +42,8 @@ public class AdminController {
         return "/admin/product_manage";
     }
 
-    // 좌석관리
+
     @GetMapping("/seat")
-    public String seatTest(){
-        seatService.createSeat();
-        return "redirect:/";
-    }
-
-
-    @GetMapping("/seat_manage")
     public ModelAndView seat() {
         ModelAndView mav = new ModelAndView("/admin/seat_manage");
 

@@ -54,6 +54,8 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
+    @Autowired
+    private SeatService seatService;
 
     @GetMapping("/login")
     public void login() {
@@ -105,6 +107,13 @@ public class AuthController {
         log.info("유저 생성 완료!!");
 
         return "redirect:/auth/login";
+    }
+
+    // 좌석관리
+    @GetMapping("/seat")
+    public String seatTest(){
+        seatService.createSeat();
+        return "redirect:/";
     }
 
     @GetMapping("/loginSuccess")
