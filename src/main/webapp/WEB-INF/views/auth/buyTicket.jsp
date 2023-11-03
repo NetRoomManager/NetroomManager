@@ -122,9 +122,8 @@
     </div>
 </div>
 
-<div
-        class="w-100 bg-light container d-flex flex-wrap mt-3 mb-3 h-50 offcanvas offcanvas-bottom"
-        id="ticket" style="overflow-x: auto; margin: auto">
+<div class="w-100 bg-light container d-flex flex-wrap mt-3 mb-3 h-50 offcanvas offcanvas-bottom"
+     id="ticket" style="overflow-x: auto; margin: auto">
     <div class="ticket_item text-lg-center mx-5" style="width: 20%;">
         <div class="card mt-3 mb-3 fw-bold border-black border-1 ticket_item"
              style="background-color: #ffbb3f">
