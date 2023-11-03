@@ -6,6 +6,10 @@ import com.itbank.repository.jpa.TicketSalesRepository;
 import com.itbank.service.PaymentService;
 import com.itbank.service.UserDetailsServiceImpl;
 import com.itbank.service.UserService;
+import com.itbank.model.PaymentResponse;
+import com.itbank.model.Ticket;
+import com.itbank.model.User;
+import com.itbank.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -17,7 +21,6 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.*;
@@ -39,12 +42,18 @@ public class AuthController {
     @Autowired
     private PaymentService paymentService;
 
-
     @Autowired
     private OrderListRepository orderListRepository;
 
     @Autowired
     private TicketSalesRepository ticketSalesRepository;
+
+    @Autowired
+    private TicketService ticketService;
+
+    @Autowired
+    private AuthService authService;
+
 
     @GetMapping("/login")
     public void login() {
@@ -107,8 +116,10 @@ public class AuthController {
         ModelAndView mav = new ModelAndView("/auth/buyTicket");
 
         List<User> list = userService.findAll();
+        List<Ticket> ticketList = ticketService.selectTicketList();
 
         mav.addObject("list", list);
+        mav.addObject("ticketList", ticketList);
 
         return mav;
     }
@@ -154,4 +165,42 @@ public class AuthController {
         return result;
     }
 
+    @PostMapping("/checkAuthNumber")
+    @ResponseBody
+    public Map<String, Boolean> checkAuthNumber(@RequestBody Map<String, Object> reauestBody, HttpSession session) {
+        int authNumber = (int) reauestBody.get("authNumber");
+        Map<String, Boolean> result = new HashMap<>();
+        if(session.getAttribute("authNumber") != null){
+            boolean emailCheck = authService.checkAuthNumber(authNumber, session);
+            result.put("emailCheck", emailCheck);
+            log.info("authNumber" + String.valueOf(authNumber));
+            log.info("session.getAttribute(authNumber)" + session.getAttribute("authNumber"));
+            System.out.println("result" + result);
+        }else{
+            result.put("emailCheck", false);
+        }
+        return result;
+    }
+
+    @GetMapping("/sendAuthNumber")
+    @ResponseBody
+    public String sendAuthNumber(String email, HttpSession session){
+        log.info("인증번호 전송");
+        HashMap<String, Integer> authHash = authService.sendAuthNumber(email,session);
+        String msg;
+        if(authHash.get("row") != 1){
+            msg = "인증번호 발송에 실패했습니다";
+            log.info("msg : " + msg);
+        }
+        else{
+            msg = "인증번호가 발송되었습니다";
+            session.setAttribute("authNumber", authHash.get("authNumber"));
+            session.setMaxInactiveInterval(180);
+            log.info("msg : " + msg);
+            log.info("session.get(authNumber) : " + session.getAttribute("authNumber"));
+            log.info("session.getMaxInactiveInterval() : " + session.getMaxInactiveInterval());
+        }
+
+        return msg;
+    }
 }
