@@ -25,8 +25,6 @@ import java.util.concurrent.TimeUnit;
 // 이를 구현해서 User Entity를 제어하기 위해 만든 클래스
 public class UserDetailsServiceImpl implements UserDetailsService {
 
-
-
     @Autowired
     private UserRepository userRepository;
 

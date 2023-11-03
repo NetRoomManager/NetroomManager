@@ -63,7 +63,7 @@ public class AuthController {
         User user = new User();
         user.setUsername("admin");
         user.setMobile("010-9999-9999");
-        user.setPassword(passwordEncoder.encode("1234"));
+        user.setPassword("1234");
         user.setName("admin");
         user.setEmail("admin@naver.com");
         user.setBirth(null);
