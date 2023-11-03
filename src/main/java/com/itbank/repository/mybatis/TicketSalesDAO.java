@@ -13,5 +13,5 @@ public interface TicketSalesDAO {
 
 
     // 총 금액
-    int selectTotal();
+    Integer selectTotal();
 }

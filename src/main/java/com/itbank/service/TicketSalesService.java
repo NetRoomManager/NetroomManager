@@ -60,8 +60,11 @@ public class TicketSalesService {
 //        return list;
 //    }
 
-    public int selectTotal() {
-        int total = ticketSalesDAO.selectTotal();
+    public Integer selectTotal() {
+        Integer total = ticketSalesDAO.selectTotal();
+        if(total == null){
+            return 0;
+        }
         System.out.println("total : " + total);
         return total;
     }
