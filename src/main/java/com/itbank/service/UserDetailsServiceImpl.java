@@ -64,7 +64,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         long remaningTime = remainingTime.getRemainingTime() * 60L;
 
-        log.info(username + "님의 남은 시간: " + remaningTime + "분");
+        log.info(username + "님의 남은 시간: " + remaningTime + "초");
 
         // 레디스에 로드
         redisTemplate.opsForValue().set(username, remaningTime, remaningTime, TimeUnit.SECONDS);

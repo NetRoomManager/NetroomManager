@@ -51,6 +51,10 @@
             stompClient.subscribe('/user/queue/messages', function(messageOutput) {
                 showMessageOutput(JSON.parse(messageOutput.body));
             });
+
+            stompClient.subscribe('/user/queue/alert', function(alert) {
+                console.log(JSON.parse(alert.body));
+            });
         });
     }
 

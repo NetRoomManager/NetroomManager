@@ -58,8 +58,6 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
             // 레디스에서 남은 시간 불러옴
             Long time = (Long) redisTemplate.opsForValue().get(userPrincipal.getUsername());
 
-
-
             log.info(userPrincipal.getUsername() + "의 남은 시간을 불러옵니다");
 
             // 유저의 DB남은시간 컬럼에
