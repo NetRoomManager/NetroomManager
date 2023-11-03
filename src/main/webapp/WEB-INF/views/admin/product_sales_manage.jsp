@@ -1,9 +1,9 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ include file="header.jsp"%>
-<!-- 상품관리 페이지 -->
+<!-- 상품매출 페이지 -->
 
-<title>매출관리</title>
+<title>상품매출관리</title>
         <style>
             #menuBar {
                 background-color: #ffa500
@@ -22,10 +22,10 @@
                     <a class="nav-link active navbar-brand" aria-current="page" href="#">NetRoom</a>
                   </li>
                   <li class="nav-item pe-3">
-                    <a class="nav-link" href="${cpath}/productsales">상품매출</a>
+                    <a class="nav-link" href="${cpath}/admin/productsales">상품매출</a>
                   </li>
                   <li class="nav-item pe-3">
-                    <a class="nav-link" href="${cpath}/ticketsales">이용권매출</a>
+                    <a class="nav-link" href="${cpath}/admin/ticketsales">이용권매출</a>
                   </li>
                 </ul>
                 <ul class="navbar-nav">
@@ -52,7 +52,7 @@
                     </li>
                     <li class="nav-item pe-2">
                         <button type="button" class="btn btn-light"
-                                style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .75rem; --bs-btn-font-size: 1.15rem;">                        
+                                style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .75rem; --bs-btn-font-size: 1.15rem;">
                                 <svg
                                 width="20"
                                 height="20"
@@ -84,6 +84,8 @@
             <a class="nav-link py-3 active" style="background-color: #FF8339;" aria-current="page" href="${cpath }/admin/productsales">매출</a>
             <a class="nav-link py-3" href="${cpath}/admin/user">회원</a>
             <a class="nav-link py-3" href="${cpath}/admin/seat">좌석</a>
+            <a
+                    class="nav-link py-3 active" href="${cpath }/admin/ticket" style="background-color: #FF8339;">이용권</a>
         </nav>
         <div class="container pt-4">
             <form class="d-flex">
@@ -115,7 +117,9 @@
                     </tr>
                 </thead>
                 <tbody>
+                <c:forEach var="list" items="${list}">
                     <tr class="text-center">
+                        <td class="pt-3">#</td>
                         <td class="pt-3" >Mark</td>
                         <td class="pt-3" >Otto</td>
                         <td class="pt-3" >@mdo</td>
@@ -126,17 +130,7 @@
                         <td><button type="button" class="btn btn-outline-danger" disabled>삭제</button></td>
                         <td><button type="button" class="btn btn-outline-warning" disabled>조회</button></td>
                     </tr>
-                    <tr class="text-center">
-                        <td class="pt-3" >Mark</td>
-                        <td class="pt-3" >Otto</td>
-                        <td class="pt-3" >@mdo</td>
-                        <td class="pt-3" >Mark</td>
-                        <td class="pt-3" >Otto</td>
-                        <td class="pt-3" >@mdo</td>
-                        <td class="pt-3" >Mark</td>
-                        <td><button type="button" class="btn btn-outline-danger">삭제</button></td>
-                        <td><button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#detail_check_modal">조회</button></td>
-                    </tr>
+                </c:forEach>
                 </tbody>
                 <tfoot>
                     <tr class="text-center table-primary">
@@ -150,8 +144,8 @@
                         <td class="pt-3" >Otto</td>
                         <td class="pt-3" >@mdo</td>
                         <td class="pt-3" >Mark</td>
-                        <td class="pt-3" ></td>
-                        <td class="pt-3" ></td>
+                        <td class="pt-3" >#</td>
+                        <td class="pt-3" >#</td>
                     </tr>
                 </tfoot>
               </table>

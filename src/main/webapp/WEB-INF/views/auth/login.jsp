@@ -20,7 +20,6 @@
             display: none;
         }
 
-        @charset "utf-8";
         /* ---- reset ---- */
         body {
             margin: 0;

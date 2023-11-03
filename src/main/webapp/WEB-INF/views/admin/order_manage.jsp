@@ -21,19 +21,19 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 pt-1">
                   <li class="nav-item">
-                    <a class="nav-link active navbar-brand" aria-current="page" href="#">NetRoom</a>
+                    <a class="nav-link active navbar-brand" aria-current="page" href="${cpath}/">NetRoom</a>
                   </li>
                   <li class="nav-item pe-3">
-                    <a class="nav-link active" href="#">주문현황</a>
+                    <a class="nav-link active" href="">주문현황</a>
                   </li>
                   <li class="nav-item pe-3">
-                    <a class="nav-link" href="#">신규주문</a>
+                    <a class="nav-link" href="">신규주문</a>
                   </li>
                   <li class="nav-item pe-3">
-                    <a class="nav-link" href="#">판매취소</a>
+                    <a class="nav-link" href="">판매취소</a>
                   </li>
                   <li class="nav-item pe-3">
-                    <a class="nav-link" href="#">준비중</a>
+                    <a class="nav-link" href="">준비중</a>
                   </li>
                 </ul>
                 <ul class="navbar-nav">
@@ -87,11 +87,12 @@
             </div>
         </nav>
         <nav id="menuBar" class="nav nav-pills flex-column py-3" style="position: absolute; height: 91.6%;">
-            <a class="nav-link py-3 active" style="background-color: #FF8339;" aria-current="page"  href="#">주문</a>
-            <a class="nav-link py-3" href="#">재고</a>
-            <a class="nav-link py-3" href="#">매출</a>
-            <a class="nav-link py-3" href="#">회원</a>
-            <a class="nav-link py-3" href="#">좌석</a>
+            <a class="nav-link py-3 active" style="background-color: #FF8339;" aria-current="page"  href="${cpath}/admin/order">주문</a>
+            <a class="nav-link py-3" href="${cpath}/admin/product">재고</a>
+            <a class="nav-link py-3" href="${cpath}/admin/productsales">매출</a>
+            <a class="nav-link py-3" href="${cpath}/admin/user">회원</a>
+            <a class="nav-link py-3" href="${cpath}/admin/seat">좌석</a>
+            <a class="nav-link py-3" href="${cpath}/admin/ticket">이용권</a>
         </nav>
         <div class="container-fluid ps-5 ms-4">
             <div class="row pt-4">

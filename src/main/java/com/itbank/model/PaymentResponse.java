@@ -6,6 +6,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class PaymentResponse {
+    private String username;
     private boolean success;
     private String imp_uid;
     private String pay_method;

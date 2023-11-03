@@ -1,6 +1,5 @@
 package com.itbank.config;
 
-import com.itbank.handler.CustomAuthenticationFailureHandler;
 import com.itbank.handler.CustomLogoutSuccessHandler;
 import com.itbank.handler.OAuth2LoginSuccessHandler;
 import com.itbank.service.CustomOAuth2UserService;
@@ -9,12 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.InMemoryOAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
@@ -45,9 +43,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
 
     @Autowired
-    private CustomAuthenticationFailureHandler customAuthenticationFailureHandler;
-
-    @Autowired
     private PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -62,17 +57,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .headers().frameOptions().sameOrigin();
 
         http.authorizeRequests()
-                .antMatchers("/", "/auth/**", "/img/**", "/css/**", "/js/**")
+//                .antMatchers("/", "/auth/**", "/img/**", "/css/**", "/js/**")
+                .antMatchers("/**")
                 // 위 경로는 로그인 안해도 ㄱㄴ
                 .permitAll()
 
-                .antMatchers("/admin/**")
-                // ADMIN만 가능
-                .hasRole("ADMIN")
-
-                .antMatchers("/customer/**")
-                // ADMIN, USER가능
-                .hasAnyRole("USER", "ADMIN")
+//                .antMatchers("/admin/**")
+//                // ADMIN만 가능
+//                .hasRole("ADMIN")
+//
+//                .antMatchers("/customer/**")
+//                // ADMIN, USER가능
+//                .hasAnyRole("USER", "ADMIN")
                 .anyRequest().authenticated()
                 .and()
 
@@ -83,7 +79,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 로그인 페이지 지정
                 .loginPage("/auth/login")
                 // 실패시 핸들러
-                .failureHandler(customAuthenticationFailureHandler)
+                .failureHandler(((request, response, exception) -> {
+                    if(exception instanceof AuthenticationServiceException) {
+                        response.sendRedirect("/auth/buyTicket");
+                    } else {
+                        response.sendRedirect("/login?error");
+                    }
+                }))
                 // 성공시 URL
 //                .defaultSuccessUrl("/")
                 // 로그인 처리 담당할 주소

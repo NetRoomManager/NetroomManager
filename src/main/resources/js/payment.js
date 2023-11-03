@@ -93,6 +93,7 @@ function userSelect(id) {
     }
 
     // 구매자 정보
+    // 이용권 파라미터 추가해야함
     kakaoButton.setAttribute('onclick', `pay('${email}', '${name}', 0)`)
     tossButton.setAttribute('onclick', `pay('${email}', '${name}', 1)`)
     inicisButton.setAttribute('onclick', `pay('${email}', '${name}', 2)`)

@@ -16,12 +16,27 @@ import org.springframework.core.io.Resource;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Component;
 
-@Component
 public class MaileComponent {
-    private  final  String host = "smtp.gmail.com";
-    private  final  int port = 587;
-    private String serverId = "rmsdnr3521";
-    private String serverPw = "ojhumlibyxkcaxqz";
+
+    private String host;
+    private int port;
+    private String serverId;
+    private String serverPw;
+
+    public MaileComponent(String host, int port, String serverId, String serverPw) {
+        this.host = host;
+        this.port = port;
+        this.serverId = serverId;
+        this.serverPw = serverPw;
+        props = new Properties();
+        props.put("mail.smtp.host",host);
+        props.put("mail.smtp.port",port);
+        props.put("mail.smtp.auth","true");
+        props.put("mail.smtp.starttls.enable","true");
+        props.put("mail.smtp.ssl.trust",host);
+        System.out.println("mailComponent: " + props);
+        System.out.println("mailComponent: " + serverId);
+    }
 
     private Properties props;
 
@@ -30,16 +45,6 @@ public class MaileComponent {
     // src/main/resources
     @Value("classpath:mailForm.html")
     private Resource mailForm;
-
-    public MaileComponent() throws FileNotFoundException, IOException {
-        props = new Properties();
-        props.put("mail.smtp.host",host);
-        props.put("mail.smtp.port",port);
-        props.put("mail.smtp.auth","true");
-        props.put("mail.smtp.starttls.enable","true");
-        props.put("mail.smtp.ssl.trust",host);
-    }
-
 
     public int sendMimeMessage(HashMap<String, String> param) {
         Session mailSession = Session.getDefaultInstance(props, new Authenticator() {

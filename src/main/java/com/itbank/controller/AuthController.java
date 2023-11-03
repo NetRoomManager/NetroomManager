@@ -1,13 +1,17 @@
 package com.itbank.controller;
 
+import com.itbank.model.*;
+import com.itbank.repository.jpa.OrderListRepository;
+import com.itbank.repository.jpa.TicketSalesRepository;
+import com.itbank.service.PaymentService;
+import com.itbank.service.UserDetailsServiceImpl;
+import com.itbank.service.UserService;
 import com.itbank.model.PaymentResponse;
 import com.itbank.model.Ticket;
 import com.itbank.model.User;
 import com.itbank.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,12 +21,8 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.sql.Date;
-import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
@@ -43,37 +43,20 @@ public class AuthController {
     private PaymentService paymentService;
 
     @Autowired
+    private OrderListRepository orderListRepository;
+
+    @Autowired
+    private TicketSalesRepository ticketSalesRepository;
+
+    @Autowired
     private TicketService ticketService;
 
     @Autowired
     private AuthService authService;
 
+
     @GetMapping("/login")
     public void login() {
-    }
-
-    @PostMapping("/login")
-    public String login(User user, HttpServletRequest request) {
-
-        log.info("로그인중");
-        System.out.println("로그인");
-        // 사용자의 이름과 권한을 가져와서 Authentication 객체를 만듭니다.
-        UserDetails userDetails = userDetailsService.loadUserByUsernameAndPassword(user.getUsername(), user.getPassword());
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-
-        // 만든 Authentication 객체를 SecurityContext에 설정합니다.
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        // 세션에 SPRING_SECURITY_CONTEXT라는 키 값으로 SecurityContext를 저장합니다.
-        HttpSession session = request.getSession(true);
-        session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
-
-        return "redirect:/";
-    }
-
-    @RequestMapping("/logout")
-    public void logout() {
-        System.out.println("하요이용");
     }
 
     @GetMapping("/test")
@@ -89,7 +72,7 @@ public class AuthController {
         User user = new User();
         user.setUsername("admin");
         user.setMobile("010-9999-9999");
-        user.setPassword(passwordEncoder.encode("1234"));
+        user.setPassword("1234");
         user.setName("admin");
         user.setEmail("admin@naver.com");
         user.setBirth(null);
@@ -121,18 +104,7 @@ public class AuthController {
 
         log.info("유저 생성 완료!!");
 
-        // 사용자의 이름과 권한을 가져와서 Authentication 객체를 만듭니다.
-        UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-
-        // 만든 Authentication 객체를 SecurityContext에 설정합니다.
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-
-        // 세션에 SPRING_SECURITY_CONTEXT라는 키 값으로 SecurityContext를 저장합니다.
-        HttpSession session = request.getSession(true);
-        session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
-
-        return "redirect:/";
+        return "redirect:/auth/login";
     }
 
     @GetMapping("/loginSuccess")
@@ -156,10 +128,30 @@ public class AuthController {
     @ResponseBody
     public Map<String, Boolean> buyTicket(@RequestBody PaymentResponse paymentResponse) throws UsernameNotFoundException {
 
-        paymentService.buyTicket(paymentResponse);
-
         Map<String, Boolean> result = new HashMap<>();
-        result.put("success", true);
+        if(paymentResponse.isSuccess()){
+
+            Payment payment = paymentService.buyTicket(paymentResponse);
+
+
+            Optional<OrderList> orderList = orderListRepository.findById(payment.getId());
+
+            Integer totalPrice = null;
+            if(orderList.isPresent()) {
+                totalPrice = orderList.get().getOrderTotalPrice();
+            }
+
+            TicketSales ticketSales = new TicketSales();
+            ticketSales.setPaymentId(payment);
+            ticketSales.setTotalPrice(totalPrice);
+            ticketSales.setSalesDate(payment.getTime());
+
+            ticketSalesRepository.save(ticketSales);
+
+            result.put("success", true);
+        }else{
+            result.put("success",false);
+        }
         return result;
     }
 
@@ -193,6 +185,7 @@ public class AuthController {
     @GetMapping("/sendAuthNumber")
     @ResponseBody
     public String sendAuthNumber(String email, HttpSession session){
+        log.info("인증번호 전송");
         HashMap<String, Integer> authHash = authService.sendAuthNumber(email,session);
         String msg;
         if(authHash.get("row") != 1){
