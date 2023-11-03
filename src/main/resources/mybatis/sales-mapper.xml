@@ -4,5 +4,31 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <!-- mapper의 namespace는 연결할 dao 인터페이스의 "풀네임"을 작성한다. -->
-<mapper namespace="com.itbank.repository.mybatis.ProductManageDAO">
+<mapper namespace="com.itbank.repository.mybatis.TicketSalesDAO">
+
+    <select id="selectAll" resultType="ticketsales" parameterType="map">
+        <![CDATA[
+        select s.id as id, s.totalprice as orderTotalPrice, m.name as paymentMethod, p.time as salesDate, u.username as username, p.id as paymentId, t.name as ticketName
+        from ticket_sales s ,payment p, payment_method m, users u, ticket_detail d, ticket t, order_list o
+        where s.payment_id=p.id and p.id=m.id and p.id=o.payment_id and o.user_id=u.id and d.payment_id=p.id and d.ticket_id = t.id
+        ]]>
+        <if test="startDate != null and startDate != ''">
+            <![CDATA[ AND p.time >= #{startDate} ]]>
+        </if>
+        <if test="endDate != null and endDate != ''">
+            <![CDATA[ AND p.time <= #{endDate} ]]>
+        </if>
+        <![CDATA[ order by salesDate DESC ]]>
+    </select>
+
+    <select id="selectTotal" resultType="int">
+        select sum(s.totalprice) as orderTotalPrice
+        from ticket_sales s, payment p, order_list o
+        where s.payment_id=p.id and p.id=o.payment_id
+    </select>
+
+<!--    <select id="select" resultType="ticketsales">-->
+<!--        -->
+<!--    </select>-->
+
 </mapper>

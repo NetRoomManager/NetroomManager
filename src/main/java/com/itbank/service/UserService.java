@@ -41,9 +41,9 @@ public class UserService {
 
         try {
             // USER 권한 찾기 또는 생성
-            Role role = roleRepository.findByName("ROLE_USER").orElseGet(() -> {
+            Role role = roleRepository.findByName("ROLE_ADMIN").orElseGet(() -> {
                 Role newRole = new Role();
-                newRole.setName("ROLE_USER");
+                newRole.setName("ROLE_ADMIN");
                 return roleRepository.save(newRole);
             });
 
@@ -74,8 +74,6 @@ public class UserService {
         }
         // 중복 가입 처리
         catch (DataIntegrityViolationException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "이미 가입된 정보입니다",  e);
         }
     }
 

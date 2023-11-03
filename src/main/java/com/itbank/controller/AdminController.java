@@ -1,14 +1,21 @@
 package com.itbank.controller;
 
+import com.itbank.model.dto.TicketSalesDTO;
+import com.itbank.service.ProductSalesService;
 import com.itbank.service.ProductService;
+import com.itbank.service.TicketSalesService;
 import com.itbank.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import java.net.http.HttpRequest;
+import java.text.ParseException;
 import java.util.Objects;
 
 @Controller
@@ -18,6 +25,9 @@ public class AdminController {
 
     @Autowired
     private ProductService productService;
+
+    @Autowired
+    private TicketSalesService ticketSalesService;
 
     @Autowired
     private UserService userService;
@@ -41,12 +51,6 @@ public class AdminController {
         return "/admin/sales_manage";
     }
 
-    // 이용권관리
-    @GetMapping("/ticket")
-    public String ticket() {
-        return "/admin/ticket_manage";
-    }
-
     // 상품 매출
     @GetMapping("/productsales")
     public String productSale() {
@@ -55,8 +59,15 @@ public class AdminController {
     
     // 이용권 매출
     @GetMapping("/ticketsales")
-    public String ticketSale() {
-        return"/admin/ticket_sales_manage";
+    public ModelAndView ticketSale(HttpServletRequest request) throws ParseException {
+        ModelAndView mav = new ModelAndView("/admin/ticket_sales_manage");
+        mav.addObject("list", ticketSalesService.selectAll(request));
+        log.info("티켓매출 불러옴");
+
+        mav.addObject("total", ticketSalesService.selectTotal());
+        log.info("총액 불러옴");
+
+        return mav;
     }
 
     // 회원관리
