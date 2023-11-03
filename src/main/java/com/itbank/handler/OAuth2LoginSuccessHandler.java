@@ -48,6 +48,14 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
 
+        RequestCache requestCache = new HttpSessionRequestCache();
+        SavedRequest savedRequest = requestCache.getRequest(request, response);
+
+        String targetUrl = "/";
+        if (savedRequest != null) {
+            targetUrl = savedRequest.getRedirectUrl();
+        }
+
         if (authentication.getPrincipal() instanceof UserPrincipal) {
             UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
             String username = userPrincipal.getUsername();
@@ -66,7 +74,7 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
                 RemainingTime remainingTime = remainingTimeRepository.findById(user.getId()).orElseGet(() -> {
                     RemainingTime newRemainingTime = new RemainingTime();
                     newRemainingTime.setUser(user);
-                    newRemainingTime.setRemainingTime(1);
+                    newRemainingTime.setRemainingTime(15);
                     user.setRemainingTime(newRemainingTime);
 
                     // 업데이트
@@ -75,24 +83,24 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
                     return newRemainingTime;
                 });
 
-                long remaningTime = remainingTime.getRemainingTime() * 60L;
+                if(remainingTime.getRemainingTime() <= 0) {
+                    // 남은 시간이 없다면 세션 날림
+                    request.getSession().invalidate();
 
-                log.info(user  .getUsername() + "님의 남은 시간: " + remaningTime + "분");
+                    // 이용권 충전 페이지로 보냄
+                    targetUrl = "/auth/buyTicket";
 
-                // 레디스에 로드
-                redisTemplate.opsForValue().set(user.getUsername(), remaningTime, remaningTime, TimeUnit.SECONDS);
+                } else { // 남은 시간이 있다면 레디스에 저장 후 로그인 유지
+                    long remaningTime = remainingTime.getRemainingTime();
 
+                    log.info(user.getUsername() + "님의 남은 시간: " + remaningTime + "분");
 
+                    // 레디스에 로드
+                    redisTemplate.opsForValue().set(user.getUsername()+" "+remaningTime, remaningTime, remaningTime, TimeUnit.SECONDS);
+                }
             }
         }
 
-        RequestCache requestCache = new HttpSessionRequestCache();
-        SavedRequest savedRequest = requestCache.getRequest(request, response);
-
-        String targetUrl = "/";
-        if (savedRequest != null) {
-            targetUrl = savedRequest.getRedirectUrl();
-        }
 
         response.sendRedirect("/auth/loginSuccess?targetUrl=" + URLEncoder.encode(targetUrl, "UTF-8"));
     }

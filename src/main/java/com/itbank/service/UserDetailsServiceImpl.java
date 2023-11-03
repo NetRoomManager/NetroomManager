@@ -54,20 +54,24 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         // 유저 로그 추가
         createUserLog(customUser);
 
-        // 유저의 남은 시간을 불러와 (분 으로 불러와서 초로 변환하기 위해 * 60)
+        // 유저의 남은 시간을 불러옴
         RemainingTime remainingTime = remainingTimeRepository.findById(customUser.getId()).orElseGet(() -> {
             RemainingTime newRemainingTime = new RemainingTime();
             newRemainingTime.setUser(customUser);
-            newRemainingTime.setRemainingTime(1);
+            newRemainingTime.setRemainingTime(0);
             return remainingTimeRepository.save(newRemainingTime);
         });
 
-        long remaningTime = remainingTime.getRemainingTime() * 60L;
+        long remaningTime = remainingTime.getRemainingTime();
+
+        if (remaningTime <= 0) {
+            throw new AuthenticationServiceException("남은 시간이 없습니다. 티켓을 구매해주세요.");
+        }
 
         log.info(username + "님의 남은 시간: " + remaningTime + "초");
 
         // 레디스에 로드
-        redisTemplate.opsForValue().set(username, remaningTime, remaningTime, TimeUnit.SECONDS);
+        redisTemplate.opsForValue().set(username + " " + remaningTime, remaningTime, remaningTime, TimeUnit.SECONDS);
 
         return new UserPrincipal(customUser);
     }

@@ -46,6 +46,8 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
         if (authentication != null && authentication.getPrincipal() instanceof UserPrincipal) {
             UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
 
+            log.info("로그달기");
+
             // 해당하는 유저의 최근 로그를 불러옴
             Optional<UserLog> userLog = userLogService.findLatestByUser(userPrincipal.getUser());
 
@@ -55,19 +57,44 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
                 userLogService.save(log); // UserLog를 데이터베이스에 저장
             }
 
+            log.info("로그저장 성공");
+
+            log.info(userPrincipal.getUsername() + "의 남은 시간을 불러옵니다");
+
             // 레디스에서 남은 시간 불러옴
             Long time = (Long) redisTemplate.opsForValue().get(userPrincipal.getUsername());
 
-            log.info(userPrincipal.getUsername() + "의 남은 시간을 불러옵니다");
+            log.info("불러오기 성공! : " + time+"초");
+
+            if(time==null) { // null이면 핸들러로 들어온거임 ?time=1초 이런식으로 들어옴
+                time = Long.valueOf((String) request.getParameter("time"));
+                log.info("파라미터로 받은 time: " + time);
+            }
+
 
             // 유저의 DB남은시간 컬럼에
             Optional<RemainingTime> optionalRemainingTime = remainingTimeRepository.findById(userPrincipal.getUser().getId());
             if(optionalRemainingTime.isPresent()){
                 RemainingTime remainingTime = optionalRemainingTime.get();
-                // 반영하기
-                remainingTime.setRemainingTime(Objects.requireNonNull(time).intValue());
+                log.info("로그인 이전 저장된 시간: " + remainingTime.getRemainingTime());
+
+                // 로그인 시간과 로그아웃시간으로 사용시간 불러옴
+                Long usingTimeInMs = userLog.get().getLogoutAt().getTime() - userLog.get().getLoginAt().getTime();
+                Long usingTimeInSecounds = usingTimeInMs / 1000;
+                log.info("사용 시간(초): " + usingTimeInSecounds);
+
+
+                // 저장되어있던 시간에 사용시간을 빼줌
+                Integer newRemainingTime = remainingTime.getRemainingTime() - usingTimeInSecounds.intValue();
+                log.info("저장할 시간(초): " + newRemainingTime);
+                if(newRemainingTime<0) { // 만약 음수가 들어오면 0으로 변경
+                    newRemainingTime=0;
+                }
+                remainingTime.setRemainingTime(newRemainingTime);
+
                 remainingTimeRepository.save(remainingTime);
             }
+            log.info("남은시간 저장 완료!");
 
         }
 
