@@ -9,9 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
-import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,41 +24,33 @@ public class TicketSalesService {
 
     public List<TicketSalesDTO> selectAll(HttpServletRequest request) throws ParseException {
 
-        Map<String,Date> dates = new HashMap<>();
+        Map<String, String> dates = new HashMap<>();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 
         String startParam = request.getParameter("startDate");
         String endParam = request.getParameter("endDate");
 
 
-        if(startParam == null || startParam.isEmpty()){
-            log.info("1번째 분기문 들어옴: " + request.getParameter("startDate"));
-            java.util.Date start  = sdf.parse("1970-01-01");
-            Date startDate = new Date(start.getTime());
-            log.info("startParam:"+startDate.toString());
-            dates.put("startDate",startDate);
-        }else{
-            dates.put("startDate",new Date(sdf.parse(startParam).getTime()));
+        if (startParam == null || startParam.isEmpty()) {
+            startParam = "1970-01-01";
+            dates.put("startDate", startParam);
+        } else {
+            dates.put("startDate", startParam);
         }
 
-        if(startParam == null || startParam.isEmpty()){
-            log.info("2번째 분기문 들어옴");
-            Date endDate = new Date(new java.util.Date().getTime());
-            log.info("endDate:"+endDate.toString());
-            dates.put("endDate",endDate);
-        }else{
-            dates.put("endDate",new Date(sdf.parse(endParam).getTime()));
+        if (endParam == null || endParam.isEmpty()) {
+            endParam = sdf.format(new Date()).toString();
+            log.info(endParam);
+            dates.put("endDate", endParam);
+        } else {
+            dates.put("endDate", endParam);
         }
-
-
-        log.info(dates.get("startDate").toString());
-        log.info(dates.get("endDate").toString());
 
         return ticketSalesDAO.selectAll(dates);
     }
 
-    //    public List<TicketSalesDTO> selectAll(HttpServletRequest request) {
-//        Map<String,String> dates = new HashMap<>();
+//    public List<TicketSalesDTO> selectAll(HttpServletRequest request) {
+//        Map<String, String> dates = new HashMap<>();
 //        System.out.println(request.getParameter("startDate"));
 //
 //        dates.put("startDate", request.getParameter("startDate"));
@@ -70,7 +62,7 @@ public class TicketSalesService {
 
     public int selectTotal() {
         int total = ticketSalesDAO.selectTotal();
-        System.out.println("total : "+total);
+        System.out.println("total : " + total);
         return total;
     }
 }
