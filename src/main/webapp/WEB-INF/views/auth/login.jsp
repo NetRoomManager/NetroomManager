@@ -189,7 +189,7 @@
                     <div class="container mt-3">
                         <p>회원가입 페이지 입니다.</p>
                         <!-- 액션   -->
-                        <form action="/auth/join" method="post">
+                        <form action="/auth/join" method="post" id="joinForm">
                             <div class="form-floating mt-3 mb-3">
                                 <input
                                         type="text"
@@ -245,11 +245,40 @@
                                         type="email"
                                         class="form-control"
                                         id="email"
-                                        placeholder="Enter username"
+                                        placeholder="Enter email"
                                         name="email"
                                         required
                                 />
                                 <label for="email">이메일</label>
+                            </div>
+                            <div class="form-floating mt-3 mb-3">
+                                <input
+                                        type="text"
+                                        class="form-control"
+                                        id="authNumber"
+                                        placeholder="인증번호 입력"
+                                        name="authNumber"
+                                        required
+                                />
+                                <label for="authNumber">인증번호 입력</label>
+                            </div>
+
+                            <div class="form-floating mt-3 mb-3">
+                                <input
+                                        type="button"
+                                        class="form-control"
+                                        id="sendAuthNumber"
+                                        value="인증번호 발송"
+                                        name="sendAuthNumber"
+                                />
+                                <input
+                                        type="button"
+                                        class="form-control"
+                                        id="authNumberCheck"
+                                        value="인증번호 확인"
+                                        name="authNumberCheck"
+                                />
+                                <span id="check_authNumber"></span>
                             </div>
 
                             <div class="form-floating mb-3 mt-3">
@@ -275,6 +304,7 @@
                             <button
                                     type="submit"
                                     class="btn btn-primary"
+                                    id="joinSubmit"
                             >
                                 회원가입
                             </button>
@@ -360,6 +390,81 @@
                 console.error('Error:', error);
             });
     });
+</script>
+
+<script>
+    /* 이메일 보내기 */
+    const sendAuthNumber = document.getElementById('sendAuthNumber')
+    sendAuthNumber.onclick = function (event){
+        const url = '${cpath}/auth/sendAuthNumber'
+        const email = document.getElementById('email')
+
+        if(email.value === ''){
+            alert('인증번호를 받을 이메일을 입력해주세요')
+            email.focus()
+            return
+        }
+        fetch(url + '?email=' + email.value)
+            .then(resp => resp.text())
+            .then(text => {
+                alert(text)
+            })
+    }
+
+    // 인증번호 확인
+    document.getElementById('authNumberCheck').addEventListener('click',function(){
+        const authNumber = document.getElementById('authNumber').value//입력받은 인증번호
+        const joinSubmit = document.getElementById('joinSubmit')//입력받은 인증번호
+        if(authNumber === ''){
+            document.getElementById('check_authNumber').classList.remove("text-primary")
+            document.getElementById('check_authNumber').classList.add("text-danger")
+            document.getElementById('check_authNumber').innerText = "인증번호를 입력하세요";
+            joinSubmit.disabled = true;
+            alert('인증번호를 입력하세요')
+        }
+
+
+        fetch('/auth/checkAuthNumber',{
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({authNumber: parseInt(authNumber)})
+        })
+            .then(resp => resp.json())
+            .then(data => {
+                console.log(data)
+                if(data.emailCheck) {
+                    document.getElementById('check_authNumber').classList.add("text-primary")
+                    document.getElementById('check_authNumber').classList.remove("text-danger")
+                    document.getElementById('check_authNumber').innerText = "인증번호 확인";
+                    joinSubmit.disabled = false;
+                }else{
+                    document.getElementById('check_authNumber').classList.remove("text-primary")
+                    document.getElementById('check_authNumber').classList.add("text-danger")
+                    document.getElementById('check_authNumber').innerText = "인증번호 오류";
+                    joinSubmit.disabled = true;
+                    alert('인증번호를 다시 입력해주세요')
+                }
+
+            })
+            .catch((error) => {
+                console.error('Error : ',error)
+            })
+    })
+
+    document.getElementById('joinSubmit').addEventListener('click', function(event) {
+        const check_authNumberText = document.getElementById('check_authNumber').innerText
+        if(check_authNumberText !== '인증번호 확인'){
+            event.preventDefault();
+            alert('인증번호 확인을 해주세요.')
+        }
+        if(check_authNumberText === ''){
+            event.preventDefault();
+            alert('인증번호 확인을 해주세요.')
+        }
+    })
+
 </script>
 </body>
 </html>
