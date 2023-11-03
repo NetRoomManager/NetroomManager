@@ -1,388 +1,242 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ include file="header.jsp"%>
+         pageEncoding="UTF-8" %>
+<%@ include file="header.jsp" %>
 <!-- 상품관리 페이지 -->
 
 <style>
-#menu_bar {
-	background-color: #ffa500
-}
+    #menu_bar {
+        background-color: #ffa500
+    }
 
-#menu_bar>a {
-	color: #ffffff;
-}
+    #menu_bar > a {
+        color: #ffffff;
+    }
 
-#product_update table>tbody>tr>th {
-	padding-top: 15px;
-}
+    #product_update table > tbody > tr > th {
+        padding-top: 15px;
+    }
 </style>
-<title>이용권관리</title>
+
 <div id="headerContent"></div>
+<%-- 상단 nav --%>
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-	<div class="collapse navbar-collapse" id="navbarSupportedContent">
-		<ul class="navbar-nav me-auto mb-2 mb-lg-0 pt-1">
-			<li class="nav-item"><a class="nav-link active navbar-brand"
-				aria-current="page" href="${cpath}/">NetRoom</a></li>
-			<li class="nav-item pe-3"><a class="nav-link" href="">재고현황</a>
-			</li>
-			<li class="nav-item pe-3"><a class="nav-link"
-				data-bs-toggle="modal" data-bs-target="#productUpdate">상품등록</a></li>
-		</ul>
-		<ul class="navbar-nav">
-			<li class="nav-item pe-2">
-				<button type="button" class="btn btn-light" data-bs-container="body"
-					data-bs-toggle="popover" data-bs-placement="bottom"
-					data-bs-content="test"
-					style="-bs-btn-padding-y: .25rem; - -bs-btn-padding-x: .75em; - -bs-btn-font-size: 1.15rem;">
-					<svg width="20" height="20" viewBox="0 0 20 20" fill="none"
-						xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 relative"
-						preserveAspectRatio="none">
-                            <path fill-rule="evenodd"
-							clip-rule="evenodd"
-							d="M5.46335 6.82247C5.17954 6.82247 4.95008 6.58557 4.98808 6.30431C5.28388 4.11461 6.91244 2.5 9.78004 2.5C12.5925 2.5 14.4888 4.20082 14.4888 6.51914C14.4888 8.19829 13.6579 9.37912 12.2516 10.2349C10.8773 11.0583 10.4832 11.6324 10.4832 12.7483V12.9091C10.4832 13.1852 10.2593 13.4091 9.98316 13.4091H8.7718C8.49805 13.4091 8.2752 13.189 8.27184 12.9152L8.26725 12.5424C8.21399 11.0149 8.86385 10.0399 10.3234 9.15162C11.6124 8.36079 12.0705 7.73246 12.0705 6.61664C12.0705 5.39248 11.1224 4.49332 9.66285 4.49332C8.35848 4.49332 7.46502 5.20111 7.21313 6.35946C7.15721 6.61661 6.94421 6.82247 6.68105 6.82247H5.46335ZM9.37002 17.5C10.1478 17.5 10.7388 16.908 10.7388 16.1364C10.7388 15.3647 10.1478 14.7727 9.37002 14.7727C8.61302 14.7727 8.01157 15.3647 8.01157 16.1364C8.01157 16.908 8.61302 17.5 9.37002 17.5Z"
-							fill="black"></path>
-                            </svg>
-				</button>
-			</li>
-			<li class="nav-item pe-2">
-				<button type="button" class="btn btn-light"
-					style="-bs-btn-padding-y: .25rem; - -bs-btn-padding-x: .75rem; - -bs-btn-font-size: 1.15rem;">
-					<svg width="20" height="20" viewBox="0 0 20 20" fill="none"
-						xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 relative"
-						preserveAspectRatio="none">
-                                <path fill-rule="evenodd"
-							clip-rule="evenodd"
-							d="M10 3.74999C6.54822 3.74999 3.75 6.54821 3.75 9.99999C3.75 13.4518 6.54822 16.25 10 16.25C13.4518 16.25 16.25 13.4518 16.25 9.99999C16.25 9.0682 16.0465 8.18565 15.6821 7.39291C15.538 7.07928 15.6753 6.70817 15.989 6.564C16.3026 6.41984 16.6737 6.55723 16.8179 6.87086C17.256 7.82403 17.5 8.88437 17.5 9.99999C17.5 14.1421 14.1421 17.5 10 17.5C5.85786 17.5 2.5 14.1421 2.5 9.99999C2.5 5.85786 5.85786 2.49999 10 2.49999V3.74999Z"
-							fill="black"></path>
-                                <path
-							d="M10 5.58279V0.667193C10 0.402244 10.309 0.257507 10.5126 0.427123L13.4619 2.88492C13.6118 3.00986 13.6118 3.24013 13.4619 3.36506L10.5126 5.82286C10.309 5.99248 10 5.84774 10 5.58279Z"
-							fill="black"></path>
-                              </svg>
-				</button>
-			</li>
-		</ul>
-	</div>
-	<div class="modal fade" id="productUpdate" data-bs-backdrop="static"
-		data-bs-keyboard="false" tabindex="-1"
-		aria-labelledby="staticBackdropLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg">
-			<div class="modal-content">
-				<form action="">
-					<div class="modal-header">
-						<h3 class="modal-title">상품등록</h3>
-						<button type="button" class="btn-close" data-bs-dismiss="modal"
-							aria-label="Close"></button>
-					</div>
-					<div class="modal-body container">
-						<div class="row justify-content-center align-items-center mb-3">
-							<div class="col-6 text-center">
-								<img id="preview" class="img-thumbnail mb-2"
-									src="../img/1422005677144.png" alt="예시 이미지"
-									style="max-width: 200px; max-height: 200px;"> <input
-									class="form-control form-control-sm" id="image" name="image"
-									accept="image/*" type="file">
-							</div>
-						</div>
-						<table class="table table-borderless">
-							<tbody>
-								<tr>
-									<th>제품/이용권</th>
-									<td><select class="form-select"
-										aria-label="Default select example">
-											<option selected>이용권 선택 시 시간 필수</option>
-											<option value="1">제품</option>
-											<option value="2">이용권</option>
-									</select></td>
-									<th>사용시간</th>
-									<td><input class="form-control" type="text"
-										placeholder="Default input" aria-label="default input example">
-									</td>
-								</tr>
-								<tr>
-									<th>상품분류</th>
-									<td><input class="form-control" type="text"
-										placeholder="Default input" aria-label="default input example">
-									</td>
-									<th colspan="2">상품설명</th>
-								</tr>
-								<tr>
-									<th>상품명</th>
-									<td><input class="form-control" type="text"
-										placeholder="Default input" aria-label="default input example">
-									</td>
-									<td colspan="2" rowspan="2" class="form-floating"><textarea
-											class="form-control" placeholder="Leave a comment here"
-											id="floatingTextarea" style="height: 90px;"></textarea> <label
-										for="floatingTextarea">Comments</label></td>
-								</tr>
-								<tr>
-									<th>가격</th>
-									<td><input class="form-control" type="text"
-										placeholder="Default input" aria-label="default input example">
-									</td>
-								</tr>
-							</tbody>
-						</table>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary"
-							data-bs-dismiss="modal">취소</button>
-						<button type="button" class="btn btn-primary">등록</button>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0 pt-1">
+            <li class="nav-item"><a class="nav-link active navbar-brand"
+                <<<<<<< HEAD
+                aria-current="page" href="${cpath}/">NetRoom</a></li>
+            <li class="nav-item pe-3"><a class="nav-link" href="">재고현황</a>
+            </li>
+            =======
+            aria-current="page" href="#">NetRoom</a></li>
+
+            >>>>>>> 087161511efaa41703627ee0755b89f73173dd1c
+            <li class="nav-item pe-3"><a class="nav-link"
+                                         data-bs-toggle="modal" data-bs-target="#ticketUpdate">이용권등록</a>
+            </li>
+        </ul>
+        <ul class="navbar-nav">
+            <li class="nav-item pe-2">
+                <button type="button" class="btn btn-light" data-bs-container="body"
+                        data-bs-toggle="popover" data-bs-placement="bottom"
+                        data-bs-content="test"
+                        style="-bs-btn-padding-y: .25rem; - -bs-btn-padding-x: .75em; - -bs-btn-font-size: 1.15rem;">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                         xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 relative"
+                         preserveAspectRatio="none">
+                        <path fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M5.46335 6.82247C5.17954 6.82247 4.95008 6.58557 4.98808 6.30431C5.28388 4.11461 6.91244 2.5 9.78004 2.5C12.5925 2.5 14.4888 4.20082 14.4888 6.51914C14.4888 8.19829 13.6579 9.37912 12.2516 10.2349C10.8773 11.0583 10.4832 11.6324 10.4832 12.7483V12.9091C10.4832 13.1852 10.2593 13.4091 9.98316 13.4091H8.7718C8.49805 13.4091 8.2752 13.189 8.27184 12.9152L8.26725 12.5424C8.21399 11.0149 8.86385 10.0399 10.3234 9.15162C11.6124 8.36079 12.0705 7.73246 12.0705 6.61664C12.0705 5.39248 11.1224 4.49332 9.66285 4.49332C8.35848 4.49332 7.46502 5.20111 7.21313 6.35946C7.15721 6.61661 6.94421 6.82247 6.68105 6.82247H5.46335ZM9.37002 17.5C10.1478 17.5 10.7388 16.908 10.7388 16.1364C10.7388 15.3647 10.1478 14.7727 9.37002 14.7727C8.61302 14.7727 8.01157 15.3647 8.01157 16.1364C8.01157 16.908 8.61302 17.5 9.37002 17.5Z"
+                              fill="black"></path>
+                    </svg>
+                </button>
+            </li>
+            <li class="nav-item pe-2">
+                <button type="button" class="btn btn-light"
+                        style="-bs-btn-padding-y: .25rem; - -bs-btn-padding-x: .75rem; - -bs-btn-font-size: 1.15rem;">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
+                         xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 relative"
+                         preserveAspectRatio="none">
+                        <path fill-rule="evenodd"
+                              clip-rule="evenodd"
+                              d="M10 3.74999C6.54822 3.74999 3.75 6.54821 3.75 9.99999C3.75 13.4518 6.54822 16.25 10 16.25C13.4518 16.25 16.25 13.4518 16.25 9.99999C16.25 9.0682 16.0465 8.18565 15.6821 7.39291C15.538 7.07928 15.6753 6.70817 15.989 6.564C16.3026 6.41984 16.6737 6.55723 16.8179 6.87086C17.256 7.82403 17.5 8.88437 17.5 9.99999C17.5 14.1421 14.1421 17.5 10 17.5C5.85786 17.5 2.5 14.1421 2.5 9.99999C2.5 5.85786 5.85786 2.49999 10 2.49999V3.74999Z"
+                              fill="black"></path>
+                        <path
+                                d="M10 5.58279V0.667193C10 0.402244 10.309 0.257507 10.5126 0.427123L13.4619 2.88492C13.6118 3.00986 13.6118 3.24013 13.4619 3.36506L10.5126 5.82286C10.309 5.99248 10 5.84774 10 5.58279Z"
+                                fill="black"></path>
+                    </svg>
+                </button>
+            </li>
+        </ul>
+    </div>
+
+    <%--이용권등록 모달                       --%>
+    <div class="modal fade" id="ticketUpdate" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="/admin/ticketRegister" method="POST">
+                    <div class="modal-header">
+                        <h3 class="modal-title">이용권등록</h3>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body container">
+                        <table class="table table-borderless">
+                            <tbody>
+                            <tr>
+                                <th>이용권이름</th>
+                                <td>
+                                    <input type="hidden" id="editTicketId" name="id">
+                                    <input class="form-control" type="text" id="editTicketName" name="name"
+                                           placeholder="이용권 이름 등록" required aria-label="default input example">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>이용권시간</th>
+                                <td>
+                                    <input class="form-control" type="number" id="editTicketTime" name="time"
+                                           placeholder="분" required aria-label="default input example">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>이용권가격</th>
+                                <td>
+                                    <input class="form-control" type="number" id="editTicketPrice" name="price"
+                                           placeholder="금액입력" required aria-label="default input example">
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                        <button type="submit" class="btn btn-primary editModalBtn">등록</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </nav>
+<%-- 사이드 바 --%>
 <nav id="menu_bar" class="nav nav-pills flex-column py-3 text-center"
-	style="position: absolute; height: 100%;">
-	<a class="nav-link py-3" href="${cpath }/admin/order">주문</a>
-	<a class="nav-link py-3" href="${cpath }/admin/product">재고</a>
-	<a class="nav-link py-3" 
-		aria-current="page" href="${cpath }/admin/productsales">매출</a> <a
-		class="nav-link py-3" href="${cpath }/admin/user">회원</a> <a
-		class="nav-link py-3" href="${cpath }/admin/seat">좌석</a> <a
-		class="nav-link py-3 active" href="${cpath }/admin/ticket" style="background-color: #FF8339;">이용권</a>
+     style="position: absolute; height: 100%;">
+    <a class="nav-link py-3" href="${cpath }/admin/order">주문</a>
+    <a class="nav-link py-3" href="${cpath }/admin/product">재고</a>
+    <a class="nav-link py-3" aria-current="page" href="${cpath }/admin/productsales">매출</a>
+    <a
+        class="nav-link py-3" href="${cpath }/admin/user">회원</a> <a
+        class="nav-link py-3" href="${cpath }/admin/seat">좌석</a> <a
+        class="nav-link py-3" href="${cpath }/admin/ticket">이용권</a>
 </nav>
 
-<div class="container pt-4">
-	<form class="d-flex">
-		<div class="mb-3 pe-2" style="width: 150px;">
-			<select class="form-select" aria-label="Default select example">
-				<option selected>가격</option>
-				<option value="1">현재재고</option>
-				<option value="2">금일 판매갯수</option>
-				<option value="3">평균 판매갯수</option>
-			</select>
-		</div>
-		<div class="mb-3 pe-2">
-			<input type="number" class="form-control" id="searchRangeOne">
-		</div>
-		<p class="h3">~</p>
-		<div class="mb-3 px-2">
-			<input type="number" class="form-control" id="searchRangeTwo">
-		</div>
-		<div>
-			<button type="submit" class="btn btn-secondary">검색</button>
-		</div>
-	</form>
+
+<%--이용권 목록                      --%>
+<div class="container mt-5">
+    <table class="table table-hover">
+        <thead>
+        <tr class="table-dark text-center">
+            <th scope="col">#</th>
+            <th scope="col">이용권번호</th>
+            <th scope="col">이용권이름</th>
+            <th scope="col">가격</th>
+            <th scope="col">시간</th>
+            <th scope="col">수정</th>
+            <th scope="col">삭제</th>
+        </tr>
+        </thead>
+        <tbody>
+        <c:forEach var="ticket" items="${ticketList}">
+            <tr class="text-center">
+                <th class="pt-3 " scope="row">
+                    <div class="form-check d-flex justify-content-center">
+                        <input class="form-check-input" type="checkbox" value=""
+                               id="flexCheckDefault">
+                    </div>
+                </th>
+                <td class="pt-3">${ticket.id}</td>
+                <td class="pt-3">${ticket.name}</td>
+                <td class="pt-3">${ticket.price}</td>
+                <td class="pt-3">${ticket.time}</td>
+                <td>
+                    <button type="button" id="editBtn" class="btn btn-outline-warning"
+                            data-bs-toggle="modal" data-bs-target="#ticketUpdate"
+                            data-ticket-id="${ticket.id}" data-ticket-name="${ticket.name}"
+                            data-ticket-price="${ticket.price}" data-ticket-time="${ticket.time}"
+                    >수정
+                    </button>
+                </td>
+                <td>
+                    <button type="button" id="deleteTicketBtn" class="btn btn-outline-danger"
+                            data-ticket-id="${ticket.id}"
+                    >삭제
+                    </button>
+                </td>
+            </tr>
+        </c:forEach>
+        </tbody>
+    </table>
+
 </div>
-<div class="container">
-	<form class="d-flex">
-		<div class="mb-3 pe-2" style="width: 150px;">
-			<select class="form-select" aria-label="Default select example">
-				<option selected>전체</option>
-				<option value="1">전체</option>
-				<option value="2">상품번호</option>
-				<option value="3">상품명</option>
-				<option value="4">상품분류</option>
-			</select>
-		</div>
-		<div class="mb-3 pe-2">
-			<input type="text" class="form-control" id="searchName">
-		</div>
-		<div>
-			<button type="submit" class="btn btn-secondary">검색</button>
-		</div>
-	</form>
-</div>
-<div class="container">
-	<table class="table table-hover">
-		<thead>
-			<tr class="table-dark text-center">
-				<th scope="col">#</th>
-				<th scope="col">상품번호</th>
-				<th scope="col">상품명</th>
-				<th scope="col">상품분류</th>
-				<th scope="col">가격</th>
-				<th scope="col">현재재고</th>
-				<th scope="col">금일 판매갯수</th>
-				<th scope="col">평균 판매갯수</th>
-				<th scope="col">소진 예상일</th>
-				<th scope="col">상세보기</th>
-				<th scope="col">삭제</th>
-			</tr>
-		</thead>
-		<tbody>
-			<tr class="text-center">
-				<th class="pt-3 " scope="row">
-					<div class="form-check d-flex justify-content-center">
-						<input class="form-check-input" type="checkbox" value=""
-							id="flexCheckDefault">
-					</div>
-				</th>
-				<td class="pt-3">Mark</td>
-				<td class="pt-3">Otto</td>
-				<td class="pt-3">@mdo</td>
-				<td class="pt-3">Mark</td>
-				<td class="pt-3">Otto</td>
-				<td class="pt-3">@mdo</td>
-				<td class="pt-3">Mark</td>
-				<td class="pt-3">Otto</td>
-				<td><button type="button" class="btn btn-outline-warning"
-						disabled>조회</button></td>
-				<td><button type="button" class="btn btn-outline-danger"
-						disabled>삭제</button></td>
-			</tr>
-			<tr class="text-center">
-				<th class="pt-3" scope="row">
-					<div class="form-check d-flex justify-content-center">
-						<input class="form-check-input" type="checkbox" value=""
-							id="flexCheckDefault">
-					</div>
-				</th>
-				<td class="pt-3">Mark</td>
-				<td class="pt-3">Otto</td>
-				<td class="pt-3">@mdo</td>
-				<td class="pt-3">Mark</td>
-				<td class="pt-3">Otto</td>
-				<td class="pt-3">@mdo</td>
-				<td class="pt-3">Mark</td>
-				<td class="pt-3">Otto</td>
-				<td><button type="button" class="btn btn-outline-warning"
-						data-bs-toggle="modal" data-bs-target="#myModal">조회</button></td>
-				<td><button type="button" class="btn btn-outline-danger">삭제</button></td>
-			</tr>
-		</tbody>
-	</table>
-	<div class="modal" id="myModal">
-		<div class="modal-dialog modal-lg">
-			<div class="modal-content">
 
-				<!-- Modal Header -->
-				<div class="modal-header">
-					<h4 class="modal-title">상세조회</h4>
-					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-				</div>
 
-				<!-- Modal body -->
-				<div class="modal-body">
-					<div class="row">
-						<div class="col-6 text-center">
-							<img id="preview" class="img-thumbnail mb-2"
-								src="../img/1422005677144.png" alt="예시 이미지"
-								style="max-width: 200px; max-height: 200px;">
-						</div>
-						<div class="col-6">
-							<table class="table table-borderless">
-								<tbody>
-									<tr>
-										<th>상품번호</th>
-										<td><input class="form-control form-control-sm"
-											type="text" placeholder="Default input"
-											aria-label="default input example"></td>
-									</tr>
-									<tr>
-										<th>상품명</th>
-										<td><input class="form-control form-control-sm"
-											type="text" placeholder="Default input"
-											aria-label="default input example"></td>
-									</tr>
-									<tr>
-										<th>상품분류</th>
-										<td><input class="form-control form-control-sm"
-											type="text" placeholder="Default input"
-											aria-label="default input example"></td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-6">
-							<table class="table table-borderless">
-								<tbody>
-									<tr>
-										<th>가격</th>
-										<td><input class="form-control form-control-sm"
-											type="text" placeholder="Default input"
-											aria-label="default input example"></td>
-									</tr>
-									<tr>
-										<th>할인율</th>
-										<td><input class="form-control form-control-sm"
-											type="text" placeholder="Default input"
-											aria-label="default input example"></td>
-									</tr>
-									<tr>
-										<th>현재재고</th>
-										<td><input class="form-control form-control-sm"
-											type="text" placeholder="Default input"
-											aria-label="default input example"></td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-						<div class="col-6">
-							<table class="table table-borderless">
-								<tbody>
-									<tr>
-										<th>금일 판매갯수</th>
-										<td><input class="form-control form-control-sm"
-											type="text" placeholder="Default input"
-											aria-label="default input example"></td>
-									</tr>
-									<tr>
-										<th>평균 판매갯수</th>
-										<td><input class="form-control form-control-sm"
-											type="text" placeholder="Default input"
-											aria-label="default input example"></td>
-									</tr>
-									<tr>
-										<th>소진 예상일</th>
-										<td><input class="form-control form-control-sm"
-											type="text" placeholder="Default input"
-											aria-label="default input example"></td>
-									</tr>
-								</tbody>
-							</table>
-						</div>
-					</div>
-				</div>
-
-				<!-- Modal footer -->
-				<div class="modal-footer">
-					<button type="button" class="btn btn-danger"
-						data-bs-dismiss="modal">Close</button>
-				</div>
-
-			</div>
-		</div>
-	</div>
-</div>
 <script>
-	var popoverTriggerList = [].slice.call(document
-			.querySelectorAll('[data-bs-toggle="popover"]'))
-	var popoverList = popoverTriggerList.map(function(popoverTriggerEl) {
-		return new bootstrap.Popover(popoverTriggerEl)
-	})
 
-	$(document).ready(function() {
-		$.ajax({
-			url : "header.html",
-			dataType : "html",
-			success : function(response) {
-				$("#headerContent").html(response);
-			},
-		});
-	});
-	var imageInput = document.getElementById('image');
-	imageInput.addEventListener('change', previewImage);
 
-	function previewImage(event) {
-		var input = event.target;
-		var preview = document.getElementById('preview');
+    <%-- Bootstrap Popover는 사용자가 요소를 호버하거나 클릭했을 때 콘텐츠를 팝업 형태로 보여주는 기능을 제공 --%>
+    var popoverTriggerList = [].slice.call(document
+        .querySelectorAll('[data-bs-toggle="popover"]'))
+    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
+        return new bootstrap.Popover(popoverTriggerEl)
+    })
 
-		if (input.files && input.files[0]) {
-			var reader = new FileReader();
+    <%-- 이용권 수정 --%>
+    const editBtn = document.getElementById('editBtn')
+    editBtn.onclick = function updateTicketInfo(event) {
+        var modalTitle = document.querySelector(".modal-title")
+        modalTitle.textContent = "이용권 수정"
+        var editModalBtn = document.querySelector(".editModalBtn")
+        editModalBtn.textContent = "수정"
+        var ticketId = event.target.getAttribute('data-ticket-id')
+        var ticketName = event.target.getAttribute('data-ticket-name')
+        var ticketPrice = event.target.getAttribute('data-ticket-price')
+        var ticketTime = event.target.getAttribute('data-ticket-time')
+        document.getElementById('editTicketId').value = ticketId
+        document.getElementById('editTicketName').value = ticketName
+        document.getElementById('editTicketPrice').value = ticketPrice
+        document.getElementById('editTicketTime').value = ticketTime
+    }
 
-			reader.onload = function() {
-				preview.src = reader.result;
-			};
+    /*이용권 등록 모달 내용 리셋 */
+    const ticketModalLink = document.querySelector('[data-bs-toggle=modal][data-bs-target="#ticketUpdate"]')
+    ticketModalLink.onclick = function showModal() {
+        document.getElementById('editTicketId').value = ""
+        document.getElementById('editTicketName').value = ""
+        document.getElementById('editTicketPrice').value = ""
+        document.getElementById('editTicketTime').value = ""
+    }
 
-			reader.readAsDataURL(input.files[0]);
-		}
-	}
+    const deleteTicketBtn = document.querySelectorAll('#deleteTicketBtn');
+    deleteTicketBtn.forEach(function (btn) {
+        btn.addEventListener('click', deleteTicket)
+    })
+
+    function deleteTicket(event) {
+        var ticketId = event.target.getAttribute('data-ticket-id')
+        console.log(ticketId + "번 이용권 삭제")
+        if (ticketId == null) {
+            alert('이용권 정보가 존재하지 않습니다')
+            return;
+        }
+        var cfm = window.confirm('정말 삭제하시겠습니까?')
+        if (ticketId > 0 && cfm) {
+            location.href = '/admin/deleteTicket/' + ticketId
+        }
+
+        if (!cfm) {
+            alert('삭제를 취소하셨습니다')
+        }
+    }
+
 </script>
 </body>
 </html>
