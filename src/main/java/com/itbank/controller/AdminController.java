@@ -1,6 +1,8 @@
 package com.itbank.controller;
 
 import com.itbank.model.Product;
+import com.itbank.model.ProductCategory;
+import com.itbank.model.ProductDTO;
 import com.itbank.service.ProductService;
 import com.itbank.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -8,9 +10,14 @@ import oracle.jdbc.proxy._Proxy_;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 import java.util.Objects;
 
 @Controller
@@ -26,9 +33,35 @@ public class AdminController {
 
     // 상품관리
     @GetMapping("/product")
-    public String product() {
-//        productService.createProduct();
-        return "/admin/product_manage";
+    public ModelAndView product() {
+        ModelAndView mav = new ModelAndView("/admin/product_manage");
+        List<ProductDTO> productList = productService.selectAllProduct();
+        List<ProductCategory> productCategoryList = productService.selectAllProductCategory();
+        mav.addObject("productList", productList);
+        mav.addObject("productCategoryList", productCategoryList);
+        return mav;
+    }
+
+    // 상품목록 추가
+    @PostMapping("/addProductCategory")
+    public String addProductCategory(ProductCategory productCategory) {
+        int row = productService.addProductCategory(productCategory);
+        log.info("상품목록" + row + "추가되었습니다");
+        return "redirect:/admin/product";
+    }
+
+    // 신규상품 추가
+//    @PostMapping("/addProduct")
+//    public String addProduct(Product product, @RequestParam("img")MultipartFile img) {
+//        productService.addProduct(product, img);
+//        log.info("상품 생성");
+//        return "redirect:/admin/product";
+//    }
+    @PostMapping("/addProduct")
+    public String addProduct(ProductDTO productDTO) {
+        log.info("상품생성");
+        int row = productService.addProduct(productDTO);
+        return "redirect:/admin/product";
     }
 
     // 좌석관리
