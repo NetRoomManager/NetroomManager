@@ -10,11 +10,25 @@
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 	
 	<!-- Enables the Spring MVC @Controller programming model -->
-	<annotation-driven />
+	<annotation-driven>
+		<message-converters>
+			<beans:bean class="org.springframework.http.converter.StringHttpMessageConverter">
+				<beans:property name="defaultCharset" value="utf-8"/>
+				<beans:property name="supportedMediaTypes">
+					<beans:list>
+						<beans:value>text/plain;charset=utf-8</beans:value>
+						<beans:value>text/html;charset=utf-8</beans:value>
+						<beans:value>application/json;charset=utf-8</beans:value>
+					</beans:list>
+				</beans:property>
+			</beans:bean>
+		</message-converters>
+	</annotation-driven>
+
 
 	<!-- Handles HTTP GET requests for /resources/** by efficiently serving up static resources in the ${webappRoot}/resources directory -->
 	<resources mapping="/resources/**" location="/resources/" />
-	<resources mapping="/img/**" location="classpath:/img/" />
+	<resources mapping="/img/**" location="classpath:/img/ " />
 	<resources mapping="/css/**" location="classpath:/css/" />
 	<resources mapping="/js/**" location="classpath:/js/" />
 	<resources mapping="/upload/**" location="file:c:/upload/" />
@@ -35,5 +49,7 @@
 	
 	<context:component-scan base-package="com.itbank.controller" />
 	<context:component-scan base-package="com.itbank.wersocketConfig" />
+	<context:component-scan base-package="com.itbank.listener" />
+
 
 </beans:beans>

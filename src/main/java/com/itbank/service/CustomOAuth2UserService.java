@@ -2,12 +2,10 @@ package com.itbank.service;
 
 import com.itbank.config.UserPrincipal;
 import com.itbank.model.*;
-import com.itbank.repository.jpa.RoleRepository;
-import com.itbank.repository.jpa.SocialLoginRepository;
-import com.itbank.repository.jpa.UserRepository;
-import com.itbank.repository.jpa.UserRoleRepository;
+import com.itbank.repository.jpa.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -24,6 +22,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @Slf4j
@@ -43,6 +42,13 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private RemainingTimeRepository remainingTimeRepository;
+
+    @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
 
     @Override
     // 소셜유저 로그인, 회원가입 시 정보를 불러오는 메서드

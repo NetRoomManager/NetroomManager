@@ -1,16 +1,20 @@
 package com.itbank.controller;
 
-import com.itbank.model.Product;
-import com.itbank.service.ProductService;
-import com.itbank.service.UserService;
+import com.itbank.model.Seat;
+import com.itbank.model.Ticket;
+import com.itbank.service.*;
 import lombok.extern.slf4j.Slf4j;
-import oracle.jdbc.proxy._Proxy_;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import java.text.ParseException;
 import java.util.Objects;
 
 @Controller
@@ -18,11 +22,18 @@ import java.util.Objects;
 @Slf4j
 public class AdminController {
 
+
     @Autowired
-    private ProductService productService;
+    private TicketSalesService ticketSalesService;
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private TicketService ticketService;
+
+    @Autowired
+    private SeatService seatService;
 
     // 상품관리
     @GetMapping("/product")
@@ -31,10 +42,14 @@ public class AdminController {
         return "/admin/product_manage";
     }
 
-    // 좌석관리
+
     @GetMapping("/seat")
-    public String seat() {
-        return "/admin/seat_manage";
+    public ModelAndView seat() {
+        ModelAndView mav = new ModelAndView("/admin/seat_manage");
+
+        List<Seat> seatList = seatService.selectSeatList();
+        mav.addObject("seatList",seatList);
+        return mav;
     }
 
     // 매출관리
@@ -45,12 +60,58 @@ public class AdminController {
 
     // 이용권관리
     @GetMapping("/ticket")
-    public String ticket() {
-        return "/admin/ticket_manage";
+    public ModelAndView ticket() {
+        ModelAndView mav = new ModelAndView("/admin/ticket_manage");
+        List<Ticket> ticketList = ticketService.selectTicketList();
+        mav.addObject("ticketList", ticketList);
+        return mav;
+    }
+
+    @PostMapping("/ticketRegister")
+    public String addTicket(Ticket ticket){
+        if(ticket.getId() == null){
+            log.info("이용권 추가 form");
+            int i = ticketService.addTicket(ticket);
+            log.info(i +"개의 이용권이 추가되었습니다");
+        }
+        else {
+            log.info(ticket.getId() + "번 이용권 변경");
+            int i = ticketService.updateTicket(ticket);
+            log.info(i + "개의 이용권이 변경되었습니다 :  이용권 번호 [" + ticket.getId() + "]");
+        }
+        return "redirect:/admin/ticket";
+    }
+
+    @GetMapping("/deleteTicket/{ticketId}")
+    public String deleteTicket(@PathVariable int ticketId){
+        log.info(ticketId + "번 이용권 삭제");
+        int i = ticketService.deleteTicket(ticketId);
+        log.info(i + "개의 이용권을 삭제하였습니다");
+        return "redirect:/admin/ticket";
+    }
+
+
+
+    // 상품 매출
+    @GetMapping("/productsales")
+    public String productSale() {
+        return "/admin/product_sales_manage";
+    }
+    
+    // 이용권 매출
+    @GetMapping("/ticketsales")
+    public ModelAndView ticketSale(HttpServletRequest request) throws ParseException {
+        ModelAndView mav = new ModelAndView("/admin/ticket_sales_manage");
+        mav.addObject("list", ticketSalesService.selectAll(request));
+        log.info("티켓매출 불러옴");
+
+        mav.addObject("total", ticketSalesService.selectTotal());
+        log.info("총액 불러옴");
+
+        return mav;
     }
 
     // 회원관리
-
     @GetMapping("/user")
     public ModelAndView user(String type, String keyword) {
         log.info("유형: " + type);
@@ -64,7 +125,6 @@ public class AdminController {
         }
         return mav;
     }
-
 
 
     // 주문관리

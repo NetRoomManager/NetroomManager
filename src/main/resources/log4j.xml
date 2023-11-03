@@ -44,6 +44,11 @@
 		<level value="info" />
 	</logger>
 
+	<!-- Application Loggers -->
+	<logger name="com.itbank.listener">
+		<level value="info" />
+	</logger>
+
 
 
 	<!-- 3rdparty Loggers -->

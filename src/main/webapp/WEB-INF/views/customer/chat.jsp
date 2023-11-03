@@ -51,6 +51,19 @@
             stompClient.subscribe('/user/queue/messages', function(messageOutput) {
                 showMessageOutput(JSON.parse(messageOutput.body));
             });
+
+            stompClient.subscribe('/user/queue/alert', function(param) {
+
+                const message = JSON.parse(param.body);
+
+                let msg = message.msg;
+                let time = message.time;
+
+                alert(msg);
+
+                location.href='/auth/logout?time='+time;
+
+            });
         });
     }
 

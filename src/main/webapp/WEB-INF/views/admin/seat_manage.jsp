@@ -21,7 +21,7 @@
 	<div class="collapse navbar-collapse" id="navbarSupportedContent">
 		<ul class="navbar-nav me-auto mb-2 mb-lg-0 pt-1">
 			<li class="nav-item"><a class="nav-link active navbar-brand"
-				aria-current="page" href="#">NetRoom</a></li>
+				aria-current="page" href="${cpath}/">NetRoom</a></li>
 		</ul>
 		<ul class="navbar-nav">
 			<li class="nav-item pe-2">
@@ -58,70 +58,70 @@
 		</ul>
 	</div>
 	<div class="modal fade" id="productUpdate" data-bs-backdrop="static"
-		data-bs-keyboard="false" tabindex="-1"
-		aria-labelledby="staticBackdropLabel" aria-hidden="true">
+		 data-bs-keyboard="false" tabindex="-1"
+		 aria-labelledby="staticBackdropLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 				<form action="">
 					<div class="modal-header">
 						<h3 class="modal-title">상품등록</h3>
 						<button type="button" class="btn-close" data-bs-dismiss="modal"
-							aria-label="Close"></button>
+								aria-label="Close"></button>
 					</div>
 					<div class="modal-body container">
 						<div class="row justify-content-center align-items-center mb-3">
 							<div class="col-6 text-center">
 								<img id="preview" class="img-thumbnail mb-2"
-									src="../img/1422005677144.png" alt="예시 이미지"
-									style="max-width: 200px; max-height: 200px;"> <input
+									 src="../img/1422005677144.png" alt="예시 이미지"
+									 style="max-width: 200px; max-height: 200px;"> <input
 									class="form-control form-control-sm" id="image" name="image"
 									accept="image/*" type="file">
 							</div>
 						</div>
 						<table class="table table-borderless">
 							<tbody>
-								<tr>
-									<th>제품/이용권</th>
-									<td><select class="form-select"
-										aria-label="Default select example">
-											<option selected>이용권 선택 시 시간 필수</option>
-											<option value="1">제품</option>
-											<option value="2">이용권</option>
-									</select></td>
-									<th>사용시간</th>
-									<td><input class="form-control" type="text"
-										placeholder="Default input" aria-label="default input example">
-									</td>
-								</tr>
-								<tr>
-									<th>상품분류</th>
-									<td><input class="form-control" type="text"
-										placeholder="Default input" aria-label="default input example">
-									</td>
-									<th colspan="2">상품설명</th>
-								</tr>
-								<tr>
-									<th>상품명</th>
-									<td><input class="form-control" type="text"
-										placeholder="Default input" aria-label="default input example">
-									</td>
-									<td colspan="2" rowspan="2" class="form-floating"><textarea
-											class="form-control" placeholder="Leave a comment here"
-											id="floatingTextarea" style="height: 90px;"></textarea> <label
+							<tr>
+								<th>제품/이용권</th>
+								<td><select class="form-select"
+											aria-label="Default select example">
+									<option selected>이용권 선택 시 시간 필수</option>
+									<option value="1">제품</option>
+									<option value="2">이용권</option>
+								</select></td>
+								<th>사용시간</th>
+								<td><input class="form-control" type="text"
+										   placeholder="Default input" aria-label="default input example">
+								</td>
+							</tr>
+							<tr>
+								<th>상품분류</th>
+								<td><input class="form-control" type="text"
+										   placeholder="Default input" aria-label="default input example">
+								</td>
+								<th colspan="2">상품설명</th>
+							</tr>
+							<tr>
+								<th>상품명</th>
+								<td><input class="form-control" type="text"
+										   placeholder="Default input" aria-label="default input example">
+								</td>
+								<td colspan="2" rowspan="2" class="form-floating"><textarea
+										class="form-control" placeholder="Leave a comment here"
+										id="floatingTextarea" style="height: 90px;"></textarea> <label
 										for="floatingTextarea">Comments</label></td>
-								</tr>
-								<tr>
-									<th>가격</th>
-									<td><input class="form-control" type="text"
-										placeholder="Default input" aria-label="default input example">
-									</td>
-								</tr>
+							</tr>
+							<tr>
+								<th>가격</th>
+								<td><input class="form-control" type="text"
+										   placeholder="Default input" aria-label="default input example">
+								</td>
+							</tr>
 							</tbody>
 						</table>
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary"
-							data-bs-dismiss="modal">취소</button>
+								data-bs-dismiss="modal">취소</button>
 						<button type="button" class="btn btn-primary">등록</button>
 					</div>
 				</form>
@@ -130,273 +130,26 @@
 	</div>
 </nav>
 <nav id="menu_bar" class="nav nav-pills flex-column py-3 text-center"
-	style="position: absolute; height: 100%;">
+	 style="position: absolute; height: 100%;">
 	<a class="nav-link py-3" href="${cpath }/admin/order">주문</a>
 	<a class="nav-link py-3" href="${cpath }/admin/product">재고</a>
 	<a class="nav-link py-3" aria-current="page"
-		href="${cpath }/admin/sales">매출</a> <a
+	   href="${cpath }/admin/productsales">매출</a> <a
 		class="nav-link py-3" href="${cpath }/admin/user">회원</a> <a
 		class="nav-link py-3 active" href="${cpath }/admin/seat"
 		style="background-color: #FF8339;">좌석</a> <a class="nav-link py-3"
-		href="${cpath }/admin/ticket">이용권</a>
+													 href="${cpath }/admin/ticket">이용권</a>
 </nav>
 
-<div class="container pt-4 d-flex">
-	<div class="w-50  d-flex flex-wrap">
-		<div class="card bg-primary text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[01]</div>
-			<div class="seat_remain_time card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">사용가능</div>
-		</div>
-		<div class="card bg-primary text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[02]</div>
-			<div class="seat_remain_time card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">사용가능</div>
-		</div>
-		<div class="card bg-primary text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[03]</div>
-			<div class="seat_remain_time card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">사용가능</div>
-		</div>
-		<div class="card bg-secondary text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[04]</div>
-			<div class="seat_remain_time card-body">
-				<pre>남은시간:</pre>
-				<pre>12:03</pre>
-			</div>
-			<div class="card-footer">사용중</div>
-		</div>
-		<div class="card bg-primary text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[05]</div>
-			<div class="seat_remain_time card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">사용가능</div>
-		</div>
-		<div class="card bg-primary text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[06]</div>
-			<div class="card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">사용가능</div>
-		</div>
-		<div class="card bg-primary text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[07]</div>
-			<div class="card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">사용가능</div>
-		</div>
-		<div class="card bg-primary text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[08]</div>
-			<div class="card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">사용가능</div>
-		</div>
-		<div class="card bg-primary text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[09]</div>
-			<div class="card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">사용가능</div>
-		</div>
-		<div class="card bg-primary text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[10]</div>
-			<div class="card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">사용가능</div>
-		</div>
-		<div class="card bg-primary text-white  mx-3 mt-3" style="width: 25%;"
-			data-bs-toggle="modal" data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[11]</div>
-			<div class="card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">사용가능</div>
-		</div>
-		<div class="card bg-primary text-white  mx-3 mt-3" style="width: 25%;"
-			data-bs-toggle="modal" data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[12]</div>
-			<div class="card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">사용가능</div>
-		</div>
-	</div>
-	<!-- 분단 구별  -->
-
-	<div class="w-50  d-flex flex-wrap">
-		<div class="card bg-primary text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[13]</div>
-			<div class="card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">사용가능</div>
-		</div>
-		<div class="card bg-primary text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[14]</div>
-			<div class="card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">사용가능</div>
-		</div>
-		<div class="card bg-primary text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[15]</div>
-			<div class="card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">사용가능</div>
-		</div>
-		<div class="card bg-primary text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[16]</div>
-			<div class="card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">사용가능</div>
-		</div>
-		<div class="card bg-primary text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[17]</div>
-			<div class="card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">사용가능</div>
-		</div>
-		<div class="card bg-primary text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[18]</div>
-			<div class="card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">사용가능</div>
-		</div>
-		<div class="card bg-warning text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[19]</div>
-			<div class="card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">예약석</div>
-		</div>
-		<div class="card bg-warning text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[20]</div>
-			<div class="card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">예약석</div>
-		</div>
-		<div class="card bg-warning text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[21]</div>
-			<div class="card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">예약석</div>
-		</div>
-		<div class="card bg-primary text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[22]</div>
-			<div class="card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">사용가능</div>
-		</div>
-		<div class="card bg-danger text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[23]</div>
-			<div class="card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">사용가능</div>
-		</div>
-		<div class="card bg-danger text-white mx-3 mt-3"
-			style="width: 25%; height: 25%;" data-bs-toggle="modal"
-			data-bs-target="#seat_detail">
-			<div class="seat_id card-header">좌석번호[24]</div>
-			<div class="card-body">
-				<pre>남은시간:</pre>
-				<pre>01:35</pre>
-			</div>
-			<div class="card-footer">사용불가</div>
-		</div>
-	</div>
-</div>
-<!-- The Modal -->
 <div class="modal fade" id="seat_detail" aria-hidden="true"
-	data-bs-backdrop="static" data-bs-keyboard="false"
-	aria-labelledby="seat_detailLabel" tabindex="-1">
+	 data-bs-backdrop="static" data-bs-keyboard="false"
+	 aria-labelledby="seat_detailLabel" tabindex="-1">
 	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
 
 			<!-- Modal Header -->
 			<div class="modal-header">
-				<h4 class="modal-title">좌석정보[00]</h4>
+				<h4 class="modal-title">좌석정보[<span id="modal_seat_id"></span>]</h4>
 				<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
 			</div>
 
@@ -404,10 +157,12 @@
 			<div class="modal-body">
 				<form action="#add_update">
 					<div class="input-group mb-3">
-						<select class="form-select" id="can_use" name="seat_state">
-							<option selected value="1">사용가능</option>
-							<option value="2">예약석</option>
-							<option value="0">사용불가</option>
+						<select class="form-select" id="can_use" name="seat_state" >
+							<option selected value="0">----좌석상세----</option>
+							<option value="1">사용가능</option>
+							<option value="2">사용중</option>
+							<option value="3">예약석</option>
+							<option value="4">사용불가</option>
 						</select>
 					</div>
 					<!-- 사용중인 좌석인 경우에는 -->
@@ -422,56 +177,62 @@
 							<option value="6">6시간 추가</option>
 						</select>
 					</div>
-					<button class="btn btn-success" type="submit">수정하기</button>
+					<button class="btn btn-success" type="submit" onclick="changeSeatStatus()">수정하기</button>
 				</form>
 			</div>
 			<!-- Modal footer -->
 			<div class="modal-footer">
 				<button class="btn btn-primary" data-bs-target="#seat_chat"
-					data-bs-toggle="modal" data-bs-dismiss="modal">채팅창</button>
+						data-bs-toggle="modal" data-bs-dismiss="modal">채팅창</button>
 				<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
 			</div>
 		</div>
 	</div>
 </div>
 
+
+
+
+<!-- 좌석 시간 추가, 상태  Modal -->
 <div class="modal fade" id="seat_chat" aria-hidden="true"
-	data-bs-backdrop="static" data-bs-keyboard="false"
-	aria-labelledby="seat_chatLabel2" tabindex="-1">
+	 data-bs-backdrop="static" data-bs-keyboard="false"
+	 aria-labelledby="seat_chatLabel2" tabindex="-1">
 	<div class="modal-dialog modal-dialog-centered">
 		<div class="modal-content">
 			<div class="modal-header">
 				<h5 class="modal-title" id="exampleModalToggleLabel2">좌석번호</h5>
 				<button type="button" class="btn-close" data-bs-dismiss="modal"
-					aria-label="Close"></button>
+						aria-label="Close"></button>
 			</div>
 			<div class="modal-body">
 				<div class="chat_modal_content rounded">
 					<span>name에게 보낼 메시지</span>
 					<!-- 채팅 인터페이스 -->
 					<div id="chatBox"
-						style="height: 300px; border: 1px solid #ccc; padding: 10px; overflow: auto;">
+						 style="height: 300px; border: 1px solid #ccc; padding: 10px; overflow: auto;">
 						<!-- 채팅 메시지가 여기에 표시됩니다 -->
 					</div>
 					<div class="d-flex">
 						<input class="input mt-1" type="text" id="chatInput"
-							placeholder="채팅 내용을 입력하세요" style="width: 80%">
+							   placeholder="채팅 내용을 입력하세요" style="width: 80%">
 						<button type="button" class="btn btn-primary mt-1 mx-3"
-							style="width: 15%" onclick="sendMessage()">전송</button>
+								style="width: 15%" onclick="sendMessage()">전송</button>
 					</div>
 				</div>
 			</div>
 			<div class="modal-footer">
 				<button class="btn btn-primary" data-bs-target="#seat_select"
-					data-bs-toggle="modal" data-bs-dismiss="modal">상태</button>
+						data-bs-toggle="modal" data-bs-dismiss="modal">상태</button>
 				<button class="btn btn-danger" data-bs-target="#exampleModalToggle"
-					data-bs-toggle="modal" data-bs-dismiss="modal">닫기</button>
+						data-bs-toggle="modal" data-bs-dismiss="modal">닫기</button>
 			</div>
 		</div>
 	</div>
 </div>
 
+<%--채팅 모달--%>
 <script>
+
 	var popoverTriggerList = [].slice.call(document
 			.querySelectorAll('[data-bs-toggle="popover"]'))
 	var popoverList = popoverTriggerList.map(function(popoverTriggerEl) {
@@ -505,5 +266,91 @@
 		}
 	}
 </script>
+
+
+
+
+<%-- 좌석 --%>
+<div class="container pt-4 d-flex" >
+	<c:forEach var="i" begin="1" end="2">
+		<div class="w-50  d-flex flex-wrap" >
+			<c:forEach var="seat" items="${seatList}" begin="${(i-1)*12}" end="${i*12-1}">
+				<c:choose>
+					<c:when test="${seat.seatState == 1 }">
+						<c:set var="bgColor" value="bg-primary"/>
+						<c:set var="stateCmt" value="사용가능"/>
+					</c:when>
+					<c:when test="${seat.seatState == 2 }">
+						<c:set var="bgColor" value="bg-secondary"/>
+						<c:set var="stateCmt" value="사용중"/>
+					</c:when>
+					<c:when test="${seat.seatState == 3 }">
+						<c:set var="bgColor" value="bg-warning"/>
+						<c:set var="stateCmt" value="예약석"/>
+					</c:when>
+					<c:when test="${seat.seatState == 4 }">
+						<c:set var="bgColor" value="bg-danger"/>
+						<c:set var="stateCmt" value="사용불가"/>
+					</c:when>
+				</c:choose>
+				<div class="card ${bgColor} text-white mx-3 mt-3"
+					 style="width: 25%; height: 25%;" data-bs-toggle="modal"
+					 data-bs-target="#seat_detail"
+					 data-bs-id="${seat.seatId}"
+					 onclick="setModalSeatId(this)">
+					<div class="seat_id card-header">좌석번호[ ${seat.seatId} ]</div>
+					<div class="seat_remain_time card-body">
+						<pre>남은시간:</pre>
+						<pre>01:35</pre>
+					</div>
+					<div class="card-footer">
+							${stateCmt}
+					</div>
+				</div>
+			</c:forEach>
+
+		</div>
+	</c:forEach>
+
+</div>
+<script>
+	let seatId;
+	function setModalSeatId(card) {
+		seatId = card.getAttribute('data-bs-id')
+		const modalSeatId = document.getElementById('modal_seat_id')
+		modalSeatId.textContent = seatId;
+	}
+
+	function changeSeatStatus(){
+		const selectElement = document.getElementById('can_use')
+		const selectOption = selectElement.options[selectElement.selectedIndex]
+		const seat = document.querySelector(`[data-bs-id="${seatId}"]`)
+
+		switch (selectOption.value){
+			case 1:
+				seat.classList.remove('bg-secondary','bg-warning','bg-danger')
+				seat.classList.add('bg-primary')
+				seat.querySelector('.card-footer').textContent = '사용가능'
+				break;
+			case 2:
+				seat.classList.remove('bg-primary', 'bg-waring', 'bg-danger')
+				seat.classList.add('bg-secondary')
+				seat.querySelector('.card-footer').textContent = '사용중'
+				break;
+			case 3:
+				seat.classList.remove('bg-secondary','bg-primary','bg-danger')
+				seat.classList.add('bg-warning')
+				seat.querySelector('.card-footer').textContent = '예약석'
+				break;
+			case 4:
+				seat.classList.remove('bg-secondary','bg-primary','bg-warning')
+				seat.classList.add('bg-danger')
+				seat.querySelector('.card-footer').textContent = '사용불가'
+				break;
+		}
+	}
+
+</script>
+
 </body>
 </html>

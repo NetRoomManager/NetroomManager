@@ -263,6 +263,32 @@
 			<version>1.5</version>
 		</dependency>
 
+
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-redis</artifactId>
+			<version>2.5.0</version>
+		</dependency>
+		<dependency>
+			<groupId>redis.clients</groupId>
+			<artifactId>jedis</artifactId>
+			<version>3.7.0</version>
+		</dependency>
+
+		<!-- 메일을 전송할 때 다양한 형태의 컨텐츠를 보내려면 spring-context-support추가하기 -->
+		<!-- https://mvnrepository.com/artifact/com.sun.mail/jakarta.mail -->
+		<dependency>
+			<groupId>com.sun.mail</groupId>
+			<artifactId>jakarta.mail</artifactId>
+			<version>2.0.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>${org.springframework-version}</version>
+		</dependency>
+
 	</dependencies>
     <build>
         <plugins>
