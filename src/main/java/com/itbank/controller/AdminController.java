@@ -3,6 +3,10 @@ package com.itbank.controller;
 import com.itbank.model.Seat;
 import com.itbank.model.Ticket;
 import com.itbank.service.*;
+import com.itbank.model.ProductCategory;
+import com.itbank.model.ProductDTO;
+import com.itbank.service.ProductService;
+import com.itbank.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,6 +26,8 @@ import java.util.Objects;
 @Slf4j
 public class AdminController {
 
+    @Autowired
+    private ProductService productService;
 
     @Autowired
     private TicketSalesService ticketSalesService;
@@ -37,9 +43,35 @@ public class AdminController {
 
     // 상품관리
     @GetMapping("/product")
-    public String product() {
-//        productService.createProduct();
-        return "/admin/product_manage";
+    public ModelAndView product() {
+        ModelAndView mav = new ModelAndView("/admin/product_manage");
+        List<ProductDTO> productList = productService.selectAllProduct();
+        List<ProductCategory> productCategoryList = productService.selectAllProductCategory();
+        mav.addObject("productList", productList);
+        mav.addObject("productCategoryList", productCategoryList);
+        return mav;
+    }
+
+    // 상품목록 추가
+    @PostMapping("/addProductCategory")
+    public String addProductCategory(ProductCategory productCategory) {
+        int row = productService.addProductCategory(productCategory);
+        log.info("상품목록" + row + "추가되었습니다");
+        return "redirect:/admin/product";
+    }
+
+    // 신규상품 추가
+//    @PostMapping("/addProduct")
+//    public String addProduct(Product product, @RequestParam("img")MultipartFile img) {
+//        productService.addProduct(product, img);
+//        log.info("상품 생성");
+//        return "redirect:/admin/product";
+//    }
+    @PostMapping("/addProduct")
+    public String addProduct(ProductDTO productDTO) {
+        log.info("상품생성");
+        int row = productService.addProduct(productDTO);
+        return "redirect:/admin/product";
     }
 
 
@@ -97,7 +129,7 @@ public class AdminController {
     public String productSale() {
         return "/admin/product_sales_manage";
     }
-    
+
     // 이용권 매출
     @GetMapping("/ticketsales")
     public ModelAndView ticketSale(HttpServletRequest request) throws ParseException {
