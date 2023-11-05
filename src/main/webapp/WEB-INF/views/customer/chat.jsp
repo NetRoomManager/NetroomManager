@@ -28,8 +28,8 @@
 <p>사용자 : ${principal}</p>
 
 <div>
-    <label for="username">Username:</label>
-    <input type="text" id="username">
+    <label for="to">Username:</label>
+    <input type="text" id="to">
 </div>
 <div>
     <label for="message">Message:</label>
@@ -42,6 +42,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script>
+
+    const from = '${username}';
     let stompClient = null;
 
     function connect() {
@@ -52,30 +54,30 @@
                 showMessageOutput(JSON.parse(messageOutput.body));
             });
 
-            stompClient.subscribe('/user/queue/alert', function(param) {
-
-                const message = JSON.parse(param.body);
-
-                let msg = message.msg;
-                let time = message.time;
-
-                alert(msg);
-
-                location.href='/auth/logout?time='+time;
-
-            });
+            // stompClient.subscribe('/user/queue/alert', function(param) {
+            //
+            //     const message = JSON.parse(param.body);
+            //
+            //     let msg = message.msg;
+            //     let time = message.time;
+            //
+            //     alert(msg);
+            //
+            //     location.href='/auth/logout?time='+time;
+            //
+            // });
         });
     }
 
     function send() {
-        let from = document.getElementById('username').value;
-        let text = document.getElementById('message').value;
-        stompClient.send("/app/chat", {}, JSON.stringify({'username': from, 'content': text}));
+        // let from = document.getElementById('from').value;
+        let message = document.getElementById('message').value;
+        let to = document.getElementById('to').value;
+        stompClient.send("/app/chat", {}, JSON.stringify({'from': from, 'message': message, 'to': to}));
     }
 
     function showMessageOutput(messageOutput) {
-        let response = document.getElementById('response');
-        response.innerHTML += messageOutput.username + ': ' + messageOutput.content + '<br>';
+        response.innerHTML += messageOutput.from + ': ' + messageOutput.message + '<br>';
     }
 
     connect();

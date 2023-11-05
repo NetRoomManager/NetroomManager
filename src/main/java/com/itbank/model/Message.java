@@ -11,7 +11,16 @@ import lombok.Setter;
 @NoArgsConstructor
 public class Message {
 
-    private String username;
-    private String content;
+    private String from;
+    private String message;
+    private String to;
 
+    @Override
+    public String toString() {
+        String msg = "";
+        msg += "from: " + from + '\n';
+        msg += "message: " + message + '\n';
+        msg += "to: " + to + '\n';
+        return msg;
+    }
 }
