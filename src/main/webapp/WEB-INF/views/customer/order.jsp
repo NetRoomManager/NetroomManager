@@ -6,6 +6,21 @@
   To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
+<!-- 세션에서 SecurityContext를 가져옵니다. -->
+<c:set var="securityContext" value="${sessionScope.SPRING_SECURITY_CONTEXT}" />
+
+<!-- SecurityContext에서 Authentication 객체를 가져옵니다. -->
+<c:set var="authentication" value="${securityContext.authentication}" />
+
+<!-- Authentication 객체에서 Principal(사용자) 정보를 가져옵니다. -->
+<c:set var="principal" value="${authentication.principal}" />
+
+<!-- Principal에서 사용자의 이름을 가져옵니다. -->
+<c:set var="username" value="${principal.username}" />
+
 <!DOCTYPE html>
 <html lang="ko">
 
@@ -15,6 +30,10 @@
     <link rel="stylesheet" type="text/css" href="/css/style.css"/>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery -->
+    <script type="text/javascript" src="https://code.jquery.com/jquery-1.12.4.min.js" ></script>
+    <!-- iamport.payment.js -->
+    <script type="text/javascript" src="https://cdn.iamport.kr/js/iamport.payment-1.2.0.js"></script>
     <title>order</title>
 </head>
 
@@ -103,7 +122,7 @@
 
         <div class="w-25">
             <div class="mt-3 px-2 text-bg-light border border-info" style="width: 200px; height: 250px;">
-                <img src="/img/음식사진1.jpg" class="w-100 h-50">
+<%--                <img src="/img/음식사진1.jpg" class="w-100 h-50">--%>
                 <ul class="list-unstyled pt-1">
                     <li class="pb-4 name">불고기 브리또 2조각</li>
                     <li class="price">1,500원</li>
@@ -115,7 +134,7 @@
         </div>
         <div class="w-25">
             <div class="mt-3 px-2 text-bg-light border border-info" style="width: 200px; height: 250px;">
-                <img src="/img/음식사진2.jpg" class="w-100 h-50">
+<%--                <img src="/img/음식사진2.jpg" class="w-100 h-50">--%>
                 <ul class="list-unstyled pt-1">
                     <li class="pb-4 name">라면 + 양념치킨 + 음료</li>
                     <li class="price">2,000원</li>
@@ -127,7 +146,7 @@
         </div>
         <div class="w-25">
             <div class="mt-3 px-2 text-bg-light border border-info" style="width: 200px; height: 250px;">
-                <img src="/img/음식사진3.jpg" class="w-100 h-50">
+<%--                <img src="/img/음식사진3.jpg" class="w-100 h-50">--%>
                 <ul class="list-unstyled pt-1">
                     <li class="pb-4 name">리얼짜장덮밥</li>
                     <li class="price">3,000원</li>
@@ -139,7 +158,7 @@
         </div>
         <div class="w-25">
             <div class="mt-3 px-2 text-bg-light border border-info" style="width: 200px; height: 250px;">
-                <img src="/img/음식사진4.jpg" class="w-100 h-50">
+<%--                <img src="/img/음식사진4.jpg" class="w-100 h-50">--%>
                 <ul class="list-unstyled pt-1">
                     <li class="pb-4 name">상하이짜장떡볶이</li>
                     <li class="price">4,000원</li>
@@ -151,7 +170,7 @@
         </div>
         <div class="w-25">
             <div class="mt-3 px-2 text-bg-light border border-info" style="width: 200px; height: 250px;">
-                <img src="/img/음식사진5.jpg" class="w-100 h-50">
+<%--                <img src="/img/음식사진5.jpg" class="w-100 h-50">--%>
                 <ul class="list-unstyled pt-1">
                     <li class="pb-4 name">한품 고기짬뽕</li>
                     <li class="price">5,000원</li>
@@ -163,7 +182,7 @@
         </div>
         <div class="w-25">
             <div class="mt-3 px-2 text-bg-light border border-info" style="width: 200px; height: 250px;">
-                <img src="/img/음식사진1.jpg" class="w-100 h-50">
+<%--                <img src="/img/음식사진1.jpg" class="w-100 h-50">--%>
                 <ul class="list-unstyled pt-1">
                     <li class="pb-4 name">불고기 브리또 2조각</li>
                     <li class="price">1,500원</li>
@@ -175,7 +194,7 @@
         </div>
         <div class="w-25">
             <div class="mt-3 px-2 text-bg-light border border-info" style="width: 200px; height: 250px;">
-                <img src="/img/음식사진1.jpg" class="w-100 h-50">
+<%--                <img src="/img/음식사진1.jpg" class="w-100 h-50">--%>
                 <ul class="list-unstyled pt-1">
                     <li class="pb-4 name">불고기 브리또 2조각</li>
                     <li class="price">1,500원</li>
@@ -187,7 +206,7 @@
         </div>
         <div class="w-25">
             <div class="mt-3 px-2 text-bg-light border border-info" style="width: 200px; height: 250px;">
-                <img src="/img/음식사진1.jpg" class="w-100 h-50">
+<%--                <img src="/img/음식사진1.jpg" class="w-100 h-50">--%>
                 <ul class="list-unstyled pt-1">
                     <li class="pb-4 name">불고기 브리또 2조각</li>
                     <li class="price">1,500원</li>
@@ -290,7 +309,7 @@
                            checked>
                     <label id="sell_btn5" class="form-check-label d-flex" for="flexRadioDefault2">
                         <h4 class="me-3">금액에 맞게</h4>
-                        <input type="number" name="money" autofocus style="background-color: white;" step="1000" min="0">
+                        <input type="number" name="money" placeholder="0원" autofocus style="background-color: white;" step="1000" min="0">
                         <input class="btn btn-primary" type="submit" value="확인">
                     </label>
                 </div>
@@ -299,7 +318,7 @@
             <!-- 요청사항 -->
             <div id="request" class="w-100 mt-2">
                 <div class="input-group">
-                    <input type="text" name="text" placeholder="요청사항은 50자 내외로 입력하세요" class="form-control"
+                    <input type="text" name="memo" placeholder="요청사항은 50자 내외로 입력하세요" class="form-control"
                            style="height: 65px;">
                     <button type="button" class="btn btn-primary">확인</button>
                 </div>
@@ -313,15 +332,14 @@
     </div>
 </div>
 
-<script src="../js/script.js"></script>
-<script>
 
+<script>
+    console.log('123');
     document.addEventListener("DOMContentLoaded", function () {
         // 버튼과 텍스트 입력 요소 참조
         var sellBtn = document.getElementById("sell_btn5");
         var submitBtn = sellBtn.querySelector("input[type='submit']");
         var textInput = sellBtn.querySelector("input[name='money']");
-
         // 초기에 버튼 비활성화
         submitBtn.disabled = true;
 
@@ -347,15 +365,32 @@
     });
 
 
-    const useremail = ${login.email};
-    const username = ${login.name}
+    var IMP = window.IMP;
 
-        pgList = ['kakaopay.TC0ONETIME', 'tosspay.tosstest', 'html5_inicis']
+    // 랜덤문자열 대신 millisecound로 대체
+    const today = new Date();
+    const hours = today.getHours(); // 시
+    const minutes = today.getMinutes();  // 분
+    const seconds = today.getSeconds();  // 초
+    const milliseconds = today.getMilliseconds();
+    const makeMerchantUid = `${hours}` + `${minutes}` + `${seconds}` + `${milliseconds}`;
+
+    console.log("${principal}");
+
+    const useremail = "${principal.email}";
+    const username = "${principal.username}";
+
+    console.log(username);
+    console.log(useremail);
+
+    pgList = ['kakaopay.TC0ONETIME', 'tosspay.tosstest', 'html5_inicis']
 
 
     const kakaoButton = document.getElementById('cash_btn')
     const tossButton = document.getElementById('kakao_btn')
     const inicisButton = document.getElementById('toss_btn')
+    const kgButton = document.getElementById('kg_btn');
+
 
 
     // 구매자 정보
@@ -365,17 +400,19 @@
 
     // 결제하기
     function pay(useremail, username, payId) {
+        console.log('test');
         // if (confirm("구매 하시겠습니까?")) { // 구매 클릭시 한번 더 확인하기
         // if (localStorage.getItem("access")) { // 회원만 결제 가능
         // const emoticonName = document.getElementById('title').innerText
 
         IMP.init("imp64247670"); // 가맹점 식별코드
+        let totalPrice = document.querySelector(".total_price").value;
         IMP.request_pay({
             pg: pgList[payId], // PG사 코드표에서 선택
             pay_method: 'card', // 결제 방식
             merchant_uid: "IMP" + makeMerchantUid, // 결제 고유 번호
-            name: '너구리', // 제품명
-            amount: 100, // 가격
+            name: 'NetRoom 주문 결제', // 제품명
+            amount: totalPrice, // 가격
             //구매자 정보 ↓
             buyer_email: `${useremail}`,
             buyer_name: `${username}`,
@@ -613,7 +650,7 @@
 
 
 </script>
-
+<script src="../js/script.js"></script>
 </body>
 
 </html>
