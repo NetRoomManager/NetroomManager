@@ -22,6 +22,7 @@
 <html>
 <head>
     <title>Title</title>
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 </head>
 <body>
 
@@ -39,12 +40,65 @@
 <div id="response"></div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script>
 
     const from = '${username}';
     let stompClient = null;
+
+    function openChatRoom(username) {
+        let chatRoomDiv = document.getElementById('chat-room-' + username);
+        if (!chatRoomDiv) {
+            chatRoomDiv = document.createElement('div');
+            chatRoomDiv.id = 'chat-room-' + username;
+            chatRoomDiv.style.position = "fixed";
+            chatRoomDiv.style.bottom = "0";
+            document.body.appendChild(chatRoomDiv);
+
+            // 채팅창 생성
+            let chatInput = document.createElement('input');
+            chatInput.id = 'chat-input-' + username;
+            chatRoomDiv.appendChild(chatInput);
+
+            // 전송 버튼 생성
+            let sendButton = document.createElement('button');
+            sendButton.innerText = 'Send';
+            chatRoomDiv.appendChild(sendButton);
+
+            // 전송 버튼 클릭 이벤트 핸들러
+            sendButton.onclick = function() {
+                let message = chatInput.value;
+                send(username, message);
+                chatRoomDiv.innerHTML += from + ': ' + message + ' (' + getCurrentTime() + ')<br>';
+            };
+
+            // jQuery UI dialog로 초기화
+            $(chatRoomDiv).dialog({
+                autoOpen: false,
+                width: 400
+            });
+        }
+    }
+
+    function showMessageOutput(messageOutput) {
+        let chatRoomDiv = document.getElementById('chat-room-' + messageOutput.from);
+        if (!chatRoomDiv) {
+            openChatRoom(messageOutput.from);
+            chatRoomDiv = document.getElementById('chat-room-' + messageOutput.from);
+        }
+
+        // 새로운 메시지만 추가
+        chatRoomDiv.innerHTML += messageOutput.from + ': ' + messageOutput.message + ' (' + messageOutput.time + ')<br>';
+
+        // 유저의 채팅방이 닫혀 있다면 다시 열어줌
+        if (chatRoomDiv && $(chatRoomDiv).dialog('isOpen') === false) {
+            $(chatRoomDiv).dialog('open');
+        }
+    }
+
+
 
     function connect() {
         let socket = new SockJS('/chat');
@@ -53,32 +107,49 @@
             stompClient.subscribe('/user/queue/messages', function(messageOutput) {
                 showMessageOutput(JSON.parse(messageOutput.body));
             });
-
-            // stompClient.subscribe('/user/queue/alert', function(param) {
-            //
-            //     const message = JSON.parse(param.body);
-            //
-            //     let msg = message.msg;
-            //     let time = message.time;
-            //
-            //     alert(msg);
-            //
-            //     location.href='/auth/logout?time='+time;
-            //
-            // });
         });
     }
 
-    function send() {
-        // let from = document.getElementById('from').value;
-        let message = document.getElementById('message').value;
-        let to = document.getElementById('to').value;
-        stompClient.send("/app/chat", {}, JSON.stringify({'from': from, 'message': message, 'to': to}));
+    function send(to, message) {
+        if (!to) {
+            to = document.getElementById('to').value;
+        }
+
+        if (!message) {
+            message = document.getElementById('message').value;
+        }
+
+        stompClient.send("/app/chat", {}, JSON.stringify({
+            'from': from,
+            'message': message,
+            'to': to,
+            'time': getCurrentTime()
+        }));
     }
 
-    function showMessageOutput(messageOutput) {
-        response.innerHTML += messageOutput.from + ': ' + messageOutput.message + '<br>';
+
+
+
+    function getCurrentTime() {
+        let current = new Date();
+        let year = current.getFullYear();
+        let month = current.getMonth() + 1;
+        let date = current.getDate();
+        let hours = current.getHours();
+        let minutes = current.getMinutes();
+        let seconds = current.getSeconds();
+
+        // 1자리 수를 2자리 수로 바꾸기
+        month = (month < 10) ? '0' + month : month;
+        date = (date < 10) ? '0' + date : date;
+        hours = (hours < 10) ? '0' + hours : hours;
+        minutes = (minutes < 10) ? '0' + minutes : minutes;
+        seconds = (seconds < 10) ? '0' + seconds : seconds;
+
+        return year + '-' + month + '-' + date + 'T' + hours + ':' + minutes + ':' + seconds;
     }
+
+
 
     connect();
 </script>

@@ -7,13 +7,8 @@ import com.itbank.repository.jpa.RemainingTimeRepository;
 import com.itbank.service.UserLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.stereotype.Component;
 
@@ -22,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Date;
-import java.util.Objects;
 import java.util.Optional;
 
 @Component
@@ -48,6 +42,19 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
 
             log.info("로그달기");
 
+
+//            // 채팅 메시지 삭제
+//            String chatKeyPattern1 = "chat:" + userPrincipal.getUsername() + ":*";
+//            String chatKeyPattern2 = "chat:*:" + userPrincipal.getUsername();
+//            Set<String> chatKeys1 = redisTemplate.keys(chatKeyPattern1);
+//            Set<String> chatKeys2 = redisTemplate.keys(chatKeyPattern2);
+//            if (chatKeys1 != null) {
+//                redisTemplate.delete(chatKeys1);
+//            }
+//            if (chatKeys2 != null) {
+//                redisTemplate.delete(chatKeys2);
+//            }
+
             // 해당하는 유저의 최근 로그를 불러옴
             Optional<UserLog> userLog = userLogService.findLatestByUser(userPrincipal.getUser());
 
@@ -62,7 +69,20 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
             log.info(userPrincipal.getUsername() + "의 남은 시간을 불러옵니다");
 
             // 레디스에서 남은 시간 불러옴
-            Long time = (Long) redisTemplate.opsForValue().get(userPrincipal.getUsername());
+
+            String key = userPrincipal.getUsername() + " " + remainingTimeRepository.findByUser(userPrincipal.getUser()).get().getRemainingTime();
+
+            log.info("key: " + key);
+            log.info("value: " + redisTemplate.opsForValue().get(key));
+
+            Object value = redisTemplate.opsForValue().get(key);
+            Long time = null;
+            if (value instanceof Integer) {
+                time = Long.valueOf((Integer) value);
+            } else if (value instanceof Long) {
+                time = (Long) value;
+            }
+
 
             log.info("불러오기 성공! : " + time+"초");
 
