@@ -1,6 +1,23 @@
 // 아임포트 모듈 불러오기
 var IMP = window.IMP;
 
+// 이용권 정보를 저장할 변수
+let selectedTicket = {};
+
+// 이용권 선택 함수
+function selectTicket(name, price) {
+    selectedTicket = { name, price };
+}
+
+// 이용권 선택 이벤트 리스너
+const ticketItems = document.querySelectorAll('.ticket_item');
+ticketItems.forEach(item => item.onclick = () => {
+    const ticketName = item.querySelector('.ticket-name').innerText;
+    const ticketPrice = item.querySelector('.ticket-price').innerText;
+    selectTicket(ticketName, ticketPrice);
+});
+
+
 // 랜덤문자열 대신 millisecound로 대체
 const today = new Date();
 const hours = today.getHours(); // 시
@@ -28,8 +45,8 @@ function pay(useremail, username, payId) {
         pg: pgList[payId], // PG사 코드표에서 선택
         pay_method: 'card', // 결제 방식
         merchant_uid: "IMP" + makeMerchantUid, // 결제 고유 번호
-        name: '너구리', // 제품명
-        amount: 100, // 가격
+        name: selectedTicket.name, // 제품명
+        amount: selectedTicket.price, // 가격
         //구매자 정보 ↓
         buyer_email: `${useremail}`,
         buyer_name: `${username}`,
