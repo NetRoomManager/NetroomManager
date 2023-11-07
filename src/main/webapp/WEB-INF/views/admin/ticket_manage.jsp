@@ -22,15 +22,12 @@
 <nav class="navbar navbar-expand-sm bg-dark navbar-dark">
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0 pt-1">
-            <li class="nav-item"><a class="nav-link active navbar-brand"
-                <<<<<<< HEAD
-                aria-current="page" href="${cpath}/">NetRoom</a></li>
+            <li class="nav-item">
+                <a class="nav-link active navbar-brand"
+                   aria-current="page" href="${cpath}/">NetRoom</a>
+            </li>
             <li class="nav-item pe-3"><a class="nav-link" href="">재고현황</a>
             </li>
-            =======
-            aria-current="page" href="#">NetRoom</a></li>
-
-            >>>>>>> 087161511efaa41703627ee0755b89f73173dd1c
             <li class="nav-item pe-3"><a class="nav-link"
                                          data-bs-toggle="modal" data-bs-target="#ticketUpdate">이용권등록</a>
             </li>
@@ -124,7 +121,7 @@
     <a class="nav-link py-3" href="${cpath }/admin/product">재고</a>
     <a class="nav-link py-3" aria-current="page" href="${cpath }/admin/productsales">매출</a>
     <a
-        class="nav-link py-3" href="${cpath }/admin/user">회원</a> <a
+            class="nav-link py-3" href="${cpath }/admin/user">회원</a> <a
         class="nav-link py-3" href="${cpath }/admin/seat">좌석</a> <a
         class="nav-link py-3" href="${cpath }/admin/ticket">이용권</a>
 </nav>
@@ -180,8 +177,6 @@
 
 
 <script>
-
-
     <%-- Bootstrap Popover는 사용자가 요소를 호버하거나 클릭했을 때 콘텐츠를 팝업 형태로 보여주는 기능을 제공 --%>
     var popoverTriggerList = [].slice.call(document
         .querySelectorAll('[data-bs-toggle="popover"]'))

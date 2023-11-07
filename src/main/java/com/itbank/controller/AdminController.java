@@ -5,6 +5,10 @@ import com.itbank.model.Ticket;
 import com.itbank.model.dto.SeatInfoDTO;
 import com.itbank.repository.mybatis.SeatDAO;
 import com.itbank.service.*;
+import com.itbank.model.ProductCategory;
+import com.itbank.model.ProductDTO;
+import com.itbank.service.ProductService;
+import com.itbank.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -39,9 +43,21 @@ public class AdminController {
 
     // 상품관리
     @GetMapping("/product")
-    public String product() {
-//        productService.createProduct();
-        return "/admin/product_manage";
+    public ModelAndView product() {
+        ModelAndView mav = new ModelAndView("/admin/product_manage");
+        List<ProductDTO> productList = productService.selectAllProduct();
+        List<ProductCategory> productCategoryList = productService.selectAllProductCategory();
+        mav.addObject("productList", productList);
+        mav.addObject("productCategoryList", productCategoryList);
+        return mav;
+    }
+
+    // 상품목록 추가
+    @PostMapping("/addProductCategory")
+    public String addProductCategory(ProductCategory productCategory) {
+        int row = productService.addProductCategory(productCategory);
+        log.info("상품목록" + row + "추가되었습니다");
+        return "redirect:/admin/product";
     }
 
     // 좌석관리
@@ -52,6 +68,14 @@ public class AdminController {
     }
 
 
+    @PostMapping("/addProduct")
+    public String addProduct(ProductDTO productDTO) {
+        log.info("상품생성");
+        int row = productService.addProduct(productDTO);
+        return "redirect:/admin/product";
+    }
+
+
     @GetMapping("/seat")
     public ModelAndView seat() {
         ModelAndView mav = new ModelAndView("/admin/seat_manage");
@@ -59,7 +83,6 @@ public class AdminController {
         mav.addObject("seatList",seatList);
         return mav;
     }
-
 
     // 매출관리
     @GetMapping("/sales")
@@ -118,7 +141,7 @@ public class AdminController {
     public String productSale() {
         return "/admin/product_sales_manage";
     }
-    
+
     // 이용권 매출
     @GetMapping("/ticketsales")
     public ModelAndView ticketSale(HttpServletRequest request) throws ParseException {

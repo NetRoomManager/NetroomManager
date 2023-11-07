@@ -139,6 +139,13 @@ public class AuthController {
         return "redirect:/auth/login";
     }
 
+    // 좌석관리
+    @GetMapping("/seat")
+    public String seatTest(){
+        seatService.createSeat();
+        return "redirect:/";
+    }
+
     @GetMapping("/loginSuccess")
     public void loginSuccess() {
     }
@@ -179,6 +186,8 @@ public class AuthController {
             ticketSales.setSalesDate(payment.getTime());
 
             ticketSalesRepository.save(ticketSales);
+
+
 
             result.put("success", true);
         }else{

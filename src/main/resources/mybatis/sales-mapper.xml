@@ -7,18 +7,16 @@
 <mapper namespace="com.itbank.repository.mybatis.TicketSalesDAO">
 
     <select id="selectAll" resultType="ticketsales" parameterType="map">
-        <![CDATA[
         select s.id as id, s.totalprice as orderTotalPrice, m.name as paymentMethod, p.time as salesDate, u.username as username, p.id as paymentId, t.name as ticketName
         from ticket_sales s ,payment p, payment_method m, users u, ticket_detail d, ticket t, order_list o
         where s.payment_id=p.id and p.id=m.id and p.id=o.payment_id and o.user_id=u.id and d.payment_id=p.id and d.ticket_id = t.id
-        ]]>
         <if test="startDate != null and startDate != ''">
-            <![CDATA[ AND p.time >= #{startDate} ]]>
+             AND  p.time &gt;= TO_DATE(#{startDate},'yyyy-MM-dd')
         </if>
         <if test="endDate != null and endDate != ''">
-            <![CDATA[ AND p.time <= #{endDate} ]]>
+            AND p.time &lt;= TO_DATE(#{endDate}, 'yyyy-MM-dd') + 1
         </if>
-        <![CDATA[ order by salesDate DESC ]]>
+        order by salesDate DESC
     </select>
 
     <select id="selectTotal" resultType="int">

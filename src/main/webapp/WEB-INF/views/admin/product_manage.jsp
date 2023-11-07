@@ -2,7 +2,7 @@
 		 pageEncoding="UTF-8"%>
 <%@ include file="header.jsp"%>
 <!-- 상품관리 페이지 -->
-
+<%--${productList.get(0).productCategoryName}--%>
 <style>
 	#menu_bar {
 		background-color: #ffa500
@@ -15,6 +15,14 @@
 	#product_update table>tbody>tr>th {
 		padding-top: 15px;
 	}
+
+	.hover_element {
+		cursor: pointer;
+	}
+
+	.hover_element:hover {
+		cursor: pointer;
+	}
 </style>
 
 <div id="headerContent"></div>
@@ -23,14 +31,11 @@
 		<ul class="navbar-nav me-auto mb-2 mb-lg-0 pt-1">
 			<li class="nav-item"><a class="nav-link active navbar-brand"
 									aria-current="page" href="${cpath}/">NetRoom</a></li>
-			<li class="nav-item pe-3"><a class="nav-link"
-										 data-bs-toggle="modal" data-bs-target="#productUpdate">상품등록</a>
+			<li class="nav-item pe-3 hover_element"><a class="nav-link"
+													   data-bs-toggle="modal" data-bs-target="#productUpdate">상품등록</a>
 			</li>
-			<li class="nav-item pe-3"><a class="nav-link"
-										 data-bs-toggle="modal" data-bs-target="#categoryUpdate">카테고리등록</a>
-			</li>
-			<li class="nav-item pe-3"><a class="nav-link"
-										 data-bs-toggle="modal" data-bs-target="#ticketUpdate">이용권등록</a>
+			<li class="nav-item pe-3 hover_element"><a class="nav-link"
+													   data-bs-toggle="modal" data-bs-target="#categoryUpdate">카테고리등록</a>
 			</li>
 		</ul>
 		<ul class="navbar-nav">
@@ -72,7 +77,7 @@
 		 aria-labelledby="staticBackdropLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
-				<form action="">
+				<form action="${cpath}/admin/addProduct" method="POST" enctype="multipart/form-data">
 					<div class="modal-header">
 						<h3 class="modal-title">상품등록</h3>
 						<button type="button" class="btn-close" data-bs-dismiss="modal"
@@ -82,9 +87,9 @@
 						<div class="row justify-content-center align-items-center mb-3">
 							<div class="col-6 text-center">
 								<img id="preview" class="img-thumbnail mb-2"
-									 src="../img/1422005677144.png" alt="예시 이미지"
+									 src="../img/nuguri.webp" alt="예시 이미지"
 									 style="max-width: 200px; max-height: 200px;">
-								<input class="form-control form-control-sm" id="image" name="image" accept="image/*" type="file">
+								<input class="form-control form-control-sm" id="image" name="upload" accept="image/*" type="file">
 							</div>
 						</div>
 						<table class="table table-borderless">
@@ -92,38 +97,39 @@
 							<tr>
 								<th>상품명</th>
 								<td>
-									<input class="form-control" type="text" placeholder="Default input" aria-label="default input example">
+									<input class="form-control" type="text" name="name" placeholder="Default input" aria-label="default input example">
 								</td>
 								<th>상품분류</th>
 								<td>
 									<select class="form-select"
-											aria-label="Default select example">
-										<option selected>이용권 선택 시 시간 필수</option>
-										<option value="1">먹거리</option>
-										<option value="2">음료</option>
+											aria-label="Default select example" name="productCategoryId">
+										<option selected>분류에 없는 것은 등록해서 사용</option>
+										<c:forEach var="categoryDTO" items="${productCategoryList}">
+											<option value="${categoryDTO.id}">${categoryDTO.name}</option>
+										</c:forEach>
 									</select>
 								</td>
 							</tr>
 							<tr>
 								<th>상품가격</th>
 								<td>
-									<input class="form-control" type="text" placeholder="1,000" aria-label="default input example">
+									<input class="form-control" type="number" name="price" placeholder="1,000" aria-label="default input example">
 								</td>
 								<th>상품수량</th>
 								<td>
-									<input class="form-control" type="number" placeholder="1" aria-label="default input example">
+									<input class="form-control" type="number" name="count" placeholder="1" aria-label="default input example">
 								</td>
 							</tr>
 							<tr>
 								<th colspan="2">제품설명</th>
 								<th>할인율</th>
 								<td>
-									<input class="form-control" type="number" placeholder="%" aria-label="default input example">
+									<input class="form-control" type="number" name="dcRate" placeholder="%" aria-label="default input example">
 								</td>
 							</tr>
 							<tr>
 								<td colspan="4" rowspan="4" class="form-floating">
-									<textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea" style="height: 90px;"></textarea>
+									<textarea class="form-control" name="detail" placeholder="Leave a comment here" id="floatingTextarea" style="height: 90px;"></textarea>
 									<label for="floatingTextarea">Comments</label>
 								</td>
 							</tr>
@@ -132,7 +138,7 @@
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-						<button type="button" class="btn btn-primary">등록</button>
+						<button type="submit" class="btn btn-primary"  data-bs-dismiss="modal">등록</button>
 					</div>
 				</form>
 			</div>
@@ -141,7 +147,7 @@
 	<div class="modal fade" id="categoryUpdate" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 		<div class="modal-dialog">
 			<div class="modal-content">
-				<form action="">
+				<form action="${cpath}/admin/addProductCategory" method="POST" enctype="multipart/form-data">
 					<div class="modal-header">
 						<h3 class="modal-title">카테고리등록</h3>
 						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -152,7 +158,7 @@
 							<tr>
 								<th>카테고리이름</th>
 								<td>
-									<input class="form-control" type="text" placeholder="Default input" aria-label="default input example">
+									<input class="form-control" type="text" name="name" placeholder="카테고리 이름" required aria-label="default input example">
 								</td>
 							</tr>
 							</tbody>
@@ -160,47 +166,7 @@
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-						<button type="button" class="btn btn-primary">등록</button>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
-	<div class="modal fade" id="ticketUpdate" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<form action="">
-					<div class="modal-header">
-						<h3 class="modal-title">이용권등록</h3>
-						<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-					</div>
-					<div class="modal-body container">
-						<table class="table table-borderless">
-							<tbody>
-							<tr>
-								<th>이용권이름</th>
-								<td>
-									<input class="form-control" type="text" placeholder="Default input" aria-label="default input example">
-								</td>
-							</tr>
-							<tr>
-								<th>이용권시간</th>
-								<td>
-									<input class="form-control" type="number" placeholder="분" aria-label="default input example">
-								</td>
-							</tr>
-							<tr>
-								<th>이용권가격</th>
-								<td>
-									<input class="form-control" type="number" placeholder="1,000" aria-label="default input example">
-								</td>
-							</tr>
-							</tbody>
-						</table>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-						<button type="button" class="btn btn-primary">등록</button>
+						<button type="submit" class="btn btn-primary" data-bs-dismiss="modal">등록</button>
 					</div>
 				</form>
 			</div>
@@ -263,7 +229,7 @@
 	<table class="table table-hover">
 		<thead>
 		<tr class="table-dark text-center">
-			<th scope="col">#</th>
+<%--			<th scope="col">#</th>--%>
 			<th scope="col">상품번호</th>
 			<th scope="col">상품명</th>
 			<th scope="col">상품분류</th>
@@ -277,47 +243,23 @@
 		</tr>
 		</thead>
 		<tbody>
-		<tr class="text-center">
-			<th class="pt-3 " scope="row">
-				<div class="form-check d-flex justify-content-center">
-					<input class="form-check-input" type="checkbox" value=""
-						   id="flexCheckDefault">
-				</div>
-			</th>
-			<td class="pt-3">Mark</td>
-			<td class="pt-3">Otto</td>
-			<td class="pt-3">@mdo</td>
-			<td class="pt-3">Mark</td>
-			<td class="pt-3">Otto</td>
-			<td class="pt-3">@mdo</td>
-			<td class="pt-3">Mark</td>
-			<td class="pt-3">Otto</td>
-			<td><button type="button" class="btn btn-outline-warning"
-						disabled>조회</button></td>
-			<td><button type="button" class="btn btn-outline-danger"
-						disabled>삭제</button></td>
-		</tr>
-		<tr class="text-center">
-			<th class="pt-3" scope="row">
-				<div class="form-check d-flex justify-content-center">
-					<input class="form-check-input" type="checkbox" value="">
-				</div>
-			</th>
-			<td class="pt-3">Mark</td>
-			<td class="pt-3">Otto</td>
-			<td class="pt-3">@mdo</td>
-			<td class="pt-3">Mark</td>
-			<td class="pt-3">Otto</td>
-			<td class="pt-3">@mdo</td>
-			<td class="pt-3">Mark</td>
-			<td class="pt-3">Otto</td>
-			<td><button type="button" class="btn btn-outline-warning"
-						data-bs-toggle="modal" data-bs-target="#myModal">조회</button></td>
-			<td><button type="button" class="btn btn-outline-danger">삭제</button></td>
-		</tr>
+		<c:forEach var="dto" items="${productList}">
+			<tr class="text-center">
+				<td class="pt-3">${dto.id}</td>
+				<td class="pt-3">${dto.name}</td>
+				<td class="pt-3">${dto.productCategoryName}</td>
+				<td class="pt-3">${dto.price}</td>
+				<td class="pt-3">현재재고</td>
+				<td class="pt-3">금일 판매갯수</td>
+				<td class="pt-3">평균 판매갯수</td>
+				<td class="pt-3">소진 예상일</td>
+				<td><button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#detail_check_modal">조회</button></td>
+				<td><button type="button" class="btn btn-outline-danger">삭제</button></td>
+			</tr>
+		</c:forEach>
 		</tbody>
 	</table>
-	<div class="modal" id="myModal">
+	<div class="modal fade" id="detail_check_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
 
@@ -331,7 +273,7 @@
 				<div class="modal-body">
 					<div class="row">
 						<div class="col-6 text-center">
-							<img class="img-thumbnail mb-2"
+							<img id="produdctImg" class="img-thumbnail mb-2"
 								 src="../img/1422005677144.png" alt="예시 이미지"
 								 style="max-width: 200px; max-height: 200px;">
 						</div>
@@ -429,15 +371,7 @@
 		return new bootstrap.Popover(popoverTriggerEl)
 	})
 
-	$(document).ready(function() {
-		$.ajax({
-			url : "header.html",
-			dataType : "html",
-			success : function(response) {
-				$("#headerContent").html(response);
-			},
-		});
-	});
+
 	var imageInput = document.getElementById('image');
 	imageInput.addEventListener('change', previewImage);
 

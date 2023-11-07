@@ -1,6 +1,7 @@
 package com.itbank.service;
 
 import com.itbank.model.*;
+import com.itbank.repository.jpa.RemainingTimeRepository;
 import com.itbank.repository.jpa.RoleRepository;
 import com.itbank.repository.jpa.UserRepository;
 import com.itbank.repository.jpa.UserRoleRepository;
@@ -10,6 +11,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.sql.Date;
@@ -19,6 +21,9 @@ import java.util.*;
 @Slf4j
 // 일반 유저 생성, 삭제, 조회 등이 이루어 지는 클래스
 public class UserService {
+
+    @Autowired
+    RemainingTimeRepository remainingTimeRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -41,9 +46,9 @@ public class UserService {
 
         try {
             // USER 권한 찾기 또는 생성
-            Role role = roleRepository.findByName("ROLE_USER").orElseGet(() -> {
+            Role role = roleRepository.findByName("ROLE_ADMIN").orElseGet(() -> {
                 Role newRole = new Role();
-                newRole.setName("ROLE_USER");
+                newRole.setName("ROLE_ADMIN");
                 return roleRepository.save(newRole);
             });
 
@@ -214,4 +219,27 @@ public class UserService {
     public Optional<User> findByUsername(String buyerName) {
         return userRepository.findByUsername(buyerName);
     }
+
+    @Transactional
+    public void updateRemainingTime(User user, Ticket ticket) {
+        log.info("충전할 유저: " + user.getName());
+        RemainingTime remainingTime = remainingTimeRepository.findByUser(user)
+                .orElseGet(() -> {
+                    RemainingTime newRemainingTime = new RemainingTime();
+                    newRemainingTime.setUser(user);
+                    newRemainingTime.setRemainingTime(0);
+                    return remainingTimeRepository.save(newRemainingTime);
+                });
+
+        // 남은 시간 추가
+        remainingTime.setRemainingTime(remainingTime.getRemainingTime() + ticket.getTime());
+
+        log.info("구매한 시간: " + ticket.getTime());
+
+        remainingTimeRepository.save(remainingTime);
+
+        log.info("유저 남은시간 추가 완료!");
+    }
+
+
 }

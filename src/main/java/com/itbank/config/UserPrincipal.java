@@ -58,6 +58,10 @@ public class UserPrincipal implements OAuth2User, UserDetails {
         return true;
     }
 
+    public String getEmail() {
+        return user.getEmail();
+    }
+
     @Override
     public boolean isCredentialsNonExpired() {
         return true;
