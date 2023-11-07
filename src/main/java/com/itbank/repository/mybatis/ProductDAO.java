@@ -13,4 +13,12 @@ public interface ProductDAO {
     int insertProduct(ProductDTO dto);
 
     int selectMaxId();
+
+    ProductDTO selectOne(int id);
+
+    int deleteProduct(int id);
+
+    String findFile(int id);
+
+    int update(ProductDTO dto);
 }

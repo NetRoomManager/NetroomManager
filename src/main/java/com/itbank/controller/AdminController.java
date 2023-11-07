@@ -10,11 +10,10 @@ import com.itbank.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -71,6 +70,36 @@ public class AdminController {
     public String addProduct(ProductDTO productDTO) {
         log.info("상품생성");
         int row = productService.addProduct(productDTO);
+        return "redirect:/admin/product";
+    }
+
+    // 상품상세조회
+    @GetMapping("/viewProduct/{id}")
+    @ResponseBody
+    public ProductDTO viewProduct(@PathVariable("id") int id) {
+        System.out.println("viewProduct들어옴");
+        return productService.selectOne(id);
+    }
+
+//    @GetMapping("/viewProduct/{id}")
+//    public String viewProduct(@PathVariable("id") int id, Model model) {
+//        ProductDTO dto = productService.selectOne(id);
+//        model.addAttribute("dto", dto);
+//        return "/admin/product_detail";
+//    }
+
+    // 상품수정
+    @PostMapping("/updateProduct/{id}")
+    public String updateProduct(ProductDTO productDTO) {
+        int row = productService.updateProduct(productDTO);
+        log.info("상품목록" + row + "변경되었습니다");
+        return "redirect:/admin/product";
+    }
+
+    // 상품삭제
+    @GetMapping("/deleteProduct/{id}")
+    public String deleteProduct(@PathVariable("id") int id) {
+        int row = productService.deleteProduct(id);
         return "redirect:/admin/product";
     }
 
