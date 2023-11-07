@@ -129,7 +129,7 @@
 							</tr>
 							<tr>
 								<td colspan="4" rowspan="4" class="form-floating">
-									<textarea class="form-control" name="detail" placeholder="Leave a comment here" id="floatingTextarea" style="height: 90px;"></textarea>
+									<textarea class="form-control" name="detail" placeholder="Leave a comment here" id="floatingTextarea" style="height: 90px;" required></textarea>
 									<label for="floatingTextarea">Comments</label>
 								</td>
 							</tr>
@@ -251,7 +251,7 @@
 				<td class="pt-3">${dto.name}</td>
 				<td class="pt-3">${dto.productCategoryName}</td>
 				<td class="pt-3">${dto.price}</td>
-				<td class="pt-3">현재재고</td>
+				<td class="pt-3">${dto.count}</td>
 				<td class="pt-3">금일 판매갯수</td>
 				<td>
 					<button id="view_product_${status.index}" type="button" name="${dto.id}" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#detail_check_modal">조회</button>
@@ -287,7 +287,7 @@
 							<img id="productImg" class="img-thumbnail mb-2"
 								 src="" alt="예시 이미지"
 								 style="max-width: 200px; max-height: 200px;">
-							<input class="form-control form-control-sm" id="updateImg" name="upload" accept="image/*" type="file">
+							<input class="form-control form-control-sm" id="updateImg" name="upload" accept="image/*" type="file" required>
 						</div>
 						<div class="col-6">
 							<table class="table table-borderless">
