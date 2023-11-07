@@ -2,16 +2,16 @@ package com.itbank.controller;
 
 import com.itbank.model.Seat;
 import com.itbank.model.Ticket;
+import com.itbank.model.dto.SeatInfoDTO;
+import com.itbank.repository.mybatis.SeatDAO;
 import com.itbank.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.Arrays;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
@@ -33,6 +33,7 @@ public class AdminController {
 
     @Autowired
     private TicketService ticketService;
+
     @Autowired
     private SeatService seatService;
 
@@ -44,21 +45,21 @@ public class AdminController {
     }
 
     // 좌석관리
-    @GetMapping("/seat")
+    @GetMapping("/createSeat")
     public String seatTest(){
         seatService.createSeat();
         return "redirect:/";
     }
 
 
-    @GetMapping("/seat_manage")
+    @GetMapping("/seat")
     public ModelAndView seat() {
         ModelAndView mav = new ModelAndView("/admin/seat_manage");
-
-        List<Seat> seatList = seatService.selectSeatList();
+        List<SeatInfoDTO> seatList = seatService.selectSeatList();
         mav.addObject("seatList",seatList);
         return mav;
     }
+
 
     // 매출관리
     @GetMapping("/sales")
@@ -73,6 +74,18 @@ public class AdminController {
         List<Ticket> ticketList = ticketService.selectTicketList();
         mav.addObject("ticketList", ticketList);
         return mav;
+    }
+
+    @PostMapping("/add_update")
+    public String add_update(@RequestParam("seat_state") Long  state, @RequestParam("hour") Integer  hour,
+                             @RequestParam("seatId") Long  seatId){
+        log.info( "state" + String.valueOf(state));
+        log.info( "hour" + String.valueOf(hour));
+        log.info( "seatId" + String.valueOf(seatId));
+        int result = seatService.updateSeat(state, hour, seatId);
+        log.info("result" + result);
+
+        return "redirect:/admin/seat";
     }
 
     @PostMapping("/ticketRegister")

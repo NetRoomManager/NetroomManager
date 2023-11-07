@@ -13,6 +13,8 @@ public class CustomerController {
 
     @GetMapping("/main")
     public void main() {
+        // 유저랑 좌석연결
+        // 임시로 좌석상태가 사용가능인곳 자동 배정
     }
 
     @GetMapping("/order")

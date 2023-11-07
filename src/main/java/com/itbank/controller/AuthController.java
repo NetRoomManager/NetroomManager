@@ -10,6 +10,7 @@ import com.itbank.model.PaymentResponse;
 import com.itbank.model.Ticket;
 import com.itbank.model.User;
 import com.itbank.service.*;
+import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -54,9 +55,21 @@ public class AuthController {
     @Autowired
     private AuthService authService;
 
+    @Autowired
+    private SeatService seatService;
+
 
     @GetMapping("/login")
-    public void login() {
+    public String login() {
+       /* // 임시로 좌석상태를 불러와서
+        List<Object[]> seatList = seatService.selectSeatList();
+        for( Object[] s : seatList){
+            if(s.getClass().get == 1){  // 이용가능 좌석일 경우 login*/
+                return "/auth/login";
+ /*           }
+        }
+        // 사용불가면 사용불가jsp로 보내기
+        return "/auth/cant_use_form";*/
     }
 
     @GetMapping("/test")
@@ -91,6 +104,25 @@ public class AuthController {
         // 세션에 SPRING_SECURITY_CONTEXT라는 키 값으로 SecurityContext를 저장합니다.
         HttpSession session = request.getSession(true);
         session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
+
+        return "redirect:/";
+    }
+
+    @GetMapping("/createUsers")
+    public String createUsers(){
+        log.info("임시 user 생성");
+        for(int i = 1; i  < 11; i++){
+
+            User user = new User();
+            user.setUsername("user" + i);
+            user.setMobile(null);
+            user.setPassword("1234");
+            user.setName("user" + i);
+            user.setEmail("admin" + i + "@naver.com");
+            user.setBirth(null);
+
+            userService.createUsers(user);
+        }
 
         return "redirect:/";
     }
