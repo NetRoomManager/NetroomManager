@@ -78,7 +78,6 @@ public class AdminController {
     @GetMapping("/seat")
     public ModelAndView seat() {
         ModelAndView mav = new ModelAndView("/admin/seat_manage");
-
         List<Seat> seatList = seatService.selectSeatList();
         mav.addObject("seatList",seatList);
         return mav;

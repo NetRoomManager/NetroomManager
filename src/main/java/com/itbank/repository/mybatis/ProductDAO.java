@@ -13,4 +13,6 @@ public interface ProductDAO {
     int insertProduct(ProductDTO dto);
 
     int selectMaxId();
+
+    List<Product> selectByCategoryId(Long id);
 }
