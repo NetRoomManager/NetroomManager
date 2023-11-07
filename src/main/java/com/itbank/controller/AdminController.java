@@ -1,7 +1,8 @@
 package com.itbank.controller;
 
-import com.itbank.model.Seat;
 import com.itbank.model.Ticket;
+import com.itbank.model.dto.SeatInfoDTO;
+import com.itbank.repository.jpa.ProductRepository;
 import com.itbank.service.*;
 import com.itbank.model.ProductCategory;
 import com.itbank.model.ProductDTO;
@@ -10,10 +11,8 @@ import com.itbank.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
@@ -40,6 +39,9 @@ public class AdminController {
     @Autowired
     private SeatService seatService;
 
+    @Autowired
+    private ProductRepository productRepository;
+
     // 상품관리
     @GetMapping("/product")
     public ModelAndView product() {
@@ -59,13 +61,14 @@ public class AdminController {
         return "redirect:/admin/product";
     }
 
-    // 신규상품 추가
-//    @PostMapping("/addProduct")
-//    public String addProduct(Product product, @RequestParam("img")MultipartFile img) {
-//        productService.addProduct(product, img);
-//        log.info("상품 생성");
-//        return "redirect:/admin/product";
-//    }
+    // 좌석관리
+    @GetMapping("/createSeat")
+    public String seatTest(){
+        seatService.createSeat();
+        return "redirect:/";
+    }
+
+
     @PostMapping("/addProduct")
     public String addProduct(ProductDTO productDTO) {
         log.info("상품생성");
@@ -73,7 +76,6 @@ public class AdminController {
         return "redirect:/admin/product";
     }
 
-    // 상품상세조회
     @GetMapping("/viewProduct/{id}")
     @ResponseBody
     public ProductDTO viewProduct(@PathVariable("id") int id) {
@@ -81,14 +83,6 @@ public class AdminController {
         return productService.selectOne(id);
     }
 
-//    @GetMapping("/viewProduct/{id}")
-//    public String viewProduct(@PathVariable("id") int id, Model model) {
-//        ProductDTO dto = productService.selectOne(id);
-//        model.addAttribute("dto", dto);
-//        return "/admin/product_detail";
-//    }
-
-    // 상품수정
     @PostMapping("/updateProduct/{id}")
     public String updateProduct(ProductDTO productDTO) {
         int row = productService.updateProduct(productDTO);
@@ -99,7 +93,10 @@ public class AdminController {
     // 상품삭제
     @GetMapping("/deleteProduct/{id}")
     public String deleteProduct(@PathVariable("id") int id) {
-        int row = productService.deleteProduct(id);
+//        int row = productService.deleteProduct(id);
+
+        productRepository.deleteById((long) id);
+
         return "redirect:/admin/product";
     }
 
@@ -107,8 +104,7 @@ public class AdminController {
     @GetMapping("/seat")
     public ModelAndView seat() {
         ModelAndView mav = new ModelAndView("/admin/seat_manage");
-
-        List<Seat> seatList = seatService.selectSeatList();
+        List<SeatInfoDTO> seatList = seatService.selectSeatList();
         mav.addObject("seatList",seatList);
         return mav;
     }
@@ -126,6 +122,18 @@ public class AdminController {
         List<Ticket> ticketList = ticketService.selectTicketList();
         mav.addObject("ticketList", ticketList);
         return mav;
+    }
+
+    @PostMapping("/add_update")
+    public String add_update(@RequestParam("seat_state") Long  state, @RequestParam("hour") Integer  hour,
+                             @RequestParam("seatId") Long  seatId){
+        log.info( "state" + String.valueOf(state));
+        log.info( "hour" + String.valueOf(hour));
+        log.info( "seatId" + String.valueOf(seatId));
+        int result = seatService.updateSeat(state, hour, seatId);
+        log.info("result" + result);
+
+        return "redirect:/admin/seat";
     }
 
     @PostMapping("/ticketRegister")

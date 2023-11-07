@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+        "//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- mapper의 namespace는 연결할 dao 인터페이스의 "풀네임"을 작성한다. -->
+<mapper namespace="com.itbank.repository.mybatis.SeatDAO">
+    <select id="getSeatInfoList" resultType="seatinfo">
+        SELECT
+            s.seatId,
+            s.seatIpAddr,
+            s.seatState,
+            u.id as user_id,
+            rt.remainingTime
+        FROM
+            seat s
+        LEFT JOIN
+            users u ON s.user_id = u.id
+        LEFT JOIN
+            remaining_time rt ON u.id = rt.user_id
+        order by seatId
+    </select>
+
+    <update id="updateSeatState" parameterType="map">
+        UPDATE seat
+        SET seatState = #{seatState}
+        WHERE seatId = #{seatId}
+    </update>
+
+    <update id="updateSeatHour" parameterType="map">
+        UPDATE remaining_time
+        SET remainingTime = remainingTime + #{addHour}
+        WHERE user_id = (
+        SELECT user_id
+        FROM seat
+        WHERE seatId = #{seatId}
+        )
+    </update>
+
+
+</mapper>

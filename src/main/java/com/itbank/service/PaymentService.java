@@ -2,11 +2,14 @@ package com.itbank.service;
 
 import com.itbank.model.*;
 import com.itbank.repository.jpa.*;
+import com.itbank.repository.mybatis.PaymentDAO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -30,7 +33,16 @@ public class PaymentService {
     private TicketDetailRepository ticketDetailRepository;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private OrderListRepository orderListRepository;
+
+    @Autowired
+    private PaymentDAO paymentDAO;
+
+    @Autowired
+    private RemainingTimeRepository remainingTimeRepository;
 
     public Payment buyTicket(PaymentResponse paymentResponse) {
         String payMethod = paymentResponse.getPg_provider();
@@ -87,6 +99,51 @@ public class PaymentService {
 
         System.out.println("티켓 상세정보 가져옴");
 
+        userService.updateRemainingTime(user, ticket);
+
+
         return payment;
+    }
+
+    public Payment buyProduct(PaymentResponse paymentResponse) {
+        String payMethod = paymentResponse.getPg_provider();
+
+        log.info(payMethod);
+
+        PaymentMethod paymentMethod = paymentMethodRepository.findByName(payMethod).orElseGet(() -> {
+            PaymentMethod newPaymentMethod = new PaymentMethod();
+            newPaymentMethod.setName(payMethod);
+            return paymentMethodRepository.save(newPaymentMethod);
+        });
+
+        System.out.println("payMethod 가져옴 : "+payMethod);
+
+        Payment payment = new Payment();
+        payment.setPaymentMethodId(paymentMethod);
+        payment = paymentRepository.save(payment);
+
+        System.out.println("pay 가져옴 : "+ payment);
+
+        int totalPrice = paymentResponse.getPaid_amount();
+        String buyerName = paymentResponse.getBuyer_name();
+        String buyerEmail = paymentResponse.getBuyer_email();
+
+        User user = userRepository.findByNameAndEmail(buyerName, buyerEmail).orElseThrow(() -> new UsernameNotFoundException("유저정보를 찾을 수 없습니다."));
+
+        System.out.println("유저 가져옴");
+
+        OrderList orderList = new OrderList();
+        orderList.setPaymentId(payment);
+        orderList.setUserId(user);
+        orderList.setOrderTotalPrice(totalPrice);
+        orderListRepository.save(orderList);
+
+        System.out.println("주문정보 가져옴");
+
+        return payment;
+    }
+
+    public Long findMaxId() {
+        return paymentDAO.maxId();
     }
 }

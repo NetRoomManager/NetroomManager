@@ -76,7 +76,7 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach var="user" items="${list}">
+        <c:forEach var="user" items="${list}" varStatus="status">
             <tr>
                 <div class="form-group mb-2 d-flex">
                     <td>
@@ -92,7 +92,7 @@
                     </td>
 
                     <td>
-                        <input id="0" name="userSelector" type="button" class="btn btn-primary" value="선택하기"
+                        <input id="${status.index}" name="userSelector" type="button" class="btn btn-primary" value="선택하기"
                                data-bs-toggle="offcanvas"
                                data-bs-target="#ticket">
                     </td>

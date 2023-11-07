@@ -14,6 +14,8 @@ public interface ProductDAO {
 
     int selectMaxId();
 
+    List<Product> selectByCategoryId(Long id);
+
     ProductDTO selectOne(int id);
 
     int deleteProduct(int id);

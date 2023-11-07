@@ -44,6 +44,14 @@
     <select id="selectMaxId" resultType="int">
         select max(id) from product
     </select>
+
+    <select id="selectByCategoryId" resultType="productEntity" parameterType="long">
+        select * from product where product_category_id = #{id}
+    </select>
+
+    <select id="findMaxId" resultType="long">
+        select max(id) as id from product;
+    </select>
     <select id="selectOne" parameterType="int" resultType="product">
         select
             p.id,

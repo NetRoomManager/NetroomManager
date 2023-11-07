@@ -49,6 +49,11 @@
 		<level value="info" />
 	</logger>
 
+	<!-- Application Loggers -->
+	<logger name="com.itbank.component">
+		<level value="info" />
+	</logger>
+
 
 
 	<!-- 3rdparty Loggers -->
