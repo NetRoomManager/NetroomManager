@@ -6,6 +6,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.sql.Date;
+import java.util.List;
 
 @Table(name="product")
 @Entity    // 제품
@@ -20,6 +21,14 @@ public class Product {
     @ManyToOne
     @JoinColumn(name = "product_category_id")
     private ProductCategory productCategory;	// 상품 카테고리 아이디
+
+    @OneToOne(mappedBy = "product")
+    private OrderDetail orderDetail;
+
+    @PreRemove
+    private void preRemove() {
+        orderDetail.setProduct(null);
+    }
 
     @Column(nullable = false)
     private String name; // 상품명

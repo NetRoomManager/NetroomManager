@@ -97,12 +97,12 @@
 							<tr>
 								<th>상품명</th>
 								<td>
-									<input class="form-control" type="text" name="name" placeholder="Default input" aria-label="default input example">
+									<input class="form-control" type="text" name="name" placeholder="Default input" aria-label="default input example" required>
 								</td>
 								<th>상품분류</th>
 								<td>
 									<select class="form-select"
-											aria-label="Default select example" name="productCategoryId">
+											aria-label="Default select example" name="productCategoryId" required>
 										<option selected>분류에 없는 것은 등록해서 사용</option>
 										<c:forEach var="categoryDTO" items="${productCategoryList}">
 											<option value="${categoryDTO.id}">${categoryDTO.name}</option>
@@ -113,18 +113,18 @@
 							<tr>
 								<th>상품가격</th>
 								<td>
-									<input class="form-control" type="number" name="price" placeholder="1,000" aria-label="default input example">
+									<input class="form-control" type="number" name="price" placeholder="1,000" aria-label="default input example" required>
 								</td>
 								<th>상품수량</th>
 								<td>
-									<input class="form-control" type="number" name="count" placeholder="1" aria-label="default input example">
+									<input class="form-control" type="number" name="count" placeholder="1" aria-label="default input example" required>
 								</td>
 							</tr>
 							<tr>
 								<th colspan="2">제품설명</th>
 								<th>할인율</th>
 								<td>
-									<input class="form-control" type="number" name="dcRate" placeholder="%" aria-label="default input example">
+									<input class="form-control" type="number" name="dcRate" placeholder="%" aria-label="default input example" required>
 								</td>
 							</tr>
 							<tr>
@@ -188,10 +188,11 @@
 	<form class="d-flex">
 		<div class="mb-3 pe-2" style="width: 150px;">
 			<select class="form-select" aria-label="Default select example">
-				<option selected>가격</option>
-				<option value="1">현재재고</option>
-				<option value="2">금일 판매갯수</option>
-				<option value="3">평균 판매갯수</option>
+				<option selected>전체</option>
+				<option value="1">전체</option>
+				<option value="2">가격</option>
+				<option value="3">현재 재고</option>
+				<option value="4">금일 판매갯수</option>
 			</select>
 		</div>
 		<div class="mb-3 pe-2">
@@ -236,14 +237,15 @@
 			<th scope="col">가격</th>
 			<th scope="col">현재재고</th>
 			<th scope="col">금일 판매갯수</th>
-			<th scope="col">평균 판매갯수</th>
-			<th scope="col">소진 예상일</th>
 			<th scope="col">상세보기</th>
 			<th scope="col">삭제</th>
 		</tr>
 		</thead>
+		<script>
+			let products = [];
+		</script>
 		<tbody>
-		<c:forEach var="dto" items="${productList}">
+		<c:forEach var="dto" items="${productList}" varStatus="status">
 			<tr class="text-center">
 				<td class="pt-3">${dto.id}</td>
 				<td class="pt-3">${dto.name}</td>
@@ -251,14 +253,22 @@
 				<td class="pt-3">${dto.price}</td>
 				<td class="pt-3">현재재고</td>
 				<td class="pt-3">금일 판매갯수</td>
-				<td class="pt-3">평균 판매갯수</td>
-				<td class="pt-3">소진 예상일</td>
-				<td><button type="button" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#detail_check_modal">조회</button></td>
-				<td><button type="button" class="btn btn-outline-danger">삭제</button></td>
+				<td>
+					<button id="view_product_${status.index}" type="button" name="${dto.id}" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#detail_check_modal">조회</button>
+				</td>
+				<td>
+					<a href="${cpath}/admin/deleteProduct/${dto.id}">
+						<button type="button" class="btn btn-outline-danger">삭제</button>
+					</a>
+				</td>
 			</tr>
+			<script>
+				products.push(${dto.id});
+			</script>
 		</c:forEach>
 		</tbody>
 	</table>
+
 	<div class="modal fade" id="detail_check_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg">
 			<div class="modal-content">
@@ -270,33 +280,35 @@
 				</div>
 
 				<!-- Modal body -->
+                <form id="product_update" method="POST" enctype="multipart/form-data">
 				<div class="modal-body">
 					<div class="row">
 						<div class="col-6 text-center">
-							<img id="produdctImg" class="img-thumbnail mb-2"
-								 src="../img/1422005677144.png" alt="예시 이미지"
+							<img id="productImg" class="img-thumbnail mb-2"
+								 src="" alt="예시 이미지"
 								 style="max-width: 200px; max-height: 200px;">
+							<input class="form-control form-control-sm" id="updateImg" name="upload" accept="image/*" type="file">
 						</div>
 						<div class="col-6">
 							<table class="table table-borderless">
 								<tbody>
 								<tr>
 									<th>상품번호</th>
-									<td><input class="form-control form-control-sm"
-											   type="text" placeholder="Default input"
-											   aria-label="default input example"></td>
+									<td><input id="productId" class="form-control form-control-sm"
+											   type="text" placeholder="" name="id"
+											   aria-label="default input example" readonly></td>
 								</tr>
 								<tr>
 									<th>상품명</th>
-									<td><input class="form-control form-control-sm"
-											   type="text" placeholder="Default input"
+									<td><input id="productName" class="form-control form-control-sm"
+											   type="text" name="name"
 											   aria-label="default input example"></td>
 								</tr>
 								<tr>
 									<th>상품분류</th>
-									<td><input class="form-control form-control-sm"
+									<td><input id="productCategory" class="form-control form-control-sm"
 											   type="text" placeholder="Default input"
-											   aria-label="default input example"></td>
+											   aria-label="default input example" readonly></td>
 								</tr>
 								</tbody>
 							</table>
@@ -308,20 +320,14 @@
 								<tbody>
 								<tr>
 									<th>가격</th>
-									<td><input class="form-control form-control-sm"
-											   type="text" placeholder="Default input"
+									<td><input id="productPrice" class="form-control form-control-sm"
+											   type="text" name="price"
 											   aria-label="default input example"></td>
 								</tr>
 								<tr>
 									<th>할인율</th>
-									<td><input class="form-control form-control-sm"
-											   type="text" placeholder="Default input"
-											   aria-label="default input example"></td>
-								</tr>
-								<tr>
-									<th>현재재고</th>
-									<td><input class="form-control form-control-sm"
-											   type="text" placeholder="Default input"
+									<td><input id="productDcrate" class="form-control form-control-sm"
+											   type="text" name="dcRate"
 											   aria-label="default input example"></td>
 								</tr>
 								</tbody>
@@ -331,20 +337,14 @@
 							<table class="table table-borderless">
 								<tbody>
 								<tr>
+									<th>현재재고</th>
+									<td><input id="productCount" class="form-control form-control-sm"
+											   type="text" name="count"
+											   aria-label="default input example"></td>
+								</tr>
+								<tr>
 									<th>금일 판매갯수</th>
-									<td><input class="form-control form-control-sm"
-											   type="text" placeholder="Default input"
-											   aria-label="default input example"></td>
-								</tr>
-								<tr>
-									<th>평균 판매갯수</th>
-									<td><input class="form-control form-control-sm"
-											   type="text" placeholder="Default input"
-											   aria-label="default input example"></td>
-								</tr>
-								<tr>
-									<th>소진 예상일</th>
-									<td><input class="form-control form-control-sm"
+									<td><input id="productSales" class="form-control form-control-sm"
 											   type="text" placeholder="Default input"
 											   aria-label="default input example"></td>
 								</tr>
@@ -352,14 +352,31 @@
 							</table>
 						</div>
 					</div>
+					<div class="row px-2">
+						<table class="table table-borderless">
+							<tbody>
+							<tr>
+								<th>제품상세</th>
+								<th></th>
+							</tr>
+							<tr>
+								<td colspan="2" rowspan="2" class="form-floating">
+									<textarea class="form-control" placeholder="Leave a comment here" id="productDetail" name="detail" style="height: 90px;"></textarea>
+									<label for="floatingTextarea">Comments</label>
+								</td>
+							</tr>
+							</tbody>
+						</table>
+					</div>
 				</div>
-
 				<!-- Modal footer -->
 				<div class="modal-footer">
-					<button type="button" class="btn btn-danger"
-							data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-secondary"
+                            data-bs-dismiss="modal">취소</button>
+                    <button type="submit" class="btn btn-danger"
+                            data-bs-dismiss="modal">수정</button>
 				</div>
-
+                </form>
 			</div>
 		</div>
 	</div>
@@ -389,6 +406,57 @@
 			reader.readAsDataURL(input.files[0]);
 		}
 	}
+</script>
+
+<script>
+
+	async function openView(id) {
+		let url = '/admin/viewProduct/' + id;
+		console.log(`Fetching: ` + url); // 요청을 보내는 URL 로그
+		return await fetch(url)
+				.then(response => {
+					console.log(`Received response: ` + JSON.stringify(response)); // 받아온 응답 로그
+					return response.json();
+				})
+				.then(productData => {
+					console.log(`Received data: ` + JSON.stringify(productData)); // 받아온 데이터 로그
+					return productData;
+				});
+	}
+
+	products.forEach((product, index) => {
+		const viewProduct = document.getElementById('view_product_' + index);
+		viewProduct.addEventListener('click', async e => {
+			let id = e.target.name;
+
+			// dto가 담겨있는 객체
+			const productData = await openView(id);
+
+            const updateForm = document.getElementById('product_update');
+            updateForm.action = '${cpath}/admin/updateProduct/' + productData.id;
+
+			console.log(productData.name);
+			const productImg = document.getElementById('productImg');
+			productImg.src = '/upload/' + productData.img;
+			const productId = document.getElementById('productId');
+			productId.value = productData.id;
+			const productName = document.getElementById('productName');
+			productName.value = productData.name;
+			const productCategory = document.getElementById('productCategory');
+			productCategory.value = productData.productCategoryName;
+			const productPrice = document.getElementById('productPrice');
+			productPrice.value = productData.price;
+			const productDcrate = document.getElementById('productDcrate');
+			productDcrate.value = productData.dcRate;
+			const productCount = document.getElementById('productCount');
+			productCount.value = productData.count;
+			const productSales = document.getElementById('productSales');
+			productSales.value = 1;
+			const productDetail = document.getElementById('productDetail');
+			productDetail.value = productData.detail;
+		});
+	});
+
 </script>
 </body>
 </html>

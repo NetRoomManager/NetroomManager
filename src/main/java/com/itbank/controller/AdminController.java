@@ -1,9 +1,8 @@
 package com.itbank.controller;
 
-import com.itbank.model.Seat;
 import com.itbank.model.Ticket;
 import com.itbank.model.dto.SeatInfoDTO;
-import com.itbank.repository.mybatis.SeatDAO;
+import com.itbank.repository.jpa.ProductRepository;
 import com.itbank.service.*;
 import com.itbank.model.ProductCategory;
 import com.itbank.model.ProductDTO;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Arrays;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
@@ -40,6 +38,9 @@ public class AdminController {
 
     @Autowired
     private SeatService seatService;
+
+    @Autowired
+    private ProductRepository productRepository;
 
     // 상품관리
     @GetMapping("/product")
@@ -72,6 +73,30 @@ public class AdminController {
     public String addProduct(ProductDTO productDTO) {
         log.info("상품생성");
         int row = productService.addProduct(productDTO);
+        return "redirect:/admin/product";
+    }
+
+    @GetMapping("/viewProduct/{id}")
+    @ResponseBody
+    public ProductDTO viewProduct(@PathVariable("id") int id) {
+        System.out.println("viewProduct들어옴");
+        return productService.selectOne(id);
+    }
+
+    @PostMapping("/updateProduct/{id}")
+    public String updateProduct(ProductDTO productDTO) {
+        int row = productService.updateProduct(productDTO);
+        log.info("상품목록" + row + "변경되었습니다");
+        return "redirect:/admin/product";
+    }
+
+    // 상품삭제
+    @GetMapping("/deleteProduct/{id}")
+    public String deleteProduct(@PathVariable("id") int id) {
+//        int row = productService.deleteProduct(id);
+
+        productRepository.deleteById((long) id);
+
         return "redirect:/admin/product";
     }
 
