@@ -2,6 +2,8 @@ package com.itbank.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -19,13 +21,9 @@ public class OrderDetail {
     @JoinColumn(name = "order_id")
     private OrderList orderList;	// 주문아이디
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "product_id")
     private Product product;	// 상품아이디
-
-    @ManyToOne
-    @JoinColumn(name = "category_id")
-    private ProductCategory category;	// 상품 카테고리 아이디
 
     private String memo; // 메모
 

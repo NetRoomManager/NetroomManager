@@ -32,8 +32,12 @@
 	<li><a href="/auth/buyTicket">티켓구매</a></li>
 	<li><a href="/auth/create_admin">관리자 생성하기</a></li>
 	<li><a href="/admin/product">관리자 상품 관리</a></li>
+	<li><a href="/admin/createSeat">좌석 생성</a></li>
+	<li><a href="/admin/seat">관리자 페이지</a></li>
+	<li><a href="/auth/createUsers">유저생성</a></li>
 	<li><a href="/auth/seat">좌석 생성</a></li>
 	<li><a href="/admin/seat">관리자 페이지</a></li>
+	<li><a href="/customer/order/1">음식 주문 페이지</a></li>
 </ul>
 
 </body>

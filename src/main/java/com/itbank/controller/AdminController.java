@@ -1,15 +1,17 @@
 package com.itbank.controller;
 
-import com.itbank.model.Seat;
 import com.itbank.model.Ticket;
+import com.itbank.model.dto.SeatInfoDTO;
+import com.itbank.repository.jpa.ProductRepository;
 import com.itbank.service.*;
+import com.itbank.model.ProductCategory;
+import com.itbank.model.ProductDTO;
+import com.itbank.service.ProductService;
+import com.itbank.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.util.List;
@@ -22,6 +24,8 @@ import java.util.Objects;
 @Slf4j
 public class AdminController {
 
+    @Autowired
+    private ProductService productService;
 
     @Autowired
     private TicketSalesService ticketSalesService;
@@ -35,19 +39,72 @@ public class AdminController {
     @Autowired
     private SeatService seatService;
 
+    @Autowired
+    private ProductRepository productRepository;
+
     // 상품관리
     @GetMapping("/product")
-    public String product() {
-//        productService.createProduct();
-        return "/admin/product_manage";
+    public ModelAndView product() {
+        ModelAndView mav = new ModelAndView("/admin/product_manage");
+        List<ProductDTO> productList = productService.selectAllProduct();
+        List<ProductCategory> productCategoryList = productService.selectAllProductCategory();
+        mav.addObject("productList", productList);
+        mav.addObject("productCategoryList", productCategoryList);
+        return mav;
+    }
+
+    // 상품목록 추가
+    @PostMapping("/addProductCategory")
+    public String addProductCategory(ProductCategory productCategory) {
+        int row = productService.addProductCategory(productCategory);
+        log.info("상품목록" + row + "추가되었습니다");
+        return "redirect:/admin/product";
+    }
+
+    // 좌석관리
+    @GetMapping("/createSeat")
+    public String seatTest(){
+        seatService.createSeat();
+        return "redirect:/";
+    }
+
+
+    @PostMapping("/addProduct")
+    public String addProduct(ProductDTO productDTO) {
+        log.info("상품생성");
+        int row = productService.addProduct(productDTO);
+        return "redirect:/admin/product";
+    }
+
+    @GetMapping("/viewProduct/{id}")
+    @ResponseBody
+    public ProductDTO viewProduct(@PathVariable("id") int id) {
+        System.out.println("viewProduct들어옴");
+        return productService.selectOne(id);
+    }
+
+    @PostMapping("/updateProduct/{id}")
+    public String updateProduct(ProductDTO productDTO) {
+        int row = productService.updateProduct(productDTO);
+        log.info("상품목록" + row + "변경되었습니다");
+        return "redirect:/admin/product";
+    }
+
+    // 상품삭제
+    @GetMapping("/deleteProduct/{id}")
+    public String deleteProduct(@PathVariable("id") int id) {
+//        int row = productService.deleteProduct(id);
+
+        productRepository.deleteById((long) id);
+
+        return "redirect:/admin/product";
     }
 
 
     @GetMapping("/seat")
     public ModelAndView seat() {
         ModelAndView mav = new ModelAndView("/admin/seat_manage");
-
-        List<Seat> seatList = seatService.selectSeatList();
+        List<SeatInfoDTO> seatList = seatService.selectSeatList();
         mav.addObject("seatList",seatList);
         return mav;
     }
@@ -65,6 +122,18 @@ public class AdminController {
         List<Ticket> ticketList = ticketService.selectTicketList();
         mav.addObject("ticketList", ticketList);
         return mav;
+    }
+
+    @PostMapping("/add_update")
+    public String add_update(@RequestParam("seat_state") Long  state, @RequestParam("hour") Integer  hour,
+                             @RequestParam("seatId") Long  seatId){
+        log.info( "state" + String.valueOf(state));
+        log.info( "hour" + String.valueOf(hour));
+        log.info( "seatId" + String.valueOf(seatId));
+        int result = seatService.updateSeat(state, hour, seatId);
+        log.info("result" + result);
+
+        return "redirect:/admin/seat";
     }
 
     @PostMapping("/ticketRegister")
@@ -97,7 +166,7 @@ public class AdminController {
     public String productSale() {
         return "/admin/product_sales_manage";
     }
-    
+
     // 이용권 매출
     @GetMapping("/ticketsales")
     public ModelAndView ticketSale(HttpServletRequest request) throws ParseException {
