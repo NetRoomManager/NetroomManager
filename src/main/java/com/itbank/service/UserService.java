@@ -201,9 +201,14 @@ public class UserService {
             UserAndLastLog userAndLastLog = new UserAndLastLog();
             userAndLastLog.setUser(user);
             Optional<UserLog> optionalUserLog = userLogService.findLatestByUser(user);
+            Optional<RemainingTime> optionalRemainingTime = remainingTimeRepository.findByUser(user);
             if(optionalUserLog.isPresent()) {
                 UserLog log = optionalUserLog.get();
                 userAndLastLog.setLastLog(log);
+            }
+            if (optionalRemainingTime.isPresent()) {
+                RemainingTime remainingTime = optionalRemainingTime.get();
+                userAndLastLog.setRemainingTime(remainingTime);
             }
             list.add(userAndLastLog);
         }
