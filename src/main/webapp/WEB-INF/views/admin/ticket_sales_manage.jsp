@@ -2,15 +2,6 @@
          pageEncoding="UTF-8" %>
 <%@ include file="header.jsp" %>
 <!-- 티켓ㅅ매출 페이지 -->
-
-${param.startDate }
-${param.endDate }
-
-<c:if test="${empty param.startDate || param.endDate}">
-    ${list}
-</c:if>
-
-
 <title>티켓매출관리</title>
 <style>
     #menuBar {
@@ -27,7 +18,7 @@ ${param.endDate }
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0 pt-1">
             <li class="nav-item">
-                <a class="nav-link active navbar-brand" aria-current="page" href="#">NetRoom</a>
+                <a class="nav-link active navbar-brand" aria-current="page" href="/">NetRoom</a>
             </li>
             <li class="nav-item pe-3">
                 <a class="nav-link" href="${cpath}/admin/productsales">상품매출</a>
@@ -85,16 +76,6 @@ ${param.endDate }
             </li>
         </ul>
     </div>
-</nav>
-<nav id="menuBar" class="nav nav-pills flex-column py-3" style="position: absolute; height: 91.6%;">
-    <a class="nav-link py-3" href="${cpath }/admin/order">주문</a>
-    <a class="nav-link py-3" href="${cpath }/admin/product">재고</a>
-    <a class="nav-link py-3 active" style="background-color: #FF8339;" aria-current="page"
-       href="${cpath }/admin/productsales">매출</a>
-    <a class="nav-link py-3" href="${cpath}/admin/user">회원</a>
-    <a class="nav-link py-3" href="${cpath}/admin/seat">좌석</a>
-    <a
-            class="nav-link py-3" href="${cpath }/admin/ticket" style="background-color: #FF8339;">이용권</a>
 </nav>
 <div class="container pt-4">
     <form class="d-flex" id="rangeDate" action="/admin/ticketsales" method="get">

@@ -78,15 +78,6 @@
                 </ul>
             </div>
         </nav>
-        <nav id="menuBar" class="nav nav-pills flex-column py-3" style="position: absolute; height: 91.6%;">
-            <a class="nav-link py-3" href="${cpath }/admin/order">주문</a>
-            <a class="nav-link py-3" href="${cpath }/admin/product">재고</a>
-            <a class="nav-link py-3 active" style="background-color: #FF8339;" aria-current="page" href="${cpath }/admin/productsales">매출</a>
-            <a class="nav-link py-3" href="${cpath}/admin/user">회원</a>
-            <a class="nav-link py-3" href="${cpath}/admin/seat">좌석</a>
-            <a
-                    class="nav-link py-3 active" href="${cpath }/admin/ticket" style="background-color: #FF8339;">이용권</a>
-        </nav>
         <div class="container pt-4">
             <form class="d-flex">
                 <div class="mb-3 pe-2">
@@ -149,6 +140,23 @@
                     </tr>
                 </tfoot>
               </table>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
         </div>
     </body>
 </html>

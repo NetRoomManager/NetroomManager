@@ -4,17 +4,7 @@
 <!-- 회원관리 페이지 -->
 
 <style>
-    #menu_bar {
-        background-color: #ffa500
-    }
 
-    #menu_bar > a {
-        color: #ffffff;
-    }
-
-    #product_update table > tbody > tr > th {
-        padding-top: 15px;
-    }
 </style>
 
 <div id="headerContent"></div>
@@ -135,16 +125,6 @@
         </div>
     </div>
 </nav>
-<nav id="menu_bar" class="nav nav-pills flex-column py-3 text-center"
-     style="position: absolute; height: 100%;">
-    <a class="nav-link py-3" href="${cpath }/admin/order">주문</a>
-    <a class="nav-link py-3" href="${cpath }/admin/product">재고</a>
-    <a class="nav-link py-3"
-       aria-current="page" href="${cpath }/admin/productsales">매출</a> <a
-        class="nav-link py-3  active" href="${cpath }/admin/user" style="background-color: #FF8339;">회원</a> <a
-        class="nav-link py-3" href="${cpath }/admin/seat">좌석</a> <a
-        class="nav-link py-3" href="${cpath }/admin/ticket">이용권</a>
-</nav>
 
 <div class="container pt-4">
     <form class="d-flex">
@@ -198,111 +178,23 @@
         </c:forEach>
         </tbody>
     </table>
-    <div class="modal" id="myModal">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">상세조회</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-
-                <!-- Modal body -->
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-6 text-center">
-                            <img id="preview" class="img-thumbnail mb-2"
-                                 src="../img/1422005677144.png" alt="예시 이미지"
-                                 style="max-width: 200px; max-height: 200px;">
-                        </div>
-                        <div class="col-6">
-                            <table class="table table-borderless">
-                                <tbody>
-                                <tr>
-                                    <th>상품번호</th>
-                                    <td><input class="form-control form-control-sm"
-                                               type="text" placeholder="Default input"
-                                               aria-label="default input example"></td>
-                                </tr>
-                                <tr>
-                                    <th>상품명</th>
-                                    <td><input class="form-control form-control-sm"
-                                               type="text" placeholder="Default input"
-                                               aria-label="default input example"></td>
-                                </tr>
-                                <tr>
-                                    <th>상품분류</th>
-                                    <td><input class="form-control form-control-sm"
-                                               type="text" placeholder="Default input"
-                                               aria-label="default input example"></td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <table class="table table-borderless">
-                                <tbody>
-                                <tr>
-                                    <th>가격</th>
-                                    <td><input class="form-control form-control-sm"
-                                               type="text" placeholder="Default input"
-                                               aria-label="default input example"></td>
-                                </tr>
-                                <tr>
-                                    <th>할인율</th>
-                                    <td><input class="form-control form-control-sm"
-                                               type="text" placeholder="Default input"
-                                               aria-label="default input example"></td>
-                                </tr>
-                                <tr>
-                                    <th>현재재고</th>
-                                    <td><input class="form-control form-control-sm"
-                                               type="text" placeholder="Default input"
-                                               aria-label="default input example"></td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="col-6">
-                            <table class="table table-borderless">
-                                <tbody>
-                                <tr>
-                                    <th>금일 판매갯수</th>
-                                    <td><input class="form-control form-control-sm"
-                                               type="text" placeholder="Default input"
-                                               aria-label="default input example"></td>
-                                </tr>
-                                <tr>
-                                    <th>평균 판매갯수</th>
-                                    <td><input class="form-control form-control-sm"
-                                               type="text" placeholder="Default input"
-                                               aria-label="default input example"></td>
-                                </tr>
-                                <tr>
-                                    <th>소진 예상일</th>
-                                    <td><input class="form-control form-control-sm"
-                                               type="text" placeholder="Default input"
-                                               aria-label="default input example"></td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Modal footer -->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger"
-                            data-bs-dismiss="modal">Close
-                    </button>
-                </div>
-
-            </div>
-        </div>
-    </div>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            <li class="page-item">
+                <a class="page-link" href="#" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <li class="page-item"><a class="page-link" href="#">1</a></li>
+            <li class="page-item"><a class="page-link" href="#">2</a></li>
+            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <li class="page-item">
+                <a class="page-link" href="#" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
 </div>
 <script>
     var popoverTriggerList = [].slice.call(document

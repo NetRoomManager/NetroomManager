@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -51,6 +52,7 @@ public class AdminController {
         List<ProductCategory> productCategoryList = productService.selectAllProductCategory();
         mav.addObject("productList", productList);
         mav.addObject("productCategoryList", productCategoryList);
+        mav.addObject("currentPage", "product");
         return mav;
     }
 
@@ -118,12 +120,14 @@ public class AdminController {
         ModelAndView mav = new ModelAndView("/admin/seat_manage");
         List<SeatInfoDTO> seatList = seatService.selectSeatList();
         mav.addObject("seatList",seatList);
+        mav.addObject("currentPage", "seat");
         return mav;
     }
 
     // 매출관리
     @GetMapping("/sales")
-    public String sales() {
+    public String sales(Model model) {
+        model.addAttribute("currentPage", "sales");
         return "/admin/sales_manage";
     }
 
@@ -133,6 +137,7 @@ public class AdminController {
         ModelAndView mav = new ModelAndView("/admin/ticket_manage");
         List<Ticket> ticketList = ticketService.selectTicketList();
         mav.addObject("ticketList", ticketList);
+        mav.addObject("currentPage", "ticket");
         return mav;
     }
 
@@ -175,7 +180,8 @@ public class AdminController {
 
     // 상품 매출
     @GetMapping("/productsales")
-    public String productSale() {
+    public String productSale(Model model) {
+        model.addAttribute("currentPage","productsales");
         return "/admin/product_sales_manage";
     }
 
@@ -204,13 +210,15 @@ public class AdminController {
         else {
             mav.addObject("list",userService.findUserAndLastLog(Objects.requireNonNull(type), keyword));
         }
+        mav.addObject("currentPage", "user");
         return mav;
     }
 
 
     // 주문관리
     @GetMapping("/order")
-    public String order() {
+    public String order(Model model) {
+        model.addAttribute("currentPage", "order");
         return "/admin/order_manage";
     }
 }
