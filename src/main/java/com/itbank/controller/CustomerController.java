@@ -1,24 +1,20 @@
 package com.itbank.controller;
 
 import com.itbank.model.*;
-import com.itbank.repository.jpa.*;
+import com.itbank.repository.jpa.OrderListRepository;
+import com.itbank.repository.jpa.ProductRepository;
+import com.itbank.repository.jpa.ProductSalesRepository;
 import com.itbank.repository.mybatis.ProductCategoryDAO;
 import com.itbank.repository.mybatis.ProductDAO;
 import com.itbank.service.OrderDetailService;
 import com.itbank.service.PaymentService;
-import com.itbank.service.ProductService;
-import org.hibernate.criterion.Order;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Controller
 @RequestMapping("/customer")
@@ -71,6 +67,15 @@ public class CustomerController {
     public String detailOrder(@RequestBody List<Map<String,Object>> orderDetails) {
         System.out.println("orderDetail: " + orderDetails);
 
+
+        Optional<OrderList> optionalOrderList = orderListRepository.findById(paymentService.findMaxId());
+        OrderList orderList;
+        if(optionalOrderList.isPresent()) {
+            orderList = optionalOrderList.get();
+        } else {
+            orderList = null;
+        }
+
         orderDetails.forEach(e -> {
             System.out.println("e: " + e.get("p_id"));
             OrderDetail orderDetail1 = new OrderDetail();
@@ -83,10 +88,10 @@ public class CustomerController {
             }));
             System.out.println("3."+e.get("p_id").toString());
 
-            orderDetail1.setOrderList(orderListRepository.findById(paymentService.findMaxId()).orElseGet(()->{
-                System.out.println("타나2??");
-                return null;
-            }));
+            orderDetail1.setOrderList(orderList);
+
+            System.out.println(Objects.requireNonNull(orderList).getId() + "주문에 상세주문 1건 추가");
+
             System.out.println("1."+e.get("memo").toString());
             orderDetail1.setMemo(e.get("memo").toString());
 

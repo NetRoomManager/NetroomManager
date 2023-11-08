@@ -1,16 +1,10 @@
 package com.itbank.controller;
 
 import com.itbank.model.*;
+import com.itbank.model.dto.Summoner;
 import com.itbank.repository.jpa.OrderListRepository;
 import com.itbank.repository.jpa.TicketSalesRepository;
-import com.itbank.service.PaymentService;
-import com.itbank.service.UserDetailsServiceImpl;
-import com.itbank.service.UserService;
-import com.itbank.model.PaymentResponse;
-import com.itbank.model.Ticket;
-import com.itbank.model.User;
 import com.itbank.service.*;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,9 +16,13 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Controller
 @Slf4j
@@ -58,6 +56,8 @@ public class AuthController {
     @Autowired
     private SeatService seatService;
 
+    @Autowired
+    private RiotAPIService riotAPIService;
 
     @GetMapping("/login")
     public String login() {
@@ -243,5 +243,11 @@ public class AuthController {
         }
 
         return msg;
+    }
+
+    @GetMapping("/summoner/{lolid}")
+    @ResponseBody
+    public Summoner getSummonerTire(@PathVariable("lolid") String lolid) {
+        return riotAPIService.getSummoner(lolid);
     }
 }

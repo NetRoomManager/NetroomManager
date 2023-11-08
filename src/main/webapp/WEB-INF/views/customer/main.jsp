@@ -509,26 +509,25 @@
 	}
 
 
-
-
 	function connect() {
-		let socket = new SockJS('/chat');
-		stompClient = Stomp.over(socket);
 		stompClient.connect({}, function(frame) {
 			stompClient.subscribe('/user/queue/messages', function(messageOutput) {
 				showMessageOutput(JSON.parse(messageOutput.body));
 			});
+		});
+	}
+
+	function connectTimeServer() {
+		let socket = new SockJS('/chat');
+		stompClient = Stomp.over(socket);
+
+		stompClient.connect({}, function(frame) {
 			stompClient.subscribe('/user/queue/alert', function(param) {
-
-			    const message = JSON.parse(param.body);
-
-			    let msg = message.msg;
-			    let time = message.time;
-
-			    alert(msg);
-
-			    location.href='/auth/logout?time='+time;
-
+				const message = JSON.parse(param.body);
+				let msg = message.msg;
+				let time = message.time;
+				location.href='/auth/logout?time='+time;
+				alert(msg);
 			});
 		});
 	}
@@ -599,6 +598,8 @@
 
 		return year + '-' + month + '-' + date + 'T' + hours + ':' + minutes + ':' + seconds;
 	}
+
+	connectTimeServer();
 </script>
 
 

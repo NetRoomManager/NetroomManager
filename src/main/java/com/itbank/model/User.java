@@ -49,4 +49,6 @@ public class User implements Serializable {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
     private RemainingTime remainingTime;
+
+
 }
