@@ -5,6 +5,7 @@ import com.itbank.model.Seat;
 import com.itbank.model.dto.SeatInfoDTO;
 import com.itbank.repository.jpa.RemainingTimeRepository;
 import com.itbank.repository.jpa.SeatRepository;
+import com.itbank.repository.jpa.UserRepository;
 import com.itbank.repository.mybatis.SeatDAO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,6 +30,9 @@ public class SeatService {
 
     @Autowired
     private SeatDAO seatDAO;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public SeatService(SeatDAO seatDAO) {
         this.seatDAO = seatDAO;

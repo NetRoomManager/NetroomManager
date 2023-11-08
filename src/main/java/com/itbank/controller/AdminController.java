@@ -155,10 +155,14 @@ public class AdminController {
     public ModelAndView seat() {
         ModelAndView mav = new ModelAndView("/admin/seat_manage");
         List<SeatInfoDTO> seatList = seatService.selectSeatList();
+
+
         mav.addObject("seatList",seatList);
         mav.addObject("currentPage", "seat");
+
         return mav;
     }
+
 
     // 매출관리
     @GetMapping("/sales")
