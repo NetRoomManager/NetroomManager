@@ -1,10 +1,8 @@
 package com.itbank.service;
 
 import com.itbank.model.*;
-import com.itbank.repository.jpa.RemainingTimeRepository;
-import com.itbank.repository.jpa.RoleRepository;
-import com.itbank.repository.jpa.UserRepository;
-import com.itbank.repository.jpa.UserRoleRepository;
+import com.itbank.repository.jpa.*;
+import com.itbank.repository.mybatis.DropOutUserDAO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -14,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.persistence.EntityManager;
 import java.sql.Date;
 import java.util.*;
 
@@ -32,6 +31,9 @@ public class UserService {
     private RoleRepository roleRepository;
 
     @Autowired
+    private DropOutUserDAO dropOutUserDAO;
+
+    @Autowired
     private UserRoleRepository userRoleRepository;
 
     @Autowired
@@ -39,6 +41,8 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired DropOutUserRepository dropOutUserRepository;
 
     public void createAdmin(User paramUser) {
 
@@ -242,4 +246,7 @@ public class UserService {
     }
 
 
+    public Integer delete(Long id) {
+        return Integer.valueOf(dropOutUserDAO.insert(id));
+    }
 }

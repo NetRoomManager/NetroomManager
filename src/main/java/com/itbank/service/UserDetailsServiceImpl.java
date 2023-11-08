@@ -46,7 +46,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException(username + "님의 정보를 찾을 수 없습니다"));
 
         if (customUser.getDropOutUser() != null) {
-            throw new AuthenticationServiceException("탈퇴된 계정입니다");
+            throw new UsernameNotFoundException("탈퇴된 계정입니다");
         }
 
         // 유저 로그 추가

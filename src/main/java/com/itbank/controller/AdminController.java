@@ -10,6 +10,7 @@ import com.itbank.service.ProductService;
 import com.itbank.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -51,6 +52,17 @@ public class AdminController {
         mav.addObject("productList", productList);
         mav.addObject("productCategoryList", productCategoryList);
         return mav;
+    }
+
+    @GetMapping("/userdelete/{id}")
+    public String userDelete(@PathVariable("id") Long id) {
+
+        log.info("id :" + id);
+        // delete지만 insert여
+        if(userService.delete(id) != null){
+            throw new UsernameNotFoundException("삭제 실패");
+        }
+        return "redirect:/admin/user";
     }
 
     // 상품목록 추가
