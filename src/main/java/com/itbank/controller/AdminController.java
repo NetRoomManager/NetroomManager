@@ -1,6 +1,7 @@
 package com.itbank.controller;
 
 import com.itbank.model.Ticket;
+import com.itbank.model.dto.ProductSalesDTO;
 import com.itbank.model.dto.SeatInfoDTO;
 import com.itbank.repository.jpa.ProductRepository;
 import com.itbank.service.*;
@@ -42,10 +43,14 @@ public class AdminController {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private ProductSalesService productSalesService;
+
     // 상품관리
     @GetMapping("/product")
     public ModelAndView product() {
         ModelAndView mav = new ModelAndView("/admin/product_manage");
+
         List<ProductDTO> productList = productService.selectAllProduct();
         List<ProductCategory> productCategoryList = productService.selectAllProductCategory();
         mav.addObject("productList", productList);
@@ -163,8 +168,18 @@ public class AdminController {
 
     // 상품 매출
     @GetMapping("/productsales")
-    public String productSale() {
-        return "/admin/product_sales_manage";
+    public ModelAndView productSale(HttpServletRequest request) throws ParseException {
+        ModelAndView mav = new ModelAndView("/admin/product_sales_manage");
+        // 매출 리스트 조인해서 리스트 보내기
+        List<ProductSalesDTO> proSalesList = productSalesService.proSalesAllList(request);
+        log.info("productList.size() : " + proSalesList.size());
+        mav.addObject("proSalesList",proSalesList);
+        log.info("상품 매출 불러오기");
+
+//        mav.addObject("total", ticketSalesService.selectTotal());
+//        log.info("총액 불러옴");
+
+        return mav;
     }
 
     // 이용권 매출

@@ -4,18 +4,17 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <!-- mapper의 namespace는 연결할 dao 인터페이스의 "풀네임"을 작성한다. -->
-<mapper namespace="com.itbank.repository.mybatis.TicketSalesDAO">
-
-    <select id="selectAll" resultType="ticketsales" parameterType="map">
+<mapper namespace="com.itbank.repository.mybatis.ProductSalesDAO">
+    <select id="proSalesAllSelect" resultType="productsales" parameterType="map">
         SELECT
         s.id as id,
         s.totalPrice as orderTotalPrice,
         p.time as salesDate,
         u.username as username,
         p.id as paymentId,
-        t.name as ticketName
+        t.name as productName
         FROM
-        ticket_sales s
+        product_sales s
         JOIN
         payment p ON s.PAYMENT_ID = p.id
         JOIN
@@ -25,11 +24,11 @@
         JOIN
         users u ON u.id = o.USER_ID
         JOIN
-        ticket_detail d ON d.PAYMENT_ID = p.id
+        order_detail d ON d.PAYMENT_ID = p.id
         JOIN
-        ticket t ON d.TICKET_ID = t.id
+        product t ON d.product_id = t.id
         <if test="startDate != null and startDate != ''">
-            AND  p.time &gt;= TO_DATE(#{startDate},'yyyy-MM-dd')
+            AND p.time &gt;= TO_DATE(#{startDate},'yyyy-MM-dd')
         </if>
         <if test="endDate != null and endDate != ''">
             AND p.time &lt;= TO_DATE(#{endDate}, 'yyyy-MM-dd') + 1
@@ -37,16 +36,4 @@
         order by salesDate DESC
     </select>
 
-    <select id="selectTotal" resultType="int">
-        select sum(s.totalprice) as orderTotalPrice
-        from ticket_sales s, payment p, order_list o
-        where s.payment_id=p.id and p.id=o.payment_id
-    </select>
-
-
-<!--    <select id="select" resultType="ticketsales">-->
-<!--        -->
-<!--    </select>-->
-
 </mapper>
-

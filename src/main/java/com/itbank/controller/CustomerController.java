@@ -95,6 +95,7 @@ public class CustomerController {
 
 
             orderDetailService.addDetail(orderDetail1);
+            System.out.println("controller orderDetail1 : "+orderDetail1);
         });
         return "성공";
     }

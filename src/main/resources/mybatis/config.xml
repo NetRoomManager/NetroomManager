@@ -6,6 +6,7 @@
 <configuration>
     <typeAliases>
         <typeAlias type="com.itbank.model.dto.TicketSalesDTO" alias="ticketsales"/>
+        <typeAlias type="com.itbank.model.dto.ProductSalesDTO" alias="productsales"/>
         <typeAlias type="com.itbank.model.ProductDTO" alias="product"/>
         <typeAlias type="com.itbank.model.ProductCategory" alias="productCategory"/>
         <typeAlias type="com.itbank.model.Product" alias="productEntity"/>

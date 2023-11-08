@@ -5,6 +5,7 @@ import com.itbank.model.ProductDTO;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Objects;
 
 @Repository
 public interface ProductDAO {
@@ -23,4 +24,6 @@ public interface ProductDAO {
     String findFile(int id);
 
     int update(ProductDTO dto);
+
+
 }

@@ -12,6 +12,8 @@ public class OrderDetailService {
 
     public void addDetail(OrderDetail orderDetail1) {
         OrderDetail orderDetail = orderDetailRepository.save(orderDetail1);
+        System.out.println("service orderDetail1 : "+orderDetail1);
+        System.out.println("service orderDetail : "+orderDetail);
         System.out.println("test :" + orderDetail.getMemo());
     }
 }

@@ -88,17 +88,15 @@
                     class="nav-link py-3 active" href="${cpath }/admin/ticket" style="background-color: #FF8339;">이용권</a>
         </nav>
         <div class="container pt-4">
-            <form class="d-flex">
+            <form class="d-flex"  id="rangeDate" action="/admin/productsales" method="get">
                 <div class="mb-3 pe-2">
-                  <input type="number" class="form-control" id="searchRangeOne">
+                    <input type="date" class="form-control" id="startDate" name="startDate">
                 </div>
                 <p class="h3">~</p>
                 <div class="mb-3 px-2">
-                  <input type="number" class="form-control" id="searchRangeTwo">
+                    <input type="date" class="form-control" id="endDate" name="endDate">
                 </div>
-                <div>
-                    <button type="submit" class="btn btn-secondary" >기간검색</button>
-                </div>
+                <button type="submit" class="mb-3 btn btn-secondary" id="searchRange">기간검색</button>
             </form>
         </div>
         <div class="container">
@@ -117,16 +115,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                <c:forEach var="list" items="${list}">
+               <c:forEach var="list" items="${proSalesList}">
                     <tr class="text-center">
                         <td class="pt-3">#</td>
-                        <td class="pt-3" >Mark</td>
-                        <td class="pt-3" >Otto</td>
-                        <td class="pt-3" >@mdo</td>
-                        <td class="pt-3" >Mark</td>
-                        <td class="pt-3" >Otto</td>
-                        <td class="pt-3" >@mdo</td>
-                        <td class="pt-3" >Mark</td>
+                        <td class="pt-3" >${list.id}</td>
+                        <td class="pt-3" >${list.paymentMethod}</td>
+                        <td class="pt-3" >${list.productName}</td>
+                        <td class="pt-3" >${list.orderTotalPrice}</td>
+                        <td class="pt-3" >${list.salesDate}</td>
+                        <td class="pt-3" >${list.username}</td>
+                        <td class="pt-3" >${list.paymentId}</td>
                         <td><button type="button" class="btn btn-outline-danger" disabled>삭제</button></td>
                         <td><button type="button" class="btn btn-outline-warning" disabled>조회</button></td>
                     </tr>

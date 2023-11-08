@@ -8,11 +8,13 @@ import com.itbank.repository.jpa.ProductCategoryRepository;
 import com.itbank.repository.jpa.ProductRepository;
 import com.itbank.repository.mybatis.ProductCategoryDAO;
 import com.itbank.repository.mybatis.ProductDAO;
+import com.itbank.repository.mybatis.ProductSalesDAO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @Slf4j
@@ -31,23 +33,7 @@ public class ProductService {
     @Autowired
     private FileComponent fileComponent;
 
-//    public void addProduct(Product paramProduct, MultipartFile img) {
-//        Product product = new Product();
-//
-//        if(!img.isEmpty()) {
-//            String filePath = fileComponent.upload(img);
-//
-//            product.setImg(filePath);
-//        }
-//
-//        product.setProductCategory(paramProduct.getProductCategory());
-//        product.setName(paramProduct.getName());
-//        product.setDetail(paramProduct.getDetail());
-//        product.setCount(paramProduct.getCount());
-//        product.setPrice(paramProduct.getPrice());
-//        product.setDcRate(paramProduct.getDcRate());
-//        productRepository.save(product);
-//    }
+
 
     public int addProduct(ProductDTO dto) {
         int id = 0;
@@ -127,4 +113,6 @@ public class ProductService {
         int row = productDAO.update(dto);
         return id;
     }
+
+
 }

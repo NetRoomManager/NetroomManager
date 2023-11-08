@@ -30,5 +30,9 @@ public class OrderDetail {
     @Column(nullable = false)
     private Integer count;   // 수량
 
+    @OneToOne
+    @JoinColumn(name = "payment_id", nullable = false)
+    private Payment paymentId;
+
 }
 
