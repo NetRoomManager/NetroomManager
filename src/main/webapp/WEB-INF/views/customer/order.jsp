@@ -322,9 +322,9 @@
         var seconds = today.getSeconds();  // 초
         var milliseconds = today.getMilliseconds();
 
-        var makeMerchantUid = hours + minutes + seconds + milliseconds + "";
+        var makeMerchantUid = hours.toString() + minutes.toString() + seconds.toString() + milliseconds.toString();
 
-        console.log(makeMerchantUid);
+        console.log("결제 고유번호: " + makeMerchantUid);
 
         IMP.init("imp64247670"); // 가맹점 식별코드
 
@@ -381,20 +381,24 @@
             console.log('res: ' + res);
             paymentCallback(res, success => {
                 // success 값을 이용하여 원하는 작업 수행
-                console.log(success);
+                console.log('콜백함수에 들어옴: ' + success);
 
-                const url = '/customer/order/addDetail';
+                if(success) {
+                    console.log('order_detail 추가');
 
-                fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json;charset=utf-8'
-                    },
-                    body: JSON.stringify(menuList),
-                })
-                    .then(res => res.text())
-                    .then(data => console.log('Controller에서 받은 데이터: ' + data));
+                    const url = '/customer/order/addDetail';
 
+                    fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json;charset=utf-8'
+                        },
+                        body: JSON.stringify(menuList),
+                    })
+                        .then(res => res.text())
+                        .then(data => console.log('Controller에서 받은 데이터: ' + data));
+
+                }
             });
         });
     }

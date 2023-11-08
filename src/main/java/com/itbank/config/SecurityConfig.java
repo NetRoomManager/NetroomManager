@@ -14,6 +14,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.InMemoryOAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
@@ -91,12 +92,13 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .failureHandler(((request, response, exception) -> {
                     if(exception instanceof AuthenticationServiceException) {
                         response.sendRedirect("/auth/buyTicket");
-                    } else {
-                        response.sendRedirect("/login?error");
+                    }
+                    else {
+                        response.sendRedirect("/auth/login?error");
                     }
                 }))
                 // 성공시 URL
-//                .defaultSuccessUrl("/")
+                .defaultSuccessUrl("/")
                 // 로그인 처리 담당할 주소
                 .loginProcessingUrl("/auth/login")
                 .and()

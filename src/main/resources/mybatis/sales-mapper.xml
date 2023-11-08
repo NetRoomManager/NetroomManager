@@ -7,6 +7,8 @@
 <mapper namespace="com.itbank.repository.mybatis.TicketSalesDAO">
 
     <select id="selectAll" resultType="ticketsales" parameterType="map">
+
+
         SELECT
         s.id as id,
         s.totalPrice as orderTotalPrice,
@@ -28,25 +30,28 @@
         ticket_detail d ON d.PAYMENT_ID = p.id
         JOIN
         ticket t ON d.TICKET_ID = t.id
+        where
+
         <if test="startDate != null and startDate != ''">
-            AND  p.time &gt;= TO_DATE(#{startDate},'yyyy-MM-dd')
+            AND  p.time &gt;= TO_DATE('2023-11-01','yyyy-MM-dd')
         </if>
         <if test="endDate != null and endDate != ''">
-            AND p.time &lt;= TO_DATE(#{endDate}, 'yyyy-MM-dd') + 1
+            AND and p.time &lt;= TO_DATE('2023-11-08','yyyy-MM-dd')+1
         </if>
         order by salesDate DESC
     </select>
 
     <select id="selectTotal" resultType="int">
         select sum(s.totalprice) as orderTotalPrice
-        from ticket_sales s, payment p, order_list o
+        from
+        ticket_sales s,
+        payment p,
+        order_list o
         where s.payment_id=p.id and p.id=o.payment_id
     </select>
 
-
-<!--    <select id="select" resultType="ticketsales">-->
-<!--        -->
-<!--    </select>-->
+    <!--    <select id="select" resultType="ticketsales">-->
+    <!--        -->
+    <!--    </select>-->
 
 </mapper>
-
