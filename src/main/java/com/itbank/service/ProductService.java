@@ -52,18 +52,13 @@ public class ProductService {
     public int addProduct(ProductDTO dto) {
         int id = 0;
         if(!dto.getUpload().isEmpty()) {
-            System.out.println("파일업로드0");
             String fileName = fileComponent.upload(dto.getUpload());
             dto.setImg(fileName);
         }
-        System.out.println("파일업로드1");
         int row = productDAO.insertProduct(dto);
-        System.out.println("파일업로드2");
         if(row != 0) {
             id = productDAO.selectMaxId();
-            System.out.println("파일업로드3");
         }
-        System.out.println("파일업로드4");
         log.info(dto.getProductCategoryName());
         return id;
     }
@@ -113,4 +108,23 @@ public class ProductService {
         return productCategoryDAO.selectAll();
     }
 
+    public ProductDTO selectOne(int id) { return productDAO.selectOne(id); }
+
+    public int deleteProduct(int id) {
+        String fileName = productDAO.findFile(id);
+        if(fileName != null) {
+            fileComponent.deleteFile(fileName);
+        }
+        return productDAO.deleteProduct(id);
+    }
+
+    public int updateProduct(ProductDTO dto) {
+        int id = 0;
+        String fileName = productDAO.findFile(Math.toIntExact(dto.getId()));
+        fileComponent.deleteFile(fileName);
+        fileName = fileComponent.upload(dto.getUpload());
+        dto.setImg(fileName);
+        int row = productDAO.update(dto);
+        return id;
+    }
 }

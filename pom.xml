@@ -289,6 +289,7 @@
 			<version>${org.springframework-version}</version>
 		</dependency>
 
+		<!-- 레디스에 자바 시간객체 보내려고 추가함 -->
 		<dependency>
 			<groupId>com.fasterxml.jackson.datatype</groupId>
 			<artifactId>jackson-datatype-jsr310</artifactId>

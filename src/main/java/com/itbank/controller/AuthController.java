@@ -1,14 +1,9 @@
 package com.itbank.controller;
 
 import com.itbank.model.*;
+import com.itbank.model.dto.Summoner;
 import com.itbank.repository.jpa.OrderListRepository;
 import com.itbank.repository.jpa.TicketSalesRepository;
-import com.itbank.service.PaymentService;
-import com.itbank.service.UserDetailsServiceImpl;
-import com.itbank.service.UserService;
-import com.itbank.model.PaymentResponse;
-import com.itbank.model.Ticket;
-import com.itbank.model.User;
 import com.itbank.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,9 +16,13 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Controller
 @Slf4j
@@ -57,8 +56,20 @@ public class AuthController {
     @Autowired
     private SeatService seatService;
 
+    @Autowired
+    private RiotAPIService riotAPIService;
+
     @GetMapping("/login")
-    public void login() {
+    public String login() {
+       /* // 임시로 좌석상태를 불러와서
+        List<Object[]> seatList = seatService.selectSeatList();
+        for( Object[] s : seatList){
+            if(s.getClass().get == 1){  // 이용가능 좌석일 경우 login*/
+                return "/auth/login";
+ /*           }
+        }
+        // 사용불가면 사용불가jsp로 보내기
+        return "/auth/cant_use_form";*/
     }
 
     @GetMapping("/test")
@@ -93,6 +104,25 @@ public class AuthController {
         // 세션에 SPRING_SECURITY_CONTEXT라는 키 값으로 SecurityContext를 저장합니다.
         HttpSession session = request.getSession(true);
         session.setAttribute(HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY, SecurityContextHolder.getContext());
+
+        return "redirect:/";
+    }
+
+    @GetMapping("/createUsers")
+    public String createUsers(){
+        log.info("임시 user 생성");
+        for(int i = 1; i  < 11; i++){
+
+            User user = new User();
+            user.setUsername("user" + i);
+            user.setMobile(null);
+            user.setPassword("1234");
+            user.setName("user" + i);
+            user.setEmail("admin" + i + "@naver.com");
+            user.setBirth(null);
+
+            userService.createUsers(user);
+        }
 
         return "redirect:/";
     }
@@ -157,6 +187,8 @@ public class AuthController {
 
             ticketSalesRepository.save(ticketSales);
 
+
+
             result.put("success", true);
         }else{
             result.put("success",false);
@@ -211,5 +243,11 @@ public class AuthController {
         }
 
         return msg;
+    }
+
+    @GetMapping("/summoner/{lolid}")
+    @ResponseBody
+    public Summoner getSummonerTire(@PathVariable("lolid") String lolid) {
+        return riotAPIService.getSummoner(lolid);
     }
 }

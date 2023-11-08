@@ -52,4 +52,38 @@
     <select id="findMaxId" resultType="long">
         select max(id) as id from product;
     </select>
+    <select id="selectOne" parameterType="int" resultType="product">
+        select
+            p.id,
+            p.name,
+            c.name as productCategoryName,
+            p.price,
+            p.count,
+            p.dcRate,
+            p.img,
+            p.detail
+        from product p
+            join product_category c
+            on p.product_category_id = c.id
+        where
+            p.id = #{id}
+    </select>
+    <select id="findFile" resultType="String" parameterType="int">
+        select img from product where id = #{id}
+    </select>
+    <delete id="deleteProduct" parameterType="int">
+        delete product where id = #{id}
+    </delete>
+    <update id="update" parameterType="product">
+        update product
+        set
+            name = #{name},
+            img = #{img},
+            price = #{price},
+            dcRate = #{dcRate},
+            count = #{count},
+            detail = #{detail}
+        where
+            id = #{id}
+    </update>
 </mapper>

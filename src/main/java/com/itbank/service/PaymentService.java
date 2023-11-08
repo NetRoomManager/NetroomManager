@@ -9,6 +9,8 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @Transactional
 @Slf4j
@@ -31,10 +33,16 @@ public class PaymentService {
     private TicketDetailRepository ticketDetailRepository;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private OrderListRepository orderListRepository;
 
     @Autowired
     private PaymentDAO paymentDAO;
+
+    @Autowired
+    private RemainingTimeRepository remainingTimeRepository;
 
     public Payment buyTicket(PaymentResponse paymentResponse) {
         String payMethod = paymentResponse.getPg_provider();
@@ -90,6 +98,9 @@ public class PaymentService {
         ticketDetailRepository.save(ticketDetail);
 
         System.out.println("티켓 상세정보 가져옴");
+
+        userService.updateRemainingTime(user, ticket);
+
 
         return payment;
     }

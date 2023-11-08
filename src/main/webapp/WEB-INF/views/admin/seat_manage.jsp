@@ -57,90 +57,19 @@
 			</li>
 		</ul>
 	</div>
-	<div class="modal fade" id="productUpdate" data-bs-backdrop="static"
-		 data-bs-keyboard="false" tabindex="-1"
-		 aria-labelledby="staticBackdropLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg">
-			<div class="modal-content">
-				<form action="">
-					<div class="modal-header">
-						<h3 class="modal-title">상품등록</h3>
-						<button type="button" class="btn-close" data-bs-dismiss="modal"
-								aria-label="Close"></button>
-					</div>
-					<div class="modal-body container">
-						<div class="row justify-content-center align-items-center mb-3">
-							<div class="col-6 text-center">
-								<img id="preview" class="img-thumbnail mb-2"
-									 src="../img/1422005677144.png" alt="예시 이미지"
-									 style="max-width: 200px; max-height: 200px;"> <input
-									class="form-control form-control-sm" id="image" name="image"
-									accept="image/*" type="file">
-							</div>
-						</div>
-						<table class="table table-borderless">
-							<tbody>
-							<tr>
-								<th>제품/이용권</th>
-								<td><select class="form-select"
-											aria-label="Default select example">
-									<option selected>이용권 선택 시 시간 필수</option>
-									<option value="1">제품</option>
-									<option value="2">이용권</option>
-								</select></td>
-								<th>사용시간</th>
-								<td><input class="form-control" type="text"
-										   placeholder="Default input" aria-label="default input example">
-								</td>
-							</tr>
-							<tr>
-								<th>상품분류</th>
-								<td><input class="form-control" type="text"
-										   placeholder="Default input" aria-label="default input example">
-								</td>
-								<th colspan="2">상품설명</th>
-							</tr>
-							<tr>
-								<th>상품명</th>
-								<td><input class="form-control" type="text"
-										   placeholder="Default input" aria-label="default input example">
-								</td>
-								<td colspan="2" rowspan="2" class="form-floating"><textarea
-										class="form-control" placeholder="Leave a comment here"
-										id="floatingTextarea" style="height: 90px;"></textarea> <label
-										for="floatingTextarea">Comments</label></td>
-							</tr>
-							<tr>
-								<th>가격</th>
-								<td><input class="form-control" type="text"
-										   placeholder="Default input" aria-label="default input example">
-								</td>
-							</tr>
-							</tbody>
-						</table>
-					</div>
-					<div class="modal-footer">
-						<button type="button" class="btn btn-secondary"
-								data-bs-dismiss="modal">취소</button>
-						<button type="button" class="btn btn-primary">등록</button>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
+
 </nav>
 <nav id="menu_bar" class="nav nav-pills flex-column py-3 text-center"
 	 style="position: absolute; height: 100%;">
 	<a class="nav-link py-3" href="${cpath }/admin/order">주문</a>
 	<a class="nav-link py-3" href="${cpath }/admin/product">재고</a>
-	<a class="nav-link py-3" aria-current="page"
-	   href="${cpath }/admin/productsales">매출</a> <a
-		class="nav-link py-3" href="${cpath }/admin/user">회원</a> <a
-		class="nav-link py-3 active" href="${cpath }/admin/seat"
-		style="background-color: #FF8339;">좌석</a> <a class="nav-link py-3"
-													 href="${cpath }/admin/ticket">이용권</a>
+	<a class="nav-link py-3" aria-current="page" href="${cpath }/admin/productsales">매출</a>
+	<a class="nav-link py-3" href="${cpath }/admin/user">회원</a>
+	<a class="nav-link py-3 active" href="${cpath }/admin/seat">좌석</a>
+	<a class="nav-link py-3" href="${cpath }/admin/ticket">이용권</a>
 </nav>
 
+<!-- 좌석 시간 추가, 상태  Modal -->
 <div class="modal fade" id="seat_detail" aria-hidden="true"
 	 data-bs-backdrop="static" data-bs-keyboard="false"
 	 aria-labelledby="seat_detailLabel" tabindex="-1">
@@ -177,7 +106,9 @@
 							<option value="6">6시간 추가</option>
 						</select>
 					</div>
-					<button class="btn btn-success" type="submit" onclick="changeSeatStatus()">수정하기</button>
+					<button class="btn btn-success" type="button" id="changeSeat"
+							data-bs-id=""
+					>수정하기</button>
 				</form>
 			</div>
 			<!-- Modal footer -->
@@ -192,8 +123,8 @@
 
 
 
+<%--채팅 모달--%>
 
-<!-- 좌석 시간 추가, 상태  Modal -->
 <div class="modal fade" id="seat_chat" aria-hidden="true"
 	 data-bs-backdrop="static" data-bs-keyboard="false"
 	 aria-labelledby="seat_chatLabel2" tabindex="-1">
@@ -230,7 +161,6 @@
 	</div>
 </div>
 
-<%--채팅 모달--%>
 <script>
 
 	var popoverTriggerList = [].slice.call(document
@@ -248,23 +178,7 @@
 			},
 		});
 	});
-	var imageInput = document.getElementById('image');
-	imageInput.addEventListener('change', previewImage);
 
-	function previewImage(event) {
-		var input = event.target;
-		var preview = document.getElementById('preview');
-
-		if (input.files && input.files[0]) {
-			var reader = new FileReader();
-
-			reader.onload = function() {
-				preview.src = reader.result;
-			};
-
-			reader.readAsDataURL(input.files[0]);
-		}
-	}
 </script>
 
 
@@ -297,11 +211,13 @@
 					 style="width: 25%; height: 25%;" data-bs-toggle="modal"
 					 data-bs-target="#seat_detail"
 					 data-bs-id="${seat.seatId}"
+					 data-bs-userid="${seat.user_id}"
 					 onclick="setModalSeatId(this)">
 					<div class="seat_id card-header">좌석번호[ ${seat.seatId} ]</div>
 					<div class="seat_remain_time card-body">
-						<pre>남은시간:</pre>
-						<pre>01:35</pre>
+						<pre>남은시간: </pre>
+						<pre>${seat.remainingTime}</pre>
+						<pre>유저아이디 ${seat.user_id}</pre>
 					</div>
 					<div class="card-footer">
 							${stateCmt}
@@ -314,41 +230,135 @@
 
 </div>
 <script>
-	let seatId;
+	let selectedSeat = null; // 선택한 카드 정보를 저장할 변수
+	const canUseSelect = document.getElementById('can_use');
+	const addHourSelect = document.getElementById('add_hour');
+
+
 	function setModalSeatId(card) {
-		seatId = card.getAttribute('data-bs-id')
-		const modalSeatId = document.getElementById('modal_seat_id')
-		modalSeatId.textContent = seatId;
-	}
+		if (card) {
+			selectedSeat = {
+				seatId: card.getAttribute('data-bs-id'),
+				userId: card.getAttribute('data-bs-userid')
+			};
+			const modalSeatId = document.getElementById('modal_seat_id');
+			modalSeatId.textContent = selectedSeat.seatId;
+			console.log('seatId: ' + selectedSeat.seatId);
 
-	function changeSeatStatus(){
-		const selectElement = document.getElementById('can_use')
-		const selectOption = selectElement.options[selectElement.selectedIndex]
-		const seat = document.querySelector(`[data-bs-id="${seatId}"]`)
+			// '수정하기' 버튼에 data-bs-id 속성 설정
+			const changeSeatButton = document.getElementById('changeSeat');
+			changeSeatButton.setAttribute('data-bs-id', selectedSeat.seatId);
 
-		switch (selectOption.value){
-			case 1:
-				seat.classList.remove('bg-secondary','bg-warning','bg-danger')
-				seat.classList.add('bg-primary')
-				seat.querySelector('.card-footer').textContent = '사용가능'
-				break;
-			case 2:
-				seat.classList.remove('bg-primary', 'bg-waring', 'bg-danger')
-				seat.classList.add('bg-secondary')
-				seat.querySelector('.card-footer').textContent = '사용중'
-				break;
-			case 3:
-				seat.classList.remove('bg-secondary','bg-primary','bg-danger')
-				seat.classList.add('bg-warning')
-				seat.querySelector('.card-footer').textContent = '예약석'
-				break;
-			case 4:
-				seat.classList.remove('bg-secondary','bg-primary','bg-warning')
-				seat.classList.add('bg-danger')
-				seat.querySelector('.card-footer').textContent = '사용불가'
-				break;
+			canUseSelect.disabled = false;
+			addHourSelect.disabled = true;
+			addHourSelect.value = '0';
+			canUseSelect.value = '0';
+			if (selectedSeat.userId) {
+				// user_id가 있는 경우에는 canUseSelect 변경을 막음
+				canUseSelect.disabled = true;
+				canUseSelect.value = '2'; // 예를 들어, 사용중으로 설정
+				addHourSelect.disabled = false;
+			} else {
+				// user_id가 없는 경우에는 canUseSelect 변경 가능
+				canUseSelect.disabled = false;
+				addHourSelect.value = '0'; // 시간 추가하기의 기본값 설정
+			}
 		}
 	}
+
+	const changeSeat = document.getElementById('changeSeat');
+	changeSeat.addEventListener('click', changeSeatStatus);
+
+	function changeSeatStatus(event) {
+		if (selectedSeat === null) {
+			return;
+		}
+		const seatId = event.target.getAttribute('data-bs-id')
+		const canUse = canUseSelect.value;
+		const addHour = addHourSelect.value;
+		const changeSeat = document.getElementById('changeSeat');
+		const changeSeatID = changeSeat.getAttribute('data-bs-id');
+		console.log('changeSeatID : ' + changeSeatID);
+		const seat = selectedSeat.seatId;
+		const userId = selectedSeat.userId;
+		console.log('userId: ' + userId);
+		console.log('seat: ' + seat);
+		console.log('seatId: ' + seatId);
+
+		console.log('canUse' + canUse)
+		console.log('addHour' + addHour)
+
+		const cards = document.querySelectorAll('.card');
+		let selectedCard = null; // 선택된 카드를 저장할 변수
+
+		cards.forEach(card => {
+			if (card.getAttribute('data-bs-id') === changeSeatID) {
+				selectedCard = card; // 선택된 카드를 변수에 할당
+			}
+		});
+		if (selectedCard) {
+			console.log('card 있음' + selectedCard)
+			switch (canUse) {
+				case '1':
+					console.log(seat)
+					selectedCard.classList.remove('bg-secondary', 'bg-warning', 'bg-danger')
+					selectedCard.classList.add('bg-primary')
+					selectedCard.querySelector('.card-footer').textContent = '사용가능'
+					break;
+				case '2':
+					console.log(seat)
+					selectedCard.classList.remove('bg-primary', 'bg-waring', 'bg-danger')
+					selectedCard.classList.add('bg-secondary')
+					selectedCard.querySelector('.card-footer').textContent = '사용중'
+					break;
+				case '3':
+					console.log(seat)
+					selectedCard.classList.remove('bg-secondary', 'bg-primary', 'bg-danger')
+					selectedCard.classList.add('bg-warning')
+					selectedCard.querySelector('.card-footer').textContent = '예약석'
+					break;
+				case '4':
+					console.log(seat)
+					selectedCard.classList.remove('bg-secondary', 'bg-primary', 'bg-warning')
+					selectedCard.classList.add('bg-danger')
+					selectedCard.querySelector('.card-footer').textContent = '사용불가'
+					break;
+			}
+			const formData = new FormData();
+
+
+			formData.append('seat_state', canUse);
+			formData.append('hour', addHour);
+			formData.append('seatId', seatId);
+			console.log('seat_state', canUse)
+
+			console.log('hour', addHour)
+			console.log('seatId', seatId)
+			console.log('console')
+			fetch('/admin/add_update', {
+				method: 'POST',
+				body: formData
+			})
+					.then(resp => {
+						if (resp.ok) {
+							console.log('폼 데이터 전송이 성공하였습니다.')
+							location.reload();
+						} else {
+							console.error('폼 데이터 전송이 실패하였습니다.')
+						}
+					})
+					.catch(error => {
+						console.error('오류가 발생하였습니다', error)
+					})
+
+		}
+
+
+
+
+
+	}
+
 
 </script>
 
