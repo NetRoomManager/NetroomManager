@@ -1,15 +1,16 @@
 package com.itbank.controller;
 
-import com.itbank.model.Ticket;
+import com.itbank.model.*;
 import com.itbank.model.dto.SeatInfoDTO;
+import com.itbank.repository.jpa.DropOutUserRepository;
 import com.itbank.repository.jpa.ProductRepository;
+import com.itbank.repository.mybatis.DropOutUserDAO;
 import com.itbank.service.*;
-import com.itbank.model.ProductCategory;
-import com.itbank.model.ProductDTO;
 import com.itbank.service.ProductService;
 import com.itbank.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +20,9 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/admin")
@@ -44,6 +47,12 @@ public class AdminController {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private DropOutUserRepository dropOutUserRepository;
+
+    @Autowired
+    private DropOutUserDAO dropOutUserDAO;
+
     // 상품관리
     @GetMapping("/product")
     public ModelAndView product() {
@@ -61,11 +70,33 @@ public class AdminController {
 
         log.info("id :" + id);
         // delete지만 insert여
-        if(userService.delete(id) != null){
-            throw new UsernameNotFoundException("삭제 실패");
-        }
+
+        User user = userService.findById(id).orElseThrow(() -> new UsernameNotFoundException("없는 유저입니다"));
+
+        DropOutUser dropOutUser = dropOutUserRepository.findByUser(user).orElseGet(() -> {
+            DropOutUser newDropOutUser = new DropOutUser();
+            newDropOutUser.setUser(user);
+            return dropOutUserRepository.save(newDropOutUser);
+        });
+
+        log.info(dropOutUser.getUser().getUsername() + ": 탈퇴완료");
+
         return "redirect:/admin/user";
     }
+
+    @GetMapping("/userUndelete/{id}")
+    public String userUndelete(@PathVariable("id") Long id) {
+        User user = userService.findById(id).orElseThrow(() -> new UsernameNotFoundException("없는 유저입니다"));
+
+        DropOutUser dropOutUser = dropOutUserRepository.findByUser(user).orElseThrow(() -> new RuntimeException("탈퇴하지 않은 유저입니다"));
+
+        int row = dropOutUserDAO.delete(dropOutUser.getId());
+
+        log.info(row + "행 복구완료");
+
+        return "redirect:/admin/user";
+    }
+
 
     // 상품목록 추가
     @PostMapping("/addProductCategory")
@@ -211,6 +242,13 @@ public class AdminController {
             mav.addObject("list",userService.findUserAndLastLog(Objects.requireNonNull(type), keyword));
         }
         mav.addObject("currentPage", "user");
+        List<DropOutUser> dropOutList = dropOutUserRepository.findAll();
+        Map<Long, Boolean> dropOutMap = dropOutList.stream()
+                .collect(Collectors.toMap(
+                        dropOutUser -> dropOutUser.getUser().getId(),
+                        dropOutUser -> true));
+
+        mav.addObject("dropOutMap", dropOutMap);
         return mav;
     }
 

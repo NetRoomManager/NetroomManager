@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.persistence.EntityManager;
 import java.sql.Date;
 import java.util.*;
 
@@ -245,8 +244,7 @@ public class UserService {
         log.info("유저 남은시간 추가 완료!");
     }
 
-
-    public Integer delete(Long id) {
-        return Integer.valueOf(dropOutUserDAO.insert(id));
+    public Optional<User> findById(Long id) {
+        return userRepository.findById(id);
     }
 }
