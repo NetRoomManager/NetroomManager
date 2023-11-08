@@ -89,7 +89,7 @@
 								<img id="preview" class="img-thumbnail mb-2"
 									 src="../img/nuguri.webp" alt="예시 이미지"
 									 style="max-width: 200px; max-height: 200px;">
-								<input class="form-control form-control-sm" id="image" name="upload" accept="image/*" type="file">
+								<input class="form-control form-control-sm" id="image" name="upload" accept="image/*" type="file" required>
 							</div>
 						</div>
 						<table class="table table-borderless">
@@ -190,29 +190,6 @@
 			<select class="form-select" aria-label="Default select example">
 				<option selected>전체</option>
 				<option value="1">전체</option>
-				<option value="2">가격</option>
-				<option value="3">현재 재고</option>
-				<option value="4">금일 판매갯수</option>
-			</select>
-		</div>
-		<div class="mb-3 pe-2">
-			<input type="number" class="form-control" id="searchRangeOne">
-		</div>
-		<p class="h3">~</p>
-		<div class="mb-3 px-2">
-			<input type="number" class="form-control" id="searchRangeTwo">
-		</div>
-		<div>
-			<button type="submit" class="btn btn-secondary">검색</button>
-		</div>
-	</form>
-</div>
-<div class="container">
-	<form class="d-flex">
-		<div class="mb-3 pe-2" style="width: 150px;">
-			<select class="form-select" aria-label="Default select example">
-				<option selected>전체</option>
-				<option value="1">전체</option>
 				<option value="2">상품번호</option>
 				<option value="3">상품명</option>
 				<option value="4">상품분류</option>
@@ -268,6 +245,24 @@
 		</c:forEach>
 		</tbody>
 	</table>
+
+	<nav aria-label="Page navigation example">
+		<ul class="pagination justify-content-center">
+			<li class="page-item">
+				<a class="page-link" href="#" aria-label="Previous">
+					<span aria-hidden="true">&laquo;</span>
+				</a>
+			</li>
+			<li class="page-item"><a class="page-link" href="#">1</a></li>
+			<li class="page-item"><a class="page-link" href="#">2</a></li>
+			<li class="page-item"><a class="page-link" href="#">3</a></li>
+			<li class="page-item">
+				<a class="page-link" href="#" aria-label="Next">
+					<span aria-hidden="true">&raquo;</span>
+				</a>
+			</li>
+		</ul>
+	</nav>
 
 	<div class="modal fade" id="detail_check_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 		<div class="modal-dialog modal-lg">
@@ -407,7 +402,6 @@
 		}
 	}
 </script>
-
 <script>
 
 	async function openView(id) {
