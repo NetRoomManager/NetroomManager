@@ -115,6 +115,7 @@ public class UserService {
             user.setName(paramUser.getName());
             user.setEmail(paramUser.getEmail());
             user.setBirth(paramUser.getBirth());
+            user.setSummoner(paramUser.getSummoner());
 
             remainingTime.setUser(user);
             user.setRemainingTime(remainingTime);

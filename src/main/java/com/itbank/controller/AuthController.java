@@ -128,7 +128,7 @@ public class AuthController {
     }
 
     @PostMapping("/join")
-    public String join(User user, HttpServletRequest request) {
+    public String join(User user) {
 
         log.info("유저 생성");
 

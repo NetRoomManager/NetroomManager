@@ -296,7 +296,7 @@
 
                             <div class="form-floating mb-3 mt-3">
                                 <input type="text" class="form-control" id="lol_nick"
-                                       placeholder="리그오브레전드 닉네임" name="lol_nick"/> <label
+                                       placeholder="리그오브레전드 닉네임" name="summoner"/> <label
                                     for="lol_nick">리그오브레전드 닉네임(선택)</label>
                             </div>
 
