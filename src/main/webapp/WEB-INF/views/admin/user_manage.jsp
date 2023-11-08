@@ -4,17 +4,7 @@
 <!-- 회원관리 페이지 -->
 
 <style>
-    #menu_bar {
-        background-color: #ffa500
-    }
 
-    #menu_bar > a {
-        color: #ffffff;
-    }
-
-    #product_update table > tbody > tr > th {
-        padding-top: 15px;
-    }
 </style>
 
 <div id="headerContent"></div>
@@ -134,16 +124,6 @@
             </div>
         </div>
     </div>
-</nav>
-<nav id="menu_bar" class="nav nav-pills flex-column py-3 text-center"
-     style="position: absolute; height: 100%;">
-    <a class="nav-link py-3" href="${cpath }/admin/order">주문</a>
-    <a class="nav-link py-3" href="${cpath }/admin/product">재고</a>
-    <a class="nav-link py-3"
-       aria-current="page" href="${cpath }/admin/productsales">매출</a> <a
-        class="nav-link py-3  active" href="${cpath }/admin/user" style="background-color: #FF8339;">회원</a> <a
-        class="nav-link py-3" href="${cpath }/admin/seat">좌석</a> <a
-        class="nav-link py-3" href="${cpath }/admin/ticket">이용권</a>
 </nav>
 
 <div class="container pt-4">

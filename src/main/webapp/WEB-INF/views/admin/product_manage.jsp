@@ -4,25 +4,10 @@
 <!-- 상품관리 페이지 -->
 <%--${productList.get(0).productCategoryName}--%>
 <style>
-	#menu_bar {
-		background-color: #ffa500
-	}
-
-	#menu_bar>a {
-		color: #ffffff;
-	}
-
 	#product_update table>tbody>tr>th {
 		padding-top: 15px;
 	}
 
-	.hover_element {
-		cursor: pointer;
-	}
-
-	.hover_element:hover {
-		cursor: pointer;
-	}
 </style>
 
 <div id="headerContent"></div>
@@ -173,17 +158,6 @@
 		</div>
 	</div>
 </nav>
-<nav id="menu_bar" class="nav nav-pills flex-column py-3 text-center"
-	 style="position: absolute; height: 100%;">
-	<a class="nav-link py-3" href="${cpath }/admin/order">주문</a>
-	<a class="nav-link py-3 active" href="${cpath }/admin/product" style="background-color: #FF8339;">재고</a>
-	<a class="nav-link py-3"
-	   aria-current="page" href="${cpath }/admin/productsales">매출</a> <a
-		class="nav-link py-3" href="${cpath }/admin/user">회원</a> <a
-		class="nav-link py-3" href="${cpath }/admin/seat">좌석</a> <a
-		class="nav-link py-3" href="${cpath }/admin/ticket">이용권</a>
-</nav>
-
 <div class="container pt-4">
 	<form class="d-flex">
 		<div class="mb-3 pe-2" style="width: 150px;">

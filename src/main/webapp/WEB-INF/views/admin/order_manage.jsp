@@ -86,14 +86,6 @@
                 </ul>
             </div>
         </nav>
-        <nav id="menuBar" class="nav nav-pills flex-column py-3" style="position: absolute; height: 91.6%;">
-            <a class="nav-link py-3 active" style="background-color: #FF8339;" aria-current="page"  href="${cpath}/admin/order">주문</a>
-            <a class="nav-link py-3" href="${cpath}/admin/product">재고</a>
-            <a class="nav-link py-3" href="${cpath}/admin/productsales">매출</a>
-            <a class="nav-link py-3" href="${cpath}/admin/user">회원</a>
-            <a class="nav-link py-3" href="${cpath}/admin/seat">좌석</a>
-            <a class="nav-link py-3" href="${cpath}/admin/ticket">이용권</a>
-        </nav>
         <div class="container-fluid ps-5 ms-4">
             <div class="row pt-4">
                 <div class="row pt-4">

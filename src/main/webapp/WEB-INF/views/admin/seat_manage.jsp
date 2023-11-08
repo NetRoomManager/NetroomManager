@@ -59,15 +59,6 @@
 	</div>
 
 </nav>
-<nav id="menu_bar" class="nav nav-pills flex-column py-3 text-center"
-	 style="position: absolute; height: 100%;">
-	<a class="nav-link py-3" href="${cpath }/admin/order">주문</a>
-	<a class="nav-link py-3" href="${cpath }/admin/product">재고</a>
-	<a class="nav-link py-3" aria-current="page" href="${cpath }/admin/productsales">매출</a>
-	<a class="nav-link py-3" href="${cpath }/admin/user">회원</a>
-	<a class="nav-link py-3 active" href="${cpath }/admin/seat">좌석</a>
-	<a class="nav-link py-3" href="${cpath }/admin/ticket">이용권</a>
-</nav>
 
 <!-- 좌석 시간 추가, 상태  Modal -->
 <div class="modal fade" id="seat_detail" aria-hidden="true"

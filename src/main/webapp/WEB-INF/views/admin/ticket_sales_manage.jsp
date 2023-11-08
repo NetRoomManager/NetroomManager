@@ -86,16 +86,6 @@ ${param.endDate }
         </ul>
     </div>
 </nav>
-<nav id="menuBar" class="nav nav-pills flex-column py-3" style="position: absolute; height: 91.6%;">
-    <a class="nav-link py-3" href="${cpath }/admin/order">주문</a>
-    <a class="nav-link py-3" href="${cpath }/admin/product">재고</a>
-    <a class="nav-link py-3 active" style="background-color: #FF8339;" aria-current="page"
-       href="${cpath }/admin/productsales">매출</a>
-    <a class="nav-link py-3" href="${cpath}/admin/user">회원</a>
-    <a class="nav-link py-3" href="${cpath}/admin/seat">좌석</a>
-    <a
-            class="nav-link py-3" href="${cpath }/admin/ticket" style="background-color: #FF8339;">이용권</a>
-</nav>
 <div class="container pt-4">
     <form class="d-flex" id="rangeDate" action="/admin/ticketsales" method="get">
         <div class="mb-3 pe-2">
