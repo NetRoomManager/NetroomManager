@@ -10,6 +10,11 @@ import com.itbank.service.ProductService;
 import com.itbank.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
@@ -231,16 +236,17 @@ public class AdminController {
 
     // 회원관리
     @GetMapping("/user")
-    public ModelAndView user(String type, String keyword) {
-        log.info("유형: " + type);
-        log.info("검색어: "+keyword);
+    public ModelAndView user(@RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "10") int size, String type, String keyword) {
+        PageRequest pageable = PageRequest.of(page, size, Sort.by("id").ascending());
         ModelAndView mav = new ModelAndView("/admin/user_manage");
+        Page<UserAndLastLog> pages;
         if( type==null && keyword==null){
-            mav.addObject("list", userService.findUserAndLastLog());
+            pages = userService.findUserAndLastLog(pageable);
         }
         else {
-            mav.addObject("list",userService.findUserAndLastLog(Objects.requireNonNull(type), keyword));
+            pages = userService.findUserAndLastLog(pageable, Objects.requireNonNull(type), keyword);
         }
+        mav.addObject("page", pages);
         mav.addObject("currentPage", "user");
         List<DropOutUser> dropOutList = dropOutUserRepository.findAll();
         Map<Long, Boolean> dropOutMap = dropOutList.stream()

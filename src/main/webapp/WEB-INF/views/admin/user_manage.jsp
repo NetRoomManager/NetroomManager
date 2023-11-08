@@ -161,7 +161,7 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach var="dto" items="${list}">
+        <c:forEach var="dto" items="${page.content}">
             <tr class="text-center">
                 <td class="pt-3">${dto.user.id}</td>
                 <td class="pt-3">${dto.user.name}</td>

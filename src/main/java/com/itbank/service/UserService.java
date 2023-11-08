@@ -6,6 +6,8 @@ import com.itbank.repository.mybatis.DropOutUserDAO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -163,41 +165,41 @@ public class UserService {
     }
 
 
-    public List<UserAndLastLog> findUserAndLastLog() {
+    public Page<UserAndLastLog> findUserAndLastLog(Pageable pageable) {
         log.info("검색어 X");
-        return findUserAndLastLog("", null);
+        return findUserAndLastLog(pageable, "", null);
     }
-    public List<UserAndLastLog> findUserAndLastLog(String type, String keyword) {
+    public Page<UserAndLastLog> findUserAndLastLog(Pageable pageable, String type, String keyword) {
 
         log.info("유형: " + type);
         log.info("검색어: "+keyword);
 
         List<UserAndLastLog> list = new ArrayList<>();
-        List<User> users = null;
+        Page<User> users;
 
         switch (type) {
             // 전체검색
             case "" :
-                users = userRepository.findAllByKeyword(keyword==null ? "" : keyword);
+                users = userRepository.findAllByKeyword(keyword==null ? "" : keyword, pageable);
                 break;
             case "name":
-                users = userRepository.findAllByNameContaining(keyword);
+                users = userRepository.findAllByNameContaining(keyword, pageable);
                 break;
             case "username":
-                users = userRepository.findAllByUsernameContaining(keyword);
+                users = userRepository.findAllByUsernameContaining(keyword, pageable);
                 break;
             case "mobile":
-                users = userRepository.findAllByMobileContaining(keyword);
+                users = userRepository.findAllByMobileContaining(keyword, pageable);
                 break;
             case "email":
-                users = userRepository.findAllByEmailContaining(keyword);
+                users = userRepository.findAllByEmailContaining(keyword, pageable);
                 break;
             default:
-                users = userRepository.findAll();
+                users = userRepository.findAll(pageable);
                 break;
         }
 
-        for(User user : users) {
+        return users.map(user -> {
             UserAndLastLog userAndLastLog = new UserAndLastLog();
             userAndLastLog.setUser(user);
             Optional<UserLog> optionalUserLog = userLogService.findLatestByUser(user);
@@ -210,9 +212,8 @@ public class UserService {
                 RemainingTime remainingTime = optionalRemainingTime.get();
                 userAndLastLog.setRemainingTime(remainingTime);
             }
-            list.add(userAndLastLog);
-        }
-        return list;
+            return userAndLastLog;
+        });
     }
 
     public List<User> findAll() {
