@@ -1,23 +1,33 @@
 package com.itbank.controller;
 
+import com.itbank.config.UserPrincipal;
 import com.itbank.model.*;
 import com.itbank.repository.jpa.OrderListRepository;
 import com.itbank.repository.jpa.ProductRepository;
 import com.itbank.repository.jpa.ProductSalesRepository;
+import com.itbank.repository.jpa.UserLogRepository;
 import com.itbank.repository.mybatis.ProductCategoryDAO;
 import com.itbank.repository.mybatis.ProductDAO;
 import com.itbank.service.OrderDetailService;
 import com.itbank.service.PaymentService;
+import com.itbank.service.UserLogService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import redis.clients.jedis.Jedis;
 
 import java.util.*;
 
 @Controller
 @RequestMapping("/customer")
+@Slf4j
 public class CustomerController {
     @Autowired
     private PaymentService paymentService;
@@ -40,12 +50,41 @@ public class CustomerController {
     @Autowired
     private OrderDetailService orderDetailService;
 
+    @Autowired
+    private UserLogService userLogService;
+
+    @Autowired
+    private Jedis jedis;
+
     @GetMapping("/chat")
     public void chat() {
     }
 
     @GetMapping("/main")
-    public void main() {
+    public ModelAndView main() {
+
+        ModelAndView mav = new ModelAndView("/customer/main");
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object principal = authentication.getPrincipal();
+        log.info("Principal type: " + principal.toString());
+        UserPrincipal userPrincipal = (UserPrincipal) principal;
+
+        User user = userPrincipal.getUser();
+
+
+        mav.addObject("user", user);
+        mav.addObject("userLog", userLogService.findLatestByUser(user).get());
+        long l = user.getRemainingTime().getRemainingTime() - jedis.ttl(user.getUsername() + " " + user.getRemainingTime().getRemainingTime());
+        log.info("사용시간: "+l);
+        mav.addObject("usingTime", l);
+        mav.addObject("remainingTime", jedis.ttl(user.getUsername() + " " + user.getRemainingTime().getRemainingTime()));
+
+        log.info("user: "+ user);
+        log.info("userLog: " + user.getUserLogs());
+
+        return mav;
+
         // 유저랑 좌석연결
         // 임시로 좌석상태가 사용가능인곳 자동 배정
     }
@@ -70,11 +109,7 @@ public class CustomerController {
 
         Optional<OrderList> optionalOrderList = orderListRepository.findById(paymentService.findMaxId());
         OrderList orderList;
-        if(optionalOrderList.isPresent()) {
-            orderList = optionalOrderList.get();
-        } else {
-            orderList = null;
-        }
+        orderList = optionalOrderList.orElse(null);
 
         orderDetails.forEach(e -> {
             System.out.println("e: " + e.get("p_id"));
