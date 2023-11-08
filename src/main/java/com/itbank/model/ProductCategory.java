@@ -16,7 +16,7 @@ public class ProductCategory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = false)
     private String name;
 
     // 일대다 관계 설정. mappedBy 속성에는 연관관계의 주인 필드 이름을 지정.

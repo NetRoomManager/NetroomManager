@@ -7,21 +7,46 @@
 <mapper namespace="com.itbank.repository.mybatis.TicketSalesDAO">
 
     <select id="selectAll" resultType="ticketsales" parameterType="map">
-        select s.id as id, s.totalprice as orderTotalPrice, m.name as paymentMethod, p.time as salesDate, u.username as username, p.id as paymentId, t.name as ticketName
-        from ticket_sales s ,payment p, payment_method m, users u, ticket_detail d, ticket t, order_list o
-        where s.payment_id=p.id and p.id=m.id and p.id=o.payment_id and o.user_id=u.id and d.payment_id=p.id and d.ticket_id = t.id
+
+
+        SELECT
+        s.id as id,
+        s.totalPrice as orderTotalPrice,
+        p.time as salesDate,
+        u.username as username,
+        p.id as paymentId,
+        t.name as ticketName
+        FROM
+        ticket_sales s
+        JOIN
+        payment p ON s.PAYMENT_ID = p.id
+        JOIN
+        payment_method m ON m.id = p.PAYMENTMETHOD_ID
+        JOIN
+        order_list o ON p.id = o.PAYMENT_ID
+        JOIN
+        users u ON u.id = o.USER_ID
+        JOIN
+        ticket_detail d ON d.PAYMENT_ID = p.id
+        JOIN
+        ticket t ON d.TICKET_ID = t.id
+        where
+
         <if test="startDate != null and startDate != ''">
-             AND  p.time &gt;= TO_DATE(#{startDate},'yyyy-MM-dd')
+             AND  p.time &gt;= TO_DATE('2023-11-01','yyyy-MM-dd')
         </if>
         <if test="endDate != null and endDate != ''">
-            AND p.time &lt;= TO_DATE(#{endDate}, 'yyyy-MM-dd') + 1
+            AND and p.time &lt;= TO_DATE('2023-11-08','yyyy-MM-dd')+1
         </if>
         order by salesDate DESC
     </select>
 
     <select id="selectTotal" resultType="int">
         select sum(s.totalprice) as orderTotalPrice
-        from ticket_sales s, payment p, order_list o
+        from
+        ticket_sales s,
+        payment p,
+        order_list o
         where s.payment_id=p.id and p.id=o.payment_id
     </select>
 
