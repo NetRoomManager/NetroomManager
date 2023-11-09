@@ -85,7 +85,7 @@
     <table class="table table-hover">
         <thead>
         <tr class="table-dark text-center">
-            <th scope="col">유저고유번호</th>
+            <th scope="col">탈퇴유저번호</th>
             <th scope="col">유저이름</th>
             <th scope="col">유저아이디</th>
             <th scope="col">유저남은시간</th>
@@ -93,25 +93,31 @@
             <th scope="col">휴대폰번호</th>
             <th scope="col">이메일</th>
             <th scope="col">생년월일</th>
-            <th scope="col">유저삭제</th>
+            <th scope="col">유저복구</th>
         </tr>
         </thead>
         <tbody>
-<%--        <c:forEach var="dto" items="${list}">--%>
-<%--            <tr class="text-center">--%>
-<%--                <td class="pt-3">${dto.user.id}</td>--%>
-<%--                <td class="pt-3">${dto.user.name}</td>--%>
-<%--                <td class="pt-3">${dto.user.username}</td>--%>
-<%--                <td class="pt-3">남은시가</td>--%>
-<%--                <td class="pt-3">${dto.lastLog.loginAt}</td>--%>
-<%--                <td class="pt-3">${not empty dto.user.mobile ? dto.user.mobile : '모바일 정보 없음'}</td>--%>
-<%--                <td class="pt-3">${dto.user.email}</td>--%>
-<%--                <td class="pt-3">${not empty dto.user.birth ? dto.user.birth : '생일 정보 없음'}</td>--%>
-<%--                <td>--%>
-<%--                    <a href="/admin/userdelete/${dto.user.id}"><button type="button" class="btn btn-outline-danger">탈퇴</button></a>--%>
-<%--                </td>--%>
-<%--            </tr>--%>
-<%--        </c:forEach>--%>
+        <c:forEach var="dto" items="${page.content}">
+            <tr class="text-center">
+                <td class="pt-3">${dto.user.id}</td>
+                <td class="pt-3">${dto.user.name}</td>
+                <td class="pt-3">${dto.user.username}</td>
+                <td class="pt-3">${(dto.remainingTime.remainingTime) / 60}분</td>
+                <td class="pt-3">${dto.lastLog.loginAt}</td>
+                <td class="pt-3">${not empty dto.user.mobile ? dto.user.mobile : '모바일 정보 없음'}</td>
+                <td class="pt-3">${dto.user.email}</td>
+                <td class="pt-3">${not empty dto.user.birth ? dto.user.birth : '생일 정보 없음'}</td>
+                <td>
+                    <c:if test="${dropOutMap[dto.user.id] != null}">
+                        <a href="/admin/userUndelete/${dto.user.id}"><button type="button" class="btn btn-outline-danger">복구</button></a>
+                    </c:if>
+                    <c:if test="${dropOutMap[dto.user.id] == null}">
+                        <a href="/admin/userdelete/${dto.user.id}"><button type="button" class="btn btn-outline-danger">탈퇴</button></a>
+                    </c:if>
+
+                </td>
+            </tr>
+        </c:forEach>
         </tbody>
     </table>
     <nav aria-label="Page navigation example">

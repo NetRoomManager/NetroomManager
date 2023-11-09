@@ -102,7 +102,7 @@
                 <td class="pt-3">${not empty dto.user.birth ? dto.user.birth : '생일 정보 없음'}</td>
                 <td>
                     <c:if test="${dropOutMap[dto.user.id] != null}">
-                        <a href="/admin/userUndelete/${dto.user.id}"><button type="button" class="btn btn-outline-danger">복구</button></a>
+                        <a href="/admin/userUndelete/${dto.user.id}"><button type="button" class="btn btn-outline-primary">복구</button></a>
                     </c:if>
                     <c:if test="${dropOutMap[dto.user.id] == null}">
                         <a href="/admin/userdelete/${dto.user.id}"><button type="button" class="btn btn-outline-danger">탈퇴</button></a>
