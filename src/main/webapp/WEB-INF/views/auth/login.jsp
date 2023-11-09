@@ -146,7 +146,7 @@
                     src="/img/naver_circle.png"
             />
             <img
-                    onclick="javascript:kakaoLogin()"
+                    onclick="javascript:facebookLogin()"
                     class="rounded img-fluid mt-5 mb-5 mx-5"
                     style="height: 20%"
                     src="/img/kakao.webp"
@@ -337,12 +337,12 @@
         );
     }
 
-    function kakaoLogin() {
+    function facebookLogin() {
         const url =
-            "/oauth2/authorization/kakao";
+            "/oauth2/authorization/facebook";
         window.open(
             url,
-            "카카오 로그인",
+            "페이스북 로그인",
             "width=800,height=650,left=500,top=200"
         );
     }

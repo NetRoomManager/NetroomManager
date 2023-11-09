@@ -2,20 +2,17 @@ package com.itbank.controller;
 
 import com.itbank.config.UserPrincipal;
 import com.itbank.model.*;
-import com.itbank.repository.jpa.OrderListRepository;
-import com.itbank.repository.jpa.ProductRepository;
-import com.itbank.repository.jpa.ProductSalesRepository;
-import com.itbank.repository.jpa.UserLogRepository;
+import com.itbank.model.dto.SeatInfoDTO;
+import com.itbank.repository.jpa.*;
 import com.itbank.repository.mybatis.ProductCategoryDAO;
 import com.itbank.repository.mybatis.ProductDAO;
-import com.itbank.service.OrderDetailService;
-import com.itbank.service.PaymentService;
-import com.itbank.service.UserLogService;
+import com.itbank.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -42,6 +39,9 @@ public class CustomerController {
     private ProductCategoryDAO productCategoryDAO;
 
     @Autowired
+    private UserDetailsServiceImpl userService;
+
+    @Autowired
     private ProductDAO productDAO;
 
     @Autowired
@@ -55,6 +55,15 @@ public class CustomerController {
 
     @Autowired
     private Jedis jedis;
+
+    @Autowired
+    private SeatService seatService;
+
+    @Autowired
+    private SeatRepository seatRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @GetMapping("/chat")
     public void chat() {
@@ -89,7 +98,13 @@ public class CustomerController {
         // 임시로 좌석상태가 사용가능인곳 자동 배정
     }
 
-
+    @GetMapping("/seat")
+    public ModelAndView seat_view() {
+        ModelAndView mav = new ModelAndView("/customer/seat_view");
+        List<SeatInfoDTO> seatList = seatService.selectSeatList();
+        mav.addObject("seatList",seatList);
+        return mav;
+    }
     @GetMapping("/order/{id}")
     public ModelAndView order(@PathVariable Long id) {
         ModelAndView mav = new ModelAndView("/customer/order");
@@ -170,5 +185,25 @@ public class CustomerController {
             result.put("success",false);
         }
         return result;
+    }
+
+    @GetMapping("/seatSelector")
+    public String seatSelector(Long seatId) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+
+        User user = userPrincipal.getUser();
+
+        log.info("유저: " + user);
+
+
+        Seat seat = seatRepository.findById(seatId).orElseThrow(() -> new IllegalArgumentException("잘못된 접근입니다."));
+        seat.setUser(user);
+        seatRepository.save(seat);
+
+        log.info(seatId + "번 좌석: 사용중");
+
+        return "redirect:/customer/main";
     }
 }

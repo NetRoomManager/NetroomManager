@@ -1,6 +1,7 @@
 package com.itbank.repository.jpa;
 
 import com.itbank.model.Seat;
+import com.itbank.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -13,4 +14,5 @@ import java.util.Optional;
 @Repository
 public interface SeatRepository extends JpaRepository<Seat, Long> {
 
+    Seat findByUser(User user);
 }

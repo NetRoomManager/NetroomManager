@@ -2,8 +2,10 @@ package com.itbank.handler;
 
 import com.itbank.config.UserPrincipal;
 import com.itbank.model.RemainingTime;
+import com.itbank.model.Seat;
 import com.itbank.model.UserLog;
 import com.itbank.repository.jpa.RemainingTimeRepository;
+import com.itbank.repository.jpa.SeatRepository;
 import com.itbank.service.UserLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +34,9 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
+
+    @Autowired
+    private SeatRepository seatRepository;
 
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -126,6 +131,11 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
             }
             log.info("남은시간 저장 완료!");
 
+
+            // 해당 유저가 사용중이던 좌석을 사용 가능한 상태로 변경
+            Seat seat = seatRepository.findByUser(userPrincipal.getUser());
+            seat.setUser(null);
+            seatRepository.save(seat);
         }
 
         // 로그아웃 이후에는 홈으로 보냄
