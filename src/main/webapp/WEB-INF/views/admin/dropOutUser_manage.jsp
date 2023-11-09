@@ -1,3 +1,10 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: sean7
+  Date: 2023-11-09
+  Time: 오후 3:04
+  To change this template use File | Settings | File Templates.
+--%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@ include file="header.jsp" %>
@@ -90,21 +97,21 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach var="dto" items="${list}">
-            <tr class="text-center">
-                <td class="pt-3">${dto.user.id}</td>
-                <td class="pt-3">${dto.user.name}</td>
-                <td class="pt-3">${dto.user.username}</td>
-                <td class="pt-3">남은시가</td>
-                <td class="pt-3">${dto.lastLog.loginAt}</td>
-                <td class="pt-3">${not empty dto.user.mobile ? dto.user.mobile : '모바일 정보 없음'}</td>
-                <td class="pt-3">${dto.user.email}</td>
-                <td class="pt-3">${not empty dto.user.birth ? dto.user.birth : '생일 정보 없음'}</td>
-                <td>
-                    <a href="/admin/userdelete/${dto.user.id}"><button type="button" class="btn btn-outline-danger">탈퇴</button></a>
-                </td>
-            </tr>
-        </c:forEach>
+<%--        <c:forEach var="dto" items="${list}">--%>
+<%--            <tr class="text-center">--%>
+<%--                <td class="pt-3">${dto.user.id}</td>--%>
+<%--                <td class="pt-3">${dto.user.name}</td>--%>
+<%--                <td class="pt-3">${dto.user.username}</td>--%>
+<%--                <td class="pt-3">남은시가</td>--%>
+<%--                <td class="pt-3">${dto.lastLog.loginAt}</td>--%>
+<%--                <td class="pt-3">${not empty dto.user.mobile ? dto.user.mobile : '모바일 정보 없음'}</td>--%>
+<%--                <td class="pt-3">${dto.user.email}</td>--%>
+<%--                <td class="pt-3">${not empty dto.user.birth ? dto.user.birth : '생일 정보 없음'}</td>--%>
+<%--                <td>--%>
+<%--                    <a href="/admin/userdelete/${dto.user.id}"><button type="button" class="btn btn-outline-danger">탈퇴</button></a>--%>
+<%--                </td>--%>
+<%--            </tr>--%>
+<%--        </c:forEach>--%>
         </tbody>
     </table>
     <nav aria-label="Page navigation example">

@@ -26,9 +26,7 @@
                 <a class="nav-link active navbar-brand"
                    aria-current="page" href="${cpath}/">NetRoom</a>
             </li>
-            <li class="nav-item pe-3"><a class="nav-link" href="">재고현황</a>
-            </li>
-            <li class="nav-item pe-3"><a class="nav-link"
+            <li class="nav-item pe-3 hover_element"><a class="nav-link"
                                          data-bs-toggle="modal" data-bs-target="#ticketUpdate">이용권등록</a>
             </li>
         </ul>

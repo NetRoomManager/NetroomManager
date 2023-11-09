@@ -194,6 +194,7 @@ public class AdminController {
 
         mav.addObject("total", ticketSalesService.selectTotal());
         log.info("총액 불러옴");
+        mav.addObject("currentPage", "productsales");
 
         return mav;
     }
@@ -214,6 +215,13 @@ public class AdminController {
         return mav;
     }
 
+    // 탈퇴회원관리
+    @GetMapping("/dropOutUser")
+    public ModelAndView dropOutUser() {
+        ModelAndView mav = new ModelAndView("/admin/dropOutUser_manage");
+
+        return mav;
+    }
 
     // 주문관리
     @GetMapping("/order")
