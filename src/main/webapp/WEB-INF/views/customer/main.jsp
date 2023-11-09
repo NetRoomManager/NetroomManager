@@ -632,6 +632,16 @@
 			 }, 1000);
 
 			 function formatTime(param) {
+
+				 if (param===300) {
+					const audio = new Audio('/audio/5.mp3');
+					audio.play();
+				 }
+				 else if (param===180) {
+					 const audio = new Audio('/audio/3.mp3');
+					 audio.play();
+				 }
+
 				 let hours = Math.floor(param / 3600);
 				 let minutes = Math.floor((param % 3600) / 60);
 				 let seconds = param % 60;

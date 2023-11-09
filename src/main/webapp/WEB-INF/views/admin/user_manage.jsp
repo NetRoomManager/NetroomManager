@@ -116,15 +116,15 @@
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
             <li class="page-item">
-                <a class="page-link" href="#" aria-label="Previous">
+                <a class="page-link" href="/admin/user?page=0&size=10" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
-            <li class="page-item"><a class="page-link" href="#">1</a></li>
-            <li class="page-item"><a class="page-link" href="#">2</a></li>
-            <li class="page-item"><a class="page-link" href="#">3</a></li>
+            <c:forEach var="page" begin="0" end="${page.totalPages - 1}">
+                <li class="page-item"><a class="page-link  ${param.page == page ? 'bg-primary text-white' : ''}" href="/admin/user?page=${page}&size=10" >${page+1}</a></li>
+            </c:forEach>
             <li class="page-item">
-                <a class="page-link" href="#" aria-label="Next">
+                <a class="page-link" href="/admin/user?page=${page.totalPages - 1}&size=10" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>
