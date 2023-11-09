@@ -2,6 +2,7 @@ package com.itbank.controller;
 
 import com.itbank.config.UserPrincipal;
 import com.itbank.model.*;
+import com.itbank.model.dto.SeatInfoDTO;
 import com.itbank.repository.jpa.OrderListRepository;
 import com.itbank.repository.jpa.ProductRepository;
 import com.itbank.repository.jpa.ProductSalesRepository;
@@ -10,6 +11,7 @@ import com.itbank.repository.mybatis.ProductCategoryDAO;
 import com.itbank.repository.mybatis.ProductDAO;
 import com.itbank.service.OrderDetailService;
 import com.itbank.service.PaymentService;
+import com.itbank.service.SeatService;
 import com.itbank.service.UserLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -54,6 +56,9 @@ public class CustomerController {
     private UserLogService userLogService;
 
     @Autowired
+    private SeatService seatService;
+
+    @Autowired
     private Jedis jedis;
 
     @GetMapping("/chat")
@@ -89,6 +94,13 @@ public class CustomerController {
         // 임시로 좌석상태가 사용가능인곳 자동 배정
     }
 
+    @GetMapping("/seat_view")
+    public ModelAndView seat_view() {
+        ModelAndView mav = new ModelAndView("/customer/seat_view");
+        List<SeatInfoDTO> seatList = seatService.selectSeatList();
+        mav.addObject("seatList",seatList);
+        return mav;
+    }
 
     @GetMapping("/order/{id}")
     public ModelAndView order(@PathVariable Long id) {
