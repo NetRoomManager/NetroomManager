@@ -16,4 +16,6 @@ public interface UserLogRepository extends JpaRepository<UserLog, Long> {
     // id가 가장 큰 UserLog를 반환하는 쿼리
     @Query("SELECT u FROM UserLog u WHERE u.user = ?1 ORDER BY u.id DESC")
     Page<UserLog> findLatestByUser(User user, Pageable pageable);
+
+    UserLog findByUser(User user);
 }

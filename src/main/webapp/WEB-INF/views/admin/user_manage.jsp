@@ -90,18 +90,24 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach var="dto" items="${list}">
+        <c:forEach var="dto" items="${page.content}">
             <tr class="text-center">
                 <td class="pt-3">${dto.user.id}</td>
                 <td class="pt-3">${dto.user.name}</td>
                 <td class="pt-3">${dto.user.username}</td>
-                <td class="pt-3">남은시가</td>
+                <td class="pt-3">${(dto.remainingTime.remainingTime) / 60}분</td>
                 <td class="pt-3">${dto.lastLog.loginAt}</td>
                 <td class="pt-3">${not empty dto.user.mobile ? dto.user.mobile : '모바일 정보 없음'}</td>
                 <td class="pt-3">${dto.user.email}</td>
                 <td class="pt-3">${not empty dto.user.birth ? dto.user.birth : '생일 정보 없음'}</td>
                 <td>
-                    <a href="/admin/userdelete/${dto.user.id}"><button type="button" class="btn btn-outline-danger">탈퇴</button></a>
+                    <c:if test="${dropOutMap[dto.user.id] != null}">
+                        <a href="/admin/userUndelete/${dto.user.id}"><button type="button" class="btn btn-outline-danger">복구</button></a>
+                    </c:if>
+                    <c:if test="${dropOutMap[dto.user.id] == null}">
+                        <a href="/admin/userdelete/${dto.user.id}"><button type="button" class="btn btn-outline-danger">탈퇴</button></a>
+                    </c:if>
+
                 </td>
             </tr>
         </c:forEach>

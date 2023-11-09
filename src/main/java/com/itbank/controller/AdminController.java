@@ -1,15 +1,21 @@
 package com.itbank.controller;
 
-import com.itbank.model.Ticket;
+import com.itbank.model.*;
 import com.itbank.model.dto.SeatInfoDTO;
+import com.itbank.repository.jpa.DropOutUserRepository;
 import com.itbank.repository.jpa.ProductRepository;
+import com.itbank.repository.mybatis.DropOutUserDAO;
 import com.itbank.service.*;
-import com.itbank.model.ProductCategory;
-import com.itbank.model.ProductDTO;
 import com.itbank.service.ProductService;
 import com.itbank.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -19,7 +25,9 @@ import org.springframework.web.servlet.ModelAndView;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
+import java.util.Map;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/admin")
@@ -44,6 +52,12 @@ public class AdminController {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private DropOutUserRepository dropOutUserRepository;
+
+    @Autowired
+    private DropOutUserDAO dropOutUserDAO;
+
     // 상품관리
     @GetMapping("/product")
     public ModelAndView product() {
@@ -61,11 +75,33 @@ public class AdminController {
 
         log.info("id :" + id);
         // delete지만 insert여
-        if(userService.delete(id) != null){
-            throw new UsernameNotFoundException("삭제 실패");
-        }
+
+        User user = userService.findById(id).orElseThrow(() -> new UsernameNotFoundException("없는 유저입니다"));
+
+        DropOutUser dropOutUser = dropOutUserRepository.findByUser(user).orElseGet(() -> {
+            DropOutUser newDropOutUser = new DropOutUser();
+            newDropOutUser.setUser(user);
+            return dropOutUserRepository.save(newDropOutUser);
+        });
+
+        log.info(dropOutUser.getUser().getUsername() + ": 탈퇴완료");
+
         return "redirect:/admin/user";
     }
+
+    @GetMapping("/userUndelete/{id}")
+    public String userUndelete(@PathVariable("id") Long id) {
+        User user = userService.findById(id).orElseThrow(() -> new UsernameNotFoundException("없는 유저입니다"));
+
+        DropOutUser dropOutUser = dropOutUserRepository.findByUser(user).orElseThrow(() -> new RuntimeException("탈퇴하지 않은 유저입니다"));
+
+        int row = dropOutUserDAO.delete(dropOutUser.getId());
+
+        log.info(row + "행 복구완료");
+
+        return "redirect:/admin/user";
+    }
+
 
     // 상품목록 추가
     @PostMapping("/addProductCategory")
@@ -119,10 +155,14 @@ public class AdminController {
     public ModelAndView seat() {
         ModelAndView mav = new ModelAndView("/admin/seat_manage");
         List<SeatInfoDTO> seatList = seatService.selectSeatList();
+
+
         mav.addObject("seatList",seatList);
         mav.addObject("currentPage", "seat");
+
         return mav;
     }
+
 
     // 매출관리
     @GetMapping("/sales")
@@ -201,17 +241,25 @@ public class AdminController {
 
     // 회원관리
     @GetMapping("/user")
-    public ModelAndView user(String type, String keyword) {
-        log.info("유형: " + type);
-        log.info("검색어: "+keyword);
+    public ModelAndView user(@RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "10") int size, String type, String keyword) {
+        PageRequest pageable = PageRequest.of(page, size, Sort.by("id").ascending());
         ModelAndView mav = new ModelAndView("/admin/user_manage");
+        Page<UserAndLastLog> pages;
         if( type==null && keyword==null){
-            mav.addObject("list", userService.findUserAndLastLog());
+            pages = userService.findUserAndLastLog(pageable);
         }
         else {
-            mav.addObject("list",userService.findUserAndLastLog(Objects.requireNonNull(type), keyword));
+            pages = userService.findUserAndLastLog(pageable, Objects.requireNonNull(type), keyword);
         }
+        mav.addObject("page", pages);
         mav.addObject("currentPage", "user");
+        List<DropOutUser> dropOutList = dropOutUserRepository.findAll();
+        Map<Long, Boolean> dropOutMap = dropOutList.stream()
+                .collect(Collectors.toMap(
+                        dropOutUser -> dropOutUser.getUser().getId(),
+                        dropOutUser -> true));
+
+        mav.addObject("dropOutMap", dropOutMap);
         return mav;
     }
 

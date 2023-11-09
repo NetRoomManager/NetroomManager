@@ -3,6 +3,8 @@ package com.itbank.repository.jpa;
 import com.itbank.model.SocialLogin;
 import com.itbank.model.User;
 import com.itbank.model.UserAndLastLog;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,7 +18,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByUsername(String username);
 
-    List<User> findAllByUsernameContaining(String username);
+    Page<User> findAllByUsernameContaining(String username, Pageable pageable);
 
     Optional<User> findByEmailOrMobile(String email, String mobile);
 
@@ -24,13 +26,13 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Optional<User> findByUsernameAndPassword(String username, String password);
 
-    List<User> findAllByNameContaining(String keyword);
+    Page<User> findAllByNameContaining(String keyword, Pageable pageable);
 
-    List<User> findAllByMobileContaining(String keyword);
+    Page<User> findAllByMobileContaining(String keyword, Pageable pageable);
 
-    List<User> findAllByEmailContaining(String keyword);
+    Page<User> findAllByEmailContaining(String keyword, Pageable pageable);
 
     @Query("SELECT u FROM User u WHERE u.username LIKE %:keyword% OR u.email LIKE %:keyword% OR u.name LIKE %:keyword% OR u.mobile LIKE %:keyword%")
-    List<User> findAllByKeyword(@Param("keyword") String keyword);
+    Page<User> findAllByKeyword(@Param("keyword") String keyword, Pageable pageable);
 
 }

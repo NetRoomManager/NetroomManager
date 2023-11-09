@@ -39,6 +39,13 @@
 </div>
 <div id="response"></div>
 
+<div id="chat-room-${username}" title="Chat with ${username}" style="display: none;">
+    <div id="chat-log-${username}" style="height: 200px; border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; overflow-y: scroll;"></div>
+    <input id="chat-input-${username}" type="text" style="width: 80%; height: 50px;">
+    <button onclick="send('${username}', document.getElementById('chat-input-${username}').value)">Send</button>
+</div>
+
+
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
@@ -53,11 +60,14 @@
         if (!chatRoomDiv) {
             chatRoomDiv = document.createElement('div');
             chatRoomDiv.id = 'chat-room-' + username;
-            chatRoomDiv.style.position = "fixed";
-            chatRoomDiv.style.bottom = "0";
             document.body.appendChild(chatRoomDiv);
 
             // 채팅창 생성
+            let chatLogDiv = document.createElement('div');
+            chatLogDiv.id = 'chat-log-' + username;
+            chatRoomDiv.appendChild(chatLogDiv);
+
+            // 입력 필드 생성
             let chatInput = document.createElement('input');
             chatInput.id = 'chat-input-' + username;
             chatRoomDiv.appendChild(chatInput);
@@ -71,15 +81,22 @@
             sendButton.onclick = function() {
                 let message = chatInput.value;
                 send(username, message);
-                chatRoomDiv.innerHTML += from + ': ' + message + ' (' + getCurrentTime() + ')<br>';
+                chatLogDiv.innerHTML += from + ': ' + message + ' (' + getCurrentTime() + ')<br>';
             };
 
             // jQuery UI dialog로 초기화
             $(chatRoomDiv).dialog({
                 autoOpen: false,
-                width: 400
+                width: 400,
+                buttons: {
+                    "Close": function() {
+                        $(this).dialog("close");
+                    }
+                }
             });
         }
+        // 채팅창 열기
+        $(chatRoomDiv).dialog("open");
     }
 
     function showMessageOutput(messageOutput) {
@@ -89,15 +106,15 @@
             chatRoomDiv = document.getElementById('chat-room-' + messageOutput.from);
         }
 
-        // 새로운 메시지만 추가
-        chatRoomDiv.innerHTML += messageOutput.from + ': ' + messageOutput.message + ' (' + messageOutput.time + ')<br>';
+        let chatLogDiv = document.getElementById('chat-log-' + messageOutput.from);
+        chatLogDiv.innerHTML += messageOutput.from + ': ' + messageOutput.message + ' (' + messageOutput.time + ')<br>';
+        chatLogDiv.scrollTop = chatLogDiv.scrollHeight;  // 스크롤을 맨 아래로 이동
 
         // 유저의 채팅방이 닫혀 있다면 다시 열어줌
-        if (chatRoomDiv && $(chatRoomDiv).dialog('isOpen') === false) {
+        if ($(chatRoomDiv).dialog('isOpen') === false) {
             $(chatRoomDiv).dialog('open');
         }
     }
-
 
 
     function connect() {

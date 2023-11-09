@@ -50,5 +50,27 @@ public class User implements Serializable {
     @PrimaryKeyJoinColumn
     private RemainingTime remainingTime;
 
+    private String summoner;
+
+    private String tire;
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", password'********" +  + '\'' +
+                ", mobile='" + mobile + '\'' +
+                ", email='" + email + '\'' +
+                ", birth=" + birth +
+                ", name='" + name + '\'' +
+                ", userRoles=" + userRoles +
+                ", socialLogins=" + socialLogins +
+                ", dropOutUser=" + dropOutUser +
+                ", userLogs=" + userLogs +
+                ", remainingTime=" + remainingTime +
+                ", summoner='" + summoner + '\'' +
+                ", tire='" + tire + '\'' +
+                '}';
+    }
 
 }

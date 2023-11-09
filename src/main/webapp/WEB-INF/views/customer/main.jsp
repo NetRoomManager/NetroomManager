@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
+	 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ include file="header.jsp"%>
 <!-- PC방 고객 메인 페이지 -->
@@ -167,28 +167,28 @@
 		</div>
 		<a href="#">자리이동</a> <a href="#"> <i class="fa-solid fa-power-off"
 			style="color: #ffffff;"></i> &nbsp;&nbsp;
-			<p class="p-0 mx-0 my-0" id="main_close_btn">사용종료</p>
+			<p class="p-0 mx-0 my-0" id="close_btn">사용종료</p>
 		</a>
 	</div>
-	
+
 	<div class="username">
 		<p class="p-0 mx-0 my-0">
-			ID <span>geunuk</span>
+			ID <span>${user.username}</span>
 		</p>
 		<p class="p-0 mx-0 my-0">회원정보</p>
 	</div>
 	<div class="time_wrap">
 		<div class="start_date">
 			<p class="p-0 mx-0 my-0">시작날짜</p>
-			<p class="p-0 mx-0 my-0">23.10.28</p>
+			<p class="p-0 mx-0 my-0">${userLog.loginAt}</p>
 		</div>
 		<div class="usage_time">
 			<p class="p-0 mx-0 my-0">사용시간</p>
-			<p class="p-0 mx-0 my-0">12:41</p>
+			<p class="p-0 mx-0 my-0">${usingTime}</p>
 		</div>
 		<div class="remain_time">
 			<p class="p-0 mx-0 my-0">남은시간</p>
-			<p class="p-0 mx-0 my-0">10:28</p>
+			<p class="p-0 mx-0 my-0">${remainingTime}</p>
 		</div>
 	</div>
 	<div class="consumption">
@@ -198,10 +198,8 @@
 		<div class="pc_ticket">
 			<a href="#">PC방 이용권</a>
 		</div>
-		<div class="naverpay">
-			<a href="#"> <img src="/img/naver-pay.png" alt="네이버페이">
-				<p class="p-0 mx-0 my-0">PAY</p>
-			</a>
+		<div class="tire">
+			<p class="p-0 mx-0 my-0">${user.tire}</p>
 		</div>
 		<div class="kakaopay">
 			<a href="#"> <img src="/img/kakao-pay.png" alt="카카오페이">
@@ -210,7 +208,7 @@
 
 	</div>
 	<div class="service">
-		<a href="#">호출</a> <a onclick="openChatModal(); connect(); getMessages();" style="color: #eee;">메시지</a>
+		<a href="#">호출</a> <a onclick="openChatModal(); getMessages(); msgDel();" style="color: #eee;">메시지</a>
 		<a href="#">주문 목록</a> <a href="#">내 정보</a>
 	</div>
 
@@ -365,6 +363,8 @@
 	</div>
 </div>
 
+ <div id="alert" style="display: none;">새로운 메시지가 도착했습니다!</div>
+
 <!-- 모달 창 -->
 <div id="main_chat_modal" class="main_chat_modal">
 	<div class="main_chat_modal_content rounded">
@@ -397,6 +397,8 @@
 	const infoList = document.querySelectorAll('.info > div:not(.title)');
 	const hiddenBtn = document.getElementById('btn_hidden');
 	const modal = document.getElementById('main_chat_modal');
+
+	const msgBtn = document.getElementById('msgBtn');
 
 	hiddenBtn.onclick = () => {
 		console.log('123');
@@ -505,19 +507,22 @@
 
 			// 스크롤을 채팅창의 가장 아래로 내립니다.
 			chatRoomDiv.scrollTop = chatRoomDiv.scrollHeight;
+
+			// 모달창이 열려있지 않을 때만 알림을 띄웁니다.
+			if (modal.style.display !== 'inline-block') {
+				document.getElementById('alert').style.display = 'block';
+			}
 		}
 	}
 
-
-	function connect() {
-		stompClient.connect({}, function(frame) {
-			stompClient.subscribe('/user/queue/messages', function(messageOutput) {
-				showMessageOutput(JSON.parse(messageOutput.body));
-			});
-		});
+	function msgDel() {
+		document.getElementById('alert').style.display = 'none';
 	}
 
-	function connectTimeServer() {
+
+
+
+	function connect() {
 		let socket = new SockJS('/chat');
 		stompClient = Stomp.over(socket);
 
@@ -528,6 +533,10 @@
 				let time = message.time;
 				location.href='/auth/logout?time='+time;
 				alert(msg);
+			});
+
+			stompClient.subscribe('/user/queue/messages', function(messageOutput) {
+				showMessageOutput(JSON.parse(messageOutput.body));
 			});
 		});
 	}
@@ -551,6 +560,9 @@
 
 		// 메시지를 보낸 후에 화면에 최신 메시지를 출력합니다.
 		showMessageOutput(msg);
+
+		document.getElementById('message').value = '';
+		document.getElementById('message').focus();
 	}
 
 	function getMessages() {
@@ -599,8 +611,44 @@
 		return year + '-' + month + '-' + date + 'T' + hours + ':' + minutes + ':' + seconds;
 	}
 
-	connectTimeServer();
+	connect();
 </script>
+
+	 <script>
+		 window.addEventListener("DOMContentLoaded", function() {
+			 const usingTimeElement = document.querySelector(".usage_time p:nth-child(2)");
+			 const remainingTimeElement = document.querySelector(".remain_time p:nth-child(2)");
+
+			 let usingTime = parseInt(usingTimeElement.textContent);
+			 let remainingTime = parseInt(remainingTimeElement.textContent);
+
+			 console.log(usingTimeElement);
+
+			 setInterval(function() {
+				 usingTime++;
+				 remainingTime--;
+				 usingTimeElement.textContent = formatTime(usingTime);
+				 remainingTimeElement.textContent = formatTime(remainingTime);
+			 }, 1000);
+
+			 function formatTime(param) {
+				 let hours = Math.floor(param / 3600);
+				 let minutes = Math.floor((param % 3600) / 60);
+				 let seconds = param % 60;
+
+				 return hours + "시간 " + minutes + "분 " + seconds + "초";
+			 }
+		 });
+	 </script>
+	 <script>
+		 const close_btn = document.getElementById('close_btn');
+		 close_btn.addEventListener('click', function () {
+			 if(confirm('정말 종료하시겠습니까?')) {
+				 location.href='/auth/logout';
+			 }
+		 })
+	 </script>
+
 
 
 </body>
