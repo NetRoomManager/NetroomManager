@@ -27,7 +27,7 @@
                    aria-current="page" href="${cpath}/">NetRoom</a>
             </li>
             <li class="nav-item pe-3 hover_element"><a class="nav-link"
-                                         data-bs-toggle="modal" data-bs-target="#ticketUpdate">이용권등록</a>
+                                         data-bs-toggle="modal" data-bs-target="#ticketCreate">이용권등록</a>
             </li>
         </ul>
         <ul class="navbar-nav">
@@ -66,13 +66,60 @@
     </div>
 
     <%--이용권등록 모달                       --%>
-    <div class="modal fade" id="ticketUpdate" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+    <div class="modal fade" id="ticketCreate" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
          aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <form action="/admin/ticketRegister" method="POST">
                     <div class="modal-header">
                         <h3 class="modal-title">이용권등록</h3>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body container">
+                        <table class="table table-borderless">
+                            <tbody>
+                            <tr>
+                                <th>이용권이름</th>
+                                <td>
+                                    <input type="hidden" name="id">
+                                    <input class="form-control" type="text" name="name"
+                                           placeholder="이용권 이름 등록" required aria-label="default input example">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>이용권시간</th>
+                                <td>
+                                    <input class="form-control" type="number" name="time"
+                                           placeholder="분" required aria-label="default input example">
+                                </td>
+                            </tr>
+                            <tr>
+                                <th>이용권가격</th>
+                                <td>
+                                    <input class="form-control" type="number" name="price"
+                                           placeholder="금액입력" required aria-label="default input example">
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                        <button type="submit" class="btn btn-primary editModalBtn">등록</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <%--이용권등록 모달                       --%>
+    <div class="modal fade" id="ticketUpdate" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <form action="/admin/ticketRegister" method="POST">
+                    <div class="modal-header">
+                        <h3 class="modal-title">이용수정</h3>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body container">
@@ -105,7 +152,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-                        <button type="submit" class="btn btn-primary editModalBtn">등록</button>
+                        <button type="submit" class="btn btn-primary editModalBtn">수정</button>
                     </div>
                 </form>
             </div>
@@ -118,7 +165,6 @@
     <table class="table table-hover">
         <thead>
         <tr class="table-dark text-center">
-            <th scope="col">#</th>
             <th scope="col">이용권번호</th>
             <th scope="col">이용권이름</th>
             <th scope="col">가격</th>
@@ -127,21 +173,18 @@
             <th scope="col">삭제</th>
         </tr>
         </thead>
+        <script>
+            let tickets = [];
+        </script>
         <tbody>
         <c:forEach var="ticket" items="${ticketList}">
             <tr class="text-center">
-                <th class="pt-3 " scope="row">
-                    <div class="form-check d-flex justify-content-center">
-                        <input class="form-check-input" type="checkbox" value=""
-                               id="flexCheckDefault">
-                    </div>
-                </th>
                 <td class="pt-3">${ticket.id}</td>
                 <td class="pt-3">${ticket.name}</td>
                 <td class="pt-3">${ticket.price}</td>
                 <td class="pt-3">${ticket.time}</td>
                 <td>
-                    <button type="button" id="editBtn" class="btn btn-outline-warning"
+                    <button type="button" class="editBtn btn btn-outline-warning"
                             data-bs-toggle="modal" data-bs-target="#ticketUpdate"
                             data-ticket-id="${ticket.id}" data-ticket-name="${ticket.name}"
                             data-ticket-price="${ticket.price}" data-ticket-time="${ticket.time}"
@@ -155,6 +198,9 @@
                     </button>
                 </td>
             </tr>
+            <script>
+                tickets.push(${ticket.id});
+            </script>
         </c:forEach>
         </tbody>
     </table>
@@ -171,30 +217,30 @@
     })
 
     <%-- 이용권 수정 --%>
-    const editBtn = document.getElementById('editBtn')
-    editBtn.onclick = function updateTicketInfo(event) {
-        var modalTitle = document.querySelector(".modal-title")
-        modalTitle.textContent = "이용권 수정"
-        var editModalBtn = document.querySelector(".editModalBtn")
-        editModalBtn.textContent = "수정"
-        var ticketId = event.target.getAttribute('data-ticket-id')
-        var ticketName = event.target.getAttribute('data-ticket-name')
-        var ticketPrice = event.target.getAttribute('data-ticket-price')
-        var ticketTime = event.target.getAttribute('data-ticket-time')
-        document.getElementById('editTicketId').value = ticketId
-        document.getElementById('editTicketName').value = ticketName
-        document.getElementById('editTicketPrice').value = ticketPrice
-        document.getElementById('editTicketTime').value = ticketTime
-    }
+    tickets.forEach((ticket, index) => {
+        const editBtns = document.getElementsByClassName('editBtn')
+        for(let i=0; i<editBtns.length; i++) {
+            editBtns[i].onclick = function updateTicketInfo(event) {
+                var ticketId = event.target.getAttribute('data-ticket-id')
+                var ticketName = event.target.getAttribute('data-ticket-name')
+                var ticketPrice = event.target.getAttribute('data-ticket-price')
+                var ticketTime = event.target.getAttribute('data-ticket-time')
+                document.getElementById('editTicketId').value = ticketId
+                document.getElementById('editTicketName').value = ticketName
+                document.getElementById('editTicketPrice').value = ticketPrice
+                document.getElementById('editTicketTime').value = ticketTime
+            }
+        }
+    });
 
     /*이용권 등록 모달 내용 리셋 */
-    const ticketModalLink = document.querySelector('[data-bs-toggle=modal][data-bs-target="#ticketUpdate"]')
-    ticketModalLink.onclick = function showModal() {
-        document.getElementById('editTicketId').value = ""
-        document.getElementById('editTicketName').value = ""
-        document.getElementById('editTicketPrice').value = ""
-        document.getElementById('editTicketTime').value = ""
-    }
+    // const ticketModalLink = document.querySelector('[data-bs-toggle=modal][data-bs-target="#ticketUpdate"]')
+    // ticketModalLink.onclick = function showModal() {
+    //     document.getElementById('editTicketId').value = ""
+    //     document.getElementById('editTicketName').value = ""
+    //     document.getElementById('editTicketPrice').value = ""
+    //     document.getElementById('editTicketTime').value = ""
+    // }
 
     const deleteTicketBtn = document.querySelectorAll('#deleteTicketBtn');
     deleteTicketBtn.forEach(function (btn) {
