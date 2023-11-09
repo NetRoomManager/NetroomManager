@@ -633,11 +633,13 @@
 
 			 function formatTime(param) {
 
-				 if (param===300) {
+				 // 3분남음
+				 if (remainingTime===300) {
 					const audio = new Audio('/audio/5.mp3');
 					audio.play();
 				 }
-				 else if (param===180) {
+				 // 5분 남음
+				 else if (remainingTime===180) {
 					 const audio = new Audio('/audio/3.mp3');
 					 audio.play();
 				 }

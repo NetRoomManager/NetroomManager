@@ -41,9 +41,6 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
     @Autowired
     private RemainingTimeRepository remainingTimeRepository;
 
-    @Autowired
-    private RedisTemplate<String, Object> redisTemplate;
-
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
 
@@ -51,7 +48,7 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
         RequestCache requestCache = new HttpSessionRequestCache();
         SavedRequest savedRequest = requestCache.getRequest(request, response);
 
-        String targetUrl = "/";
+        String targetUrl = "/customer/seat";
         if (savedRequest != null) {
             targetUrl = savedRequest.getRedirectUrl();
         }
@@ -90,13 +87,6 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
                     // 이용권 충전 페이지로 보냄
                     targetUrl = "/auth/buyTicket";
 
-                } else { // 남은 시간이 있다면 레디스에 저장 후 로그인 유지
-                    long remaningTime = remainingTime.getRemainingTime();
-
-                    log.info(user.getUsername() + "님의 남은 시간: " + remaningTime + "분");
-
-                    // 레디스에 로드
-                    redisTemplate.opsForValue().set(user.getUsername()+" "+remaningTime, remaningTime, remaningTime, TimeUnit.SECONDS);
                 }
             }
         }

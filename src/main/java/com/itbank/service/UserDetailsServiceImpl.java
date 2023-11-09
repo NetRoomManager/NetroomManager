@@ -79,9 +79,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         log.info(username + "님의 남은 시간: " + remaningTime + "초");
 
-        // 레디스에 로드
-        redisTemplate.opsForValue().set(username + " " + remaningTime, remaningTime, remaningTime, TimeUnit.SECONDS);
-
         return new UserPrincipal(customUser);
     }
 

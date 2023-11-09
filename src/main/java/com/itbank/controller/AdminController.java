@@ -4,16 +4,19 @@ import com.itbank.model.*;
 import com.itbank.model.dto.SeatInfoDTO;
 import com.itbank.repository.jpa.DropOutUserRepository;
 import com.itbank.repository.jpa.ProductRepository;
+import com.itbank.repository.jpa.SeatRepository;
 import com.itbank.repository.mybatis.DropOutUserDAO;
 import com.itbank.service.*;
 import com.itbank.service.ProductService;
 import com.itbank.service.UserService;
+import com.itbank.wersocketConfig.ChatComponent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -21,12 +24,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import redis.clients.jedis.Jedis;
 
-import java.util.List;
+import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
-import java.util.Map;
-import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Controller
@@ -50,10 +53,22 @@ public class AdminController {
     private SeatService seatService;
 
     @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
+    @Autowired
     private ProductRepository productRepository;
 
     @Autowired
+    private SeatRepository seatRepository;
+
+    @Autowired
     private DropOutUserRepository dropOutUserRepository;
+
+    @Autowired
+    private Jedis jedis;
+
+    @Autowired
+    private ChatComponent chatComponent;
 
     @Autowired
     private DropOutUserDAO dropOutUserDAO;
@@ -182,13 +197,66 @@ public class AdminController {
     }
 
     @PostMapping("/add_update")
-    public String add_update(@RequestParam("seat_state") Long  state, @RequestParam("hour") Integer  hour,
+    public String add_update(@RequestParam("seat_state") Long  state, @RequestParam("hour") Long  hour,
                              @RequestParam("seatId") Long  seatId){
         log.info( "state" + String.valueOf(state));
         log.info( "hour" + String.valueOf(hour));
         log.info( "seatId" + String.valueOf(seatId));
-        int result = seatService.updateSeat(state, hour, seatId);
-        log.info("result" + result);
+
+        /*
+        기존 Redis에 저장된 키의 만료시간을 불러옴
+        기존 Key를 삭제
+        새로운 시간으로 레디스 키를 저장
+        만료시간은 새로운 시간 - (이전 남은시간 - 이전 레디스 남은 만료시간)
+         */
+        if (hour == 1) {
+            hour = 60L;
+        } else if (hour == 2) {
+            hour = 120L;
+        } else if (hour == 3) {
+            hour = 180L;
+        } else if (hour == 4) {
+            hour = 240L;
+        } else if (hour == 5) {
+            hour = 300L;
+        } else if (hour == 6) {
+            hour = 360L;
+        } else {
+            hour = 0L;
+        }
+        Seat seat = seatRepository.findById(seatId).orElseThrow(() -> new IllegalArgumentException("잘못된 접근입니다."));
+        if(seat.getUser()!=null){
+            // 남은 만료시간
+            Long ttl = jedis.ttl(seat.getUser().getUsername() + " " + seat.getUser().getRemainingTime().getRemainingTime());
+            // 기존키 삭제
+            redisTemplate.delete(seat.getUser().getUsername() + " " + seat.getUser().getRemainingTime().getRemainingTime());
+
+            // 사용시간
+            Long usingTime = seat.getUser().getRemainingTime().getRemainingTime() - ttl;
+
+            log.info("사용시간: " + usingTime);
+            log.info("만료시간: " + ttl);
+
+            int time = (int) (ttl + hour);
+
+            // DB에 시간 반영
+            int result = seatService.updateSeat(state, time , seatId);
+            seat = seatRepository.findById(seat.getSeatId()).orElseThrow(() -> new IllegalArgumentException("잘못된 접근입니다."));
+
+            redisTemplate.opsForValue().set(seat.getUser().getUsername()+" "+time, time, time - usingTime, TimeUnit.SECONDS);
+
+
+            log.info("레디스에 저장한 값: " + seat.getUser().getUsername()+" "+ time);
+            log.info("DB에 저장한 값: " + seat.getUser().getRemainingTime().getRemainingTime());
+            log.info("time: " + time);
+
+            log.info("result" + result);
+
+            Message message = new Message("admin", time + "초 추가", seat.getUser().getUsername(), new Date());
+            chatComponent.saveMessage(message);
+            chatComponent.convertAndSendToUser(seat.getUser().getUsername(), "/queue/messages", message);
+        }
+
 
         return "redirect:/admin/seat";
     }
