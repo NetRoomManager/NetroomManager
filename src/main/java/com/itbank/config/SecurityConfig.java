@@ -67,18 +67,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .headers().frameOptions().sameOrigin();
 
         http.authorizeRequests()
-//                .antMatchers("/", "/auth/**", "/img/**", "/css/**", "/js/**")
-                .antMatchers("/**")
+                .antMatchers("/", "/auth/**", "/img/**", "/css/**", "/js/**", "/audio/**")
                 // 위 경로는 로그인 안해도 ㄱㄴ
                 .permitAll()
 
-//                .antMatchers("/admin/**")
+                .antMatchers("/admin/**")
 //                // ADMIN만 가능
-//                .hasRole("ADMIN")
+                .hasRole("ADMIN")
 //
-//                .antMatchers("/customer/**")
+                .antMatchers("/customer/**")
 //                // ADMIN, USER가능
-//                .hasAnyRole("USER", "ADMIN")
+                .hasAnyRole("USER", "ADMIN")
                 .anyRequest().authenticated()
                 .and()
 
@@ -88,6 +87,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 // 로그인 페이지 지정
                 .loginPage("/auth/login")
+                .successHandler((request, response, exception) -> {
+                    System.out.println("로그인 성공 핸들러");
+                    response.sendRedirect("/customer/main");
+                })
                 // 실패시 핸들러
                 .failureHandler(((request, response, exception) -> {
                     if(exception instanceof AuthenticationServiceException) {
@@ -98,7 +101,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     }
                 }))
                 // 성공시 URL
-                .defaultSuccessUrl("/")
+//                .defaultSuccessUrl("/")
                 // 로그인 처리 담당할 주소
                 .loginProcessingUrl("/auth/login")
                 .and()
@@ -106,7 +109,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 로그아웃 URL
                 .logoutUrl("/auth/logout")
                 // 로그아웃 성공 URL
-                .logoutSuccessUrl("/")
+//                .logoutSuccessUrl("/customer/main")
                 // 로그아웃시 세션 날림
                 .invalidateHttpSession(true)
                 // 쿠키도 날림
