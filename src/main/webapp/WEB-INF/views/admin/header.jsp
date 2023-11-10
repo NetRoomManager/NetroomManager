@@ -31,7 +31,21 @@ html {
 	font-family: "AppleSDGothicNeoR00", "Noto Sans KR", "맑은 고딕";
 	overflow: hidden;
 }
+.from {
+	text-align: right;
+	background-color: #d2d2d2;
+	border-radius: 10px;
+	margin: 10px;
+	padding: 10px;
+}
 
+.to {
+	text-align: left;
+	background-color: #eaeaea;
+	border-radius: 10px;
+	margin: 10px;
+	padding: 10px;
+}
 #menu_bar {
 	background-color: #ffa500
 }
@@ -77,6 +91,48 @@ html {
 <%--			</ul>--%>
 <%--		</div>--%>
 <%--	</nav>--%>
+
+
+<%--채팅 모달--%>
+<div class="modal fade" id="seat_chat" aria-hidden="true"
+	 data-bs-backdrop="static" data-bs-keyboard="false"
+	 aria-labelledby="seat_chatLabel2" tabindex="-1"
+	 style="z-index: 1056">
+	<div class="modal-dialog modal-dialog-centered">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="exampleModalToggleLabel2">좌석번호</h5>
+				<button type="button" class="btn-close" data-bs-dismiss="modal"
+						aria-label="Close"></button>
+			</div>
+			<div class="modal-body">
+				<div class="chat_modal_content rounded">
+					<span>name에게 보낼 메시지</span>
+					<!-- 채팅 인터페이스 -->
+					<div id="chat_box"
+						 style="height: 300px; border: 1px solid #ccc; padding: 10px; overflow: auto;">
+						<!-- 채팅 메시지가 여기에 표시됩니다 -->
+					</div>
+					<div class="d-flex">
+						<input class="input mt-1" type="text" id="message"
+							   placeholder="채팅 내용을 입력하세요" style="width: 80%">
+						<input type="hidden" id="to">
+						<button type="button" class="btn btn-primary mt-1 mx-3"
+								style="width: 15%" onclick="send()">전송</button>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button class="btn btn-primary" data-bs-target="#seat_select"
+						data-bs-toggle="modal" data-bs-dismiss="modal">상태</button>
+				<button class="btn btn-danger" data-bs-target="#exampleModalToggle"
+						data-bs-toggle="modal" data-bs-dismiss="modal">닫기</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
 <nav id="menu_bar" class="nav nav-pills flex-column py-3 text-center"
 	 style="position: absolute; height: 100%;">
 	<a class="nav-link py-3"></a>
@@ -119,14 +175,33 @@ html {
 					chatRoomDiv.innerHTML += from + ': ' + message + ' (' + getCurrentTime() + ')<br>';
 				};
 			}
+
+			getMessages();
 		}
 	}
 
 	function showMessageOutput(messageOutput) {
+
+
+
 		let chatRoomDiv = document.getElementById('chat_box');
+
+		let to = document.getElementById('to').value;
+		// 'to' 값이 빈 문자열인 경우 'messageOutput.from' 값을 'to'로 설정
+		if (!to) {
+			to = messageOutput.from;
+			document.getElementById('to').value = to;
+		}
+
 		if (!chatRoomDiv) {
 			alert("채팅방을 찾지 못했습니다.");
 		} else {
+
+			// 받는사람 아이디 설정
+			// const to = document.getElementById('to');
+			// to.value=messageOutput.from;
+			// console.log('to1: ' + messageOutput.from);
+
 			// 새로운 메시지 추가
 			let messageDiv = document.createElement('div');
 			messageDiv.className = 'chat_message ' + (messageOutput.from === from ? 'from' : 'to');
@@ -136,12 +211,23 @@ html {
 			// 스크롤을 채팅창의 가장 아래로 내립니다.
 			chatRoomDiv.scrollTop = chatRoomDiv.scrollHeight;
 
-			// 모달창이 열려있지 않을 때만 알림을 띄웁니다.
-			if (modal.style.display !== 'inline-block') {
-				document.getElementById('alert').style.display = 'block';
+			// 모달창 열기
+			let modal = document.getElementById('seat_chat');
+			let modalInstance = bootstrap.Modal.getInstance(modal); // 기존 모달 인스턴스 가져오기
+
+			// 모달 인스턴스가 없는 경우 새로 생성
+			if (modalInstance === null) {
+				modalInstance = new bootstrap.Modal(modal);
+				getMessages();
+			}
+
+			// 모달이 이미 열려있지 않은 경우에만 show 메소드 호출
+			if (!modalInstance._isShown) {
+				modalInstance.show();
 			}
 		}
 	}
+
 
 	function msgDel() {
 		document.getElementById('alert').style.display = 'none';
@@ -184,11 +270,14 @@ html {
 		stompClient.send("/app/chat", {}, JSON.stringify(msg));
 
 		// 메시지를 보낸 후에 화면에 최신 메시지를 출력합니다.
+		// showMessageOutput(msg);  // 이 부분을 주석 처리하거나 삭제
+
 		showMessageOutput(msg);
 
 		document.getElementById('message').value = '';
 		document.getElementById('message').focus();
 	}
+
 
 	function getMessages() {
 		// 상대방의 아이디를 'to' 입력창으로부터 가져옵니다.
@@ -198,6 +287,7 @@ html {
 		fetch('/sync/' + to)
 				.then(response => response.json())
 				.then(data => {
+					console.log(data);
 					// 서버로부터 받은 메시지를 시간 순으로 정렬합니다.
 					data.sort((a, b) => (a.time > b.time) ? 1 : ((b.time > a.time) ? -1 : 0));
 
@@ -213,5 +303,42 @@ html {
 				.catch(error => console.error('Error:', error));
 	}
 
+	function switchChatRoom(userId) {
+		// 채팅 내역 초기화
+		let chatRoomDiv = document.getElementById('chat_box');
+		chatRoomDiv.innerHTML = '';
+
+		// 수신자 정보 업데이트
+		let toInput = document.getElementById('to');
+		toInput.value = userId;
+
+		console.log('to2: ' + userId);
+
+
+		// 새로운 유저의 채팅 내역 로드
+		getMessages();
+
+	}
+
+	function getCurrentTime() {
+		let current = new Date();
+		let year = current.getFullYear();
+		let month = current.getMonth() + 1;
+		let date = current.getDate();
+		let hours = current.getHours();
+		let minutes = current.getMinutes();
+		let seconds = current.getSeconds();
+
+		// 1자리 수를 2자리 수로 바꾸기
+		month = (month < 10) ? '0' + month : month;
+		date = (date < 10) ? '0' + date : date;
+		hours = (hours < 10) ? '0' + hours : hours;
+		minutes = (minutes < 10) ? '0' + minutes : minutes;
+		seconds = (seconds < 10) ? '0' + seconds : seconds;
+
+		return year + '-' + month + '-' + date + 'T' + hours + ':' + minutes + ':' + seconds;
+	}
+
 	connect();
+
 </script>

@@ -96,6 +96,9 @@ public class CustomerController {
             mav.addObject("userLog", userLogService.findLatestByUser(user).get());
             long l = user.getRemainingTime().getRemainingTime() - jedis.ttl(user.getUsername() + " " + user.getRemainingTime().getRemainingTime());
             log.info("사용시간: " + l);
+            log.info("DB저장시간: " + user.getRemainingTime().getRemainingTime());
+            log.info("레디스 남은시간: " +  jedis.ttl(user.getUsername() + " " + user.getRemainingTime().getRemainingTime()));
+
             mav.addObject("usingTime", l);
             mav.addObject("remainingTime", jedis.ttl(user.getUsername() + " " + user.getRemainingTime().getRemainingTime()));
 
@@ -116,7 +119,7 @@ public class CustomerController {
         }
         else {
             System.out.println(3);
-            mav.setViewName("/customer/seat_view");
+            mav.setViewName("redirect:/customer/seat");
         }
         return mav;
     }

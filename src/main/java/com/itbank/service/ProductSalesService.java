@@ -24,7 +24,7 @@ public class ProductSalesService {
 
 
     public List<ProductSalesDTO> proSalesAllList(Map<String, String> dates) throws ParseException {
-
+        log.info(dates.toString());
         return productSalesDAO.proSalesAllSelect(dates);
 
     }

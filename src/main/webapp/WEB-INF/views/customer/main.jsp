@@ -116,11 +116,17 @@
 
     .chat_message.from {
         text-align: right;
-    }
+        background-color: #d2d2d2;
+        border-radius: 10px;
+        margin: 10px;
+        padding: 10px;    }
 
     .chat_message.to {
         text-align: left;
-    }
+        background-color: #eaeaea;
+        border-radius: 10px;
+        margin: 10px;
+        padding: 10px;    }
 
     .game_modal {
         display: none; /* Hidden by default */

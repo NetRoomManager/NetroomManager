@@ -38,7 +38,6 @@ html {
 	display: none;
 }
 
-@charset "utf-8";
 /* ---- reset ---- */
 body {
 	margin: 0;
@@ -436,6 +435,9 @@ canvas {
 
 			return year + '-' + month + '-' + date + 'T' + hours + ':' + minutes + ':' + seconds;
 		}
+
+
+
 
 		connect();
 	</script>

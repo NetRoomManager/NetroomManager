@@ -238,7 +238,14 @@ public class AdminController {
             // 남은 만료시간
             Long ttl = jedis.ttl(seat.getUser().getUsername() + " " + seat.getUser().getRemainingTime().getRemainingTime());
             // 기존키 삭제
-            redisTemplate.delete(seat.getUser().getUsername() + " " + seat.getUser().getRemainingTime().getRemainingTime());
+            log.info(seat.getUser().getUsername() + " " + seat.getUser().getRemainingTime().getRemainingTime() + "삭제");
+            Set<String> keys = redisTemplate.keys(seat.getUser().getUsername() + " *");
+            System.out.println("삭제할 키 : " + keys);
+            if (keys != null) {
+                for (String key : keys) {
+                    redisTemplate.delete(key);
+                }
+            }
 
             // 사용시간
             Long usingTime = seat.getUser().getRemainingTime().getRemainingTime() - ttl;
@@ -252,7 +259,7 @@ public class AdminController {
             int result = seatService.updateSeat(state, time, seatId);
             seat = seatRepository.findById(seat.getSeatId()).orElseThrow(() -> new IllegalArgumentException("잘못된 접근입니다."));
 
-            redisTemplate.opsForValue().set(seat.getUser().getUsername() + " " + time, time, time - usingTime, TimeUnit.SECONDS);
+            redisTemplate.opsForValue().set(seat.getUser().getUsername() + " " + (time + usingTime), time , time - ttl, TimeUnit.SECONDS);
 
 
             log.info("레디스에 저장한 값: " + seat.getUser().getUsername() + " " + time);
