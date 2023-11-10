@@ -81,11 +81,11 @@
         <div class="container pt-4">
             <form class="d-flex">
                 <div class="mb-3 pe-2">
-                  <input type="number" class="form-control" id="searchRangeOne">
+                  <input type="date" class="form-control" id="searchRangeOne">
                 </div>
                 <p class="h3">~</p>
                 <div class="mb-3 px-2">
-                  <input type="number" class="form-control" id="searchRangeTwo">
+                  <input type="date" class="form-control" id="searchRangeTwo">
                 </div>
                 <div>
                     <button type="submit" class="btn btn-secondary" >기간검색</button>

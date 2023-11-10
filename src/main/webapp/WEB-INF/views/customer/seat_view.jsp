@@ -150,8 +150,7 @@
                      onclick="setModalSeatId(this)">
                     <div class="seat_id card-header">좌석번호[ ${seat.seatId} ]</div>
                     <div class="seat_remain_time card-body">
-                        <pre>남은시간: </pre>
-                        <pre>${seat.remainingTime}</pre>
+                        <pre>이름: </pre>
                         <pre>${seat.username}</pre>
                     </div>
                     <div class="card-footer">
@@ -181,6 +180,7 @@
     $('#seat_select_yes').click(function() {
         alert('좌석이 선택되었습니다.');
         $('#seat_select_modal').modal('hide');
+        // window.location.href = "http://localhost:8080/auth/login";
     });
 </script>
 
