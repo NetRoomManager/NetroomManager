@@ -1,3 +1,10 @@
+<%--
+  Created by IntelliJ IDEA.
+  User: sean7
+  Date: 2023-11-09
+  Time: 오후 3:04
+  To change this template use File | Settings | File Templates.
+--%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8" %>
 <%@ include file="header.jsp" %>
@@ -54,39 +61,34 @@
     </div>
 </nav>
 
+<%--<div class="container pt-4">--%>
+<%--    <form class="d-flex">--%>
+<%--        <div class="mb-3 pe-2" style="width: 150px;">--%>
+<%--            <label></label>--%>
+<%--            <select name="type" class="form-select" aria-label="Default select example">--%>
+<%--                <option selected value="">전체</option>--%>
+<%--                <option value="name"  ${param.type=='name' ? 'selected' : ''}>유저이름</option>--%>
+<%--                <option value="username" ${param.type=='username' ? 'selected' : ''}>아이디</option>--%>
+<%--                <option value="mobile" ${param.type=='mobile' ? 'selected' : ''}>휴대폰번호</option>--%>
+<%--                <option value="email" ${param.type=='email' ? 'selected' : ''}>이메일</option>--%>
+<%--            </select>--%>
+<%--        </div>--%>
+<%--        <div class="mb-3 pe-2">--%>
+<%--            <label for="searchName"></label><input type="text" class="form-control" id="searchName" name="keyword"  value="${param.keyword}">--%>
+<%--        </div>--%>
+<%--        <div class="mb-3 pt-4">--%>
+<%--            <button type="submit" class="btn btn-secondary">검색</button>--%>
+<%--        </div>--%>
+<%--    </form>--%>
+<%--</div>--%>
 <div class="container pt-4">
-    <form class="d-flex">
-        <div class="mb-3 pe-2" style="width: 150px;">
-            <label></label>
-            <select name="type" class="form-select" aria-label="Default select example">
-                <option selected value="">전체</option>
-                <option value="name"  ${param.type=='name' ? 'selected' : ''}>유저이름</option>
-                <option value="username" ${param.type=='username' ? 'selected' : ''}>아이디</option>
-                <option value="mobile" ${param.type=='mobile' ? 'selected' : ''}>휴대폰번호</option>
-                <option value="email" ${param.type=='email' ? 'selected' : ''}>이메일</option>
-            </select>
-        </div>
-        <div class="mb-3 pe-2">
-            <label for="searchName"></label><input type="text" class="form-control" id="searchName" name="keyword"  value="${param.keyword}">
-        </div>
-        <div class="mb-3 pt-4">
-            <button type="submit" class="btn btn-secondary">검색</button>
-        </div>
-    </form>
-</div>
-<div class="container">
     <table class="table table-hover">
         <thead>
         <tr class="table-dark text-center">
-            <th scope="col">유저고유번호</th>
+            <th scope="col">탈퇴유저번호</th>
             <th scope="col">유저이름</th>
             <th scope="col">유저아이디</th>
-            <th scope="col">유저남은시간</th>
-            <th scope="col">최근로그인시간</th>
-            <th scope="col">휴대폰번호</th>
-            <th scope="col">이메일</th>
-            <th scope="col">생년월일</th>
-            <th scope="col">유저삭제</th>
+            <th scope="col">유저복구</th>
         </tr>
         </thead>
         <tbody>
@@ -95,19 +97,8 @@
                 <td class="pt-3">${dto.user.id}</td>
                 <td class="pt-3">${dto.user.name}</td>
                 <td class="pt-3">${dto.user.username}</td>
-                <td class="pt-3">${(dto.remainingTime.remainingTime) / 60}분</td>
-                <td class="pt-3">${dto.lastLog.loginAt}</td>
-                <td class="pt-3">${not empty dto.user.mobile ? dto.user.mobile : '모바일 정보 없음'}</td>
-                <td class="pt-3">${dto.user.email}</td>
-                <td class="pt-3">${not empty dto.user.birth ? dto.user.birth : '생일 정보 없음'}</td>
                 <td>
-                    <c:if test="${dropOutMap[dto.user.id] != null}">
-                        <a href="/admin/userUndelete/${dto.user.id}"><button type="button" class="btn btn-outline-primary">복구</button></a>
-                    </c:if>
-                    <c:if test="${dropOutMap[dto.user.id] == null}">
-                        <a href="/admin/userdelete/${dto.user.id}"><button type="button" class="btn btn-outline-danger">탈퇴</button></a>
-                    </c:if>
-
+                    <a href="/admin/userUndelete/${dto.user.id}"><button type="button" class="btn btn-outline-danger">복구</button></a>
                 </td>
             </tr>
         </c:forEach>
@@ -116,15 +107,15 @@
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
             <li class="page-item">
-                <a class="page-link" href="/admin/user?page=0&size=10" aria-label="Previous">
+                <a class="page-link" href="/admin/dropOutUser?page=0&size=10" aria-label="Previous">
                     <span aria-hidden="true">&laquo;</span>
                 </a>
             </li>
             <c:forEach var="page" begin="0" end="${page.totalPages - 1}">
-                <li class="page-item"><a class="page-link  ${param.page == page ? 'bg-primary text-white' : ''}" href="/admin/user?page=${page}&size=10" >${page+1}</a></li>
+                <li class="page-item"><a class="page-link  ${param.page == page ? 'bg-primary text-white' : ''}" href="/admin/dropOutUser?page=${page}&size=10" >${page+1}</a></li>
             </c:forEach>
             <li class="page-item">
-                <a class="page-link" href="/admin/user?page=${page.totalPages - 1}&size=10" aria-label="Next">
+                <a class="page-link" href="/admin/dropOutUser?page=${page.totalPages - 1}&size=10" aria-label="Next">
                     <span aria-hidden="true">&raquo;</span>
                 </a>
             </li>

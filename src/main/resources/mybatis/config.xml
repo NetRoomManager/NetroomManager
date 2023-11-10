@@ -11,6 +11,8 @@
         <typeAlias type="com.itbank.model.Product" alias="productEntity"/>
         <typeAlias type="com.itbank.model.Payment" alias="payment"/>
         <typeAlias type="com.itbank.model.dto.SeatInfoDTO" alias="seatinfo"/>
+        <typeAlias type="com.itbank.model.dto.ProductSalesDTO" alias="productsales"/>
+        <typeAlias type="com.itbank.model.dto.ProductItemDTO" alias="productItem"/>
     </typeAliases>
 </configuration>
 

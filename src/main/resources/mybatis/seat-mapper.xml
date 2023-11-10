@@ -30,7 +30,7 @@
 
     <update id="updateSeatHour" parameterType="map">
         UPDATE remaining_time
-        SET remainingTime = remainingTime + #{addHour}
+        SET remainingTime = #{hour}
         WHERE user_id = (
         SELECT user_id
         FROM seat

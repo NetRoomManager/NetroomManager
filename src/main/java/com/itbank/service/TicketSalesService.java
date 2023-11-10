@@ -22,29 +22,7 @@ public class TicketSalesService {
     @Autowired
     private TicketSalesDAO ticketSalesDAO;
 
-    public List<TicketSalesDTO> selectAll(HttpServletRequest request) throws ParseException {
-
-        Map<String, String> dates = new HashMap<>();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-
-        String startParam = request.getParameter("startDate");
-        String endParam = request.getParameter("endDate");
-
-
-        if (startParam == null || startParam.isEmpty()) {
-            startParam = "1970-01-01";
-            dates.put("startDate", startParam);
-        } else {
-            dates.put("startDate", startParam);
-        }
-
-        if (endParam == null || endParam.isEmpty()) {
-            endParam = sdf.format(new Date()).toString();
-            log.info(endParam);
-            dates.put("endDate", endParam);
-        } else {
-            dates.put("endDate", endParam);
-        }
+    public List<TicketSalesDTO> selectAll(Map<String, String> dates) throws ParseException {
 
         return ticketSalesDAO.selectAll(dates);
     }
@@ -60,8 +38,8 @@ public class TicketSalesService {
 //        return list;
 //    }
 
-    public Integer selectTotal() {
-        Integer total = ticketSalesDAO.selectTotal();
+    public Integer selectTotal(Map<String, String> dates) {
+        Integer total = ticketSalesDAO.selectTotal(dates);
         if(total == null){
             return 0;
         }

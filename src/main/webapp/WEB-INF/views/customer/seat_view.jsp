@@ -96,29 +96,6 @@
 
 
 
-<script>
-
-    var popoverTriggerList = [].slice.call(document
-        .querySelectorAll('[data-bs-toggle="popover"]'))
-    var popoverList = popoverTriggerList.map(function(popoverTriggerEl) {
-        return new bootstrap.Popover(popoverTriggerEl)
-    })
-
-    $(document).ready(function() {
-        $.ajax({
-            url : "header.html",
-            dataType : "html",
-            success : function(response) {
-                $("#headerContent").html(response);
-            },
-        });
-    });
-
-</script>
-
-
-
-
 <%-- 좌석 --%>
 <div class="container pt-4 d-flex" >
     <c:forEach var="i" begin="1" end="2">
@@ -144,13 +121,15 @@
                 </c:choose>
                 <div class="card ${bgColor} text-white mx-3 mt-3"
                      style="width: 25%; height: 25%;" data-bs-toggle="modal"
-                     data-bs-target="#seat_detail"
+                     data-bs-target="#seat_select_modal"
                      data-bs-id="${seat.seatId}"
                      data-bs-userid="${seat.user_id}"
-                     onclick="setModalSeatId(this)">
+                     data-bs-state="${seat.seatState}">
+
                     <div class="seat_id card-header">좌석번호[ ${seat.seatId} ]</div>
                     <div class="seat_remain_time card-body">
-                        <pre>이름: </pre>
+                        <pre>남은시간: </pre>
+                        <pre>${seat.remainingTime}</pre>
                         <pre>${seat.username}</pre>
                     </div>
                     <div class="card-footer">
@@ -164,24 +143,46 @@
 
 </div>
 <script>
-    // 좌석 선택 모달 표시
-    $(document).ready(function() {
-        $('.card.bg-primary.text-white.mx-3.mt-3').click(function() {
-            $('#seat_select_modal').modal('show');
+    document.addEventListener('DOMContentLoaded', function() {
+        const cards = document.querySelectorAll('.card.bg-primary.text-white.mx-3.mt-3');
+        const modal = document.getElementById('seat_select_modal');
+        const yesButton = document.getElementById('seat_select_yes');
+
+        for(let i = 0; i < cards.length; i++) {
+            cards[i].addEventListener('click', function() {
+                // 좌석의 ID를 data 속성을 통해 가져와 모달의 data 속성에 저장
+                const seatId = this.getAttribute('data-bs-id');
+                const state = this.getAttribute('data-bs-state');
+                modal.setAttribute('data-selectedSeatId', seatId);
+                modal.setAttribute('data-bs-state', state);
+
+                // 모달 표시
+                const bootstrapModal = new bootstrap.Modal(modal);
+                bootstrapModal.show();
+            });
+        }
+
+        yesButton.addEventListener('click', function() {
+            const state = modal.getAttribute('data-bs-state');
+            if(state!=1) {
+                alert('사용불가한 좌석입니다.');
+                return;
+            }
+            else {
+                // 모달의 data 속성에서 선택된 좌석 ID를 가져와 콘솔에 출력
+                const selectedSeatId = modal.getAttribute('data-selectedSeatId');
+
+                location.href='/customer/seatSelector?seatId=' + selectedSeatId;
+
+                console.log('선택된 좌석 ID: ' + selectedSeatId);
+            }
+
+            // 모달 숨김
+            const bootstrapModal = bootstrap.Modal.getInstance(modal);
+            bootstrapModal.hide();
         });
     });
 
-    // No 버튼 클릭 시 좌석 보여주기
-    $('#seat_select_modal').on('hidden.bs.modal', function (e) {
-        // 좌석을 보여주는 로직 추가
-    });
-
-    // Yes 버튼 클릭 시 메시지 표시
-    $('#seat_select_yes').click(function() {
-        alert('좌석이 선택되었습니다.');
-        $('#seat_select_modal').modal('hide');
-        // window.location.href = "http://localhost:8080/auth/login";
-    });
 </script>
 
 </body>

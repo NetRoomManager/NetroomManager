@@ -18,7 +18,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0 pt-1">
             <li class="nav-item">
-                <a class="nav-link active navbar-brand" aria-current="page" href="/">NetRoom</a>
+                <a class="nav-link active navbar-brand" aria-current="page" href="${cpath}/">NetRoom</a>
             </li>
             <li class="nav-item pe-3">
                 <a class="nav-link" href="${cpath}/admin/productsales">상품매출</a>

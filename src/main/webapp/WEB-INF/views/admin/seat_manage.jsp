@@ -160,16 +160,6 @@
 		return new bootstrap.Popover(popoverTriggerEl)
 	})
 
-	$(document).ready(function() {
-		$.ajax({
-			url : "header.html",
-			dataType : "html",
-			success : function(response) {
-				$("#headerContent").html(response);
-			},
-		});
-	});
-
 </script>
 
 

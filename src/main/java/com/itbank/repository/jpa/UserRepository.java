@@ -20,7 +20,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     Page<User> findAllByUsernameContaining(String username, Pageable pageable);
 
-    Optional<User> findByEmailOrMobile(String email, String mobile);
+    Optional<User> findByEmailAndEmailIsNotNullOrMobileAndMobileIsNotNull(String email, String mobile);
 
     Optional<User> findByNameAndEmail(String name, String email);
 
@@ -35,4 +35,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT u FROM User u WHERE u.username LIKE %:keyword% OR u.email LIKE %:keyword% OR u.name LIKE %:keyword% OR u.mobile LIKE %:keyword%")
     Page<User> findAllByKeyword(@Param("keyword") String keyword, Pageable pageable);
 
+    Optional<User> findByUsernameAndEmail(String username, String email);
+
+    Optional<User> findByEmail(String buyerEmail);
 }

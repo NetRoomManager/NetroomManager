@@ -61,7 +61,7 @@ public class UserService {
 
             // 남은 시간에 유저의 시간을 관리자는 로그인 바로 시키기 위해 1분
             RemainingTime remainingTime = new RemainingTime();
-            remainingTime.setRemainingTime(15);
+            remainingTime.setRemainingTime(1000000000);
 
             // User 객체 생성
             User user = new User();
@@ -91,7 +91,7 @@ public class UserService {
         }
     }
 
-    public void createUsers(User paramUser) {
+    public int createUsers(User paramUser) {
 
         log.info("유저를 생성합니다");
 
@@ -133,9 +133,10 @@ public class UserService {
         }
         // 중복 가입 처리
         catch (DataIntegrityViolationException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "이미 가입된 정보입니다",  e);
-        }
+/*            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "이미 가입된 정보입니다",  e);*/
+            return 0;
+        }return 1;
     }
 
     public void testAdmin() {

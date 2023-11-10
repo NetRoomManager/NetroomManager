@@ -9,7 +9,7 @@ import javax.persistence.*;
 @Table(name = "order_list")
 @Getter
 @Setter
-public  class OrderList {
+public  class OrderList extends Message {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,7 +1,9 @@
 package com.itbank.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Getter;
 import lombok.Setter;
+import net.minidev.json.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -34,6 +36,7 @@ public class User implements Serializable {
     @Column(nullable = false)
     private String name;
 
+    @JsonIgnoreProperties("user")
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private Set<UserRole> userRoles;
 

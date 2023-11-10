@@ -81,45 +81,28 @@ public class SeatService {
 
         if(seat.isPresent() && hour > 0 && seat.get().getUser() != null ){    // 시간추가
             log.info( "updateSeatHour state" + state);
-            Long addHour = 60L;
-            switch (hour) {
-                case 1:
-                    addHour = 60L;
-                    break;
-                case 2:
-                    addHour = 120L;
-                    break;
-                case 3:
-                    addHour = 180L;
-                    break;
-                case 4:
-                    addHour = 240L;
-                    break;
-                case 5:
-                    addHour = 300L;
-                    break;
-                case 6:
-                    addHour = 360L;
-                    break;
-                default:
-                    addHour = 0L;
-                    break;
-            }
-            updateSeat.put("addHour",addHour);
-            log.info( "updateSeatHour addHour" + addHour);
+
+            updateSeat.put("hour",hour);
+            log.info( "updateSeatHour addHour" + hour);
             i = seatDAO.updateSeatHour(updateSeat);
             log.info( "updateSeatHour i" + i);
         }
+
+
+        return i;
+    }
+
+    public int updateState(Long seatId, Long state) {
+        HashMap<String, Object> updateSeat = new HashMap<>();
+        updateSeat.put("seatId",seatId);
+        updateSeat.put("seatState",state);
+        Optional<Seat> seat = seatRepository.findById(seatId);
+        int i = 0;
         if(seat.isPresent() && seat.get().getUser() == null ){
             log.info( "updateSeatState state" + state);
             i = seatDAO.updateSeatState(updateSeat);
             log.info( "updateSeatState i" + i);
         }
-
-        else {
-            log.info( "업데이트 실패" );
-        }
-
         return i;
     }
 
