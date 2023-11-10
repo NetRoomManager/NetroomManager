@@ -111,7 +111,7 @@
             <th scope="col">결제금액</th>
             <th scope="col">결제방식</th>
             <th scope="col">판매시간</th>
-            <th scope="col" colspan="2">관리</th>
+            <th scope="col" >관리</th>
         </tr>
         </thead>
         <tbody>
@@ -121,7 +121,7 @@
                 <td class="pt-3">${list.id}</td>
                 <td class="pt-3">${list.paymentId}</td>
                 <td class="pt-3">${list.username}</td>
-                <td class="pt-3">${list.orderTotalPrice}</td>
+                <td class="pt-3">${list.orderTotalPrice}원</td>
                 <td class="pt-3">${list.paymentMethod}</td>
                 <td class="pt-3">${list.salesDate}</td>
                 <td>
@@ -142,8 +142,7 @@
             <td class="pt-3" ></td>
             <td class="pt-3" ></td>
             <td class="pt-3" ></td>
-            <td class="pt-3" >${orderTotalPrice}</td>
-            <td class="pt-3" ></td>
+            <td class="pt-3" >${orderTotalPrice}원</td>
             <td class="pt-3" ></td>
             <td class="pt-3" ></td>
             <td class="pt-3" ></td>
