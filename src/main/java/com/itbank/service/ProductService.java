@@ -100,9 +100,6 @@ public class ProductService {
         productRepository.save(product2);
     }
 
-    public List<ProductDTO> selectAllProduct() {
-        return productDAO.selectAll();
-    }
 
     public List<ProductCategory> selectAllProductCategory() {
         return productCategoryDAO.selectAll();
@@ -127,4 +124,8 @@ public class ProductService {
         int row = productDAO.update(dto);
         return id;
     }
+
+    public List<ProductDTO> selectAll() { return productDAO.selectAll(); }
+
+    public List<ProductDTO> search(String category, String keyword) { return productDAO.search(category, keyword); }
 }

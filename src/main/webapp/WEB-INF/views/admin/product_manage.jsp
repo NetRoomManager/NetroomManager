@@ -159,18 +159,17 @@
 	</div>
 </nav>
 <div class="container pt-4">
-	<form class="d-flex">
+	<form class="d-flex" action="${cpath}/admin/product" method="get">
 		<div class="mb-3 pe-2" style="width: 150px;">
-			<select class="form-select" aria-label="Default select example">
-				<option selected>전체</option>
-				<option value="1">전체</option>
-				<option value="2">상품번호</option>
-				<option value="3">상품명</option>
-				<option value="4">상품분류</option>
+			<select class="form-select" name="category" aria-label="Default select example">
+				<option selected value="all">전체</option>
+				<option value="id">상품번호</option>
+				<option value="name">상품명</option>
+				<option value="productCategoryName">상품분류</option>
 			</select>
 		</div>
 		<div class="mb-3 pe-2">
-			<input type="text" class="form-control" id="searchName">
+			<input type="text" class="form-control" name="keyword" id="searchName">
 		</div>
 		<div>
 			<button type="submit" class="btn btn-secondary">검색</button>

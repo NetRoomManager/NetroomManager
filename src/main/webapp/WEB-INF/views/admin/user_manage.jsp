@@ -95,7 +95,7 @@
                 <td class="pt-3">${dto.user.id}</td>
                 <td class="pt-3">${dto.user.name}</td>
                 <td class="pt-3">${dto.user.username}</td>
-                <td class="pt-3">${(dto.remainingTime.remainingTime) / 60}분</td>
+                <td class="pt-3">${(dto.remainingTime.remainingTime) * 60}분</td>
                 <td class="pt-3">${dto.lastLog.loginAt}</td>
                 <td class="pt-3">${not empty dto.user.mobile ? dto.user.mobile : '모바일 정보 없음'}</td>
                 <td class="pt-3">${dto.user.email}</td>

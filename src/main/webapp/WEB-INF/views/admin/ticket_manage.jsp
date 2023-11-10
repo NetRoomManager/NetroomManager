@@ -181,8 +181,8 @@
             <tr class="text-center">
                 <td class="pt-3">${ticket.id}</td>
                 <td class="pt-3">${ticket.name}</td>
-                <td class="pt-3">${ticket.price}</td>
-                <td class="pt-3">${ticket.time}</td>
+                <td class="pt-3">${ticket.price}원</td>
+                <td class="pt-3">${ticket.time}분</td>
                 <td>
                     <button type="button" class="editBtn btn btn-outline-warning"
                             data-bs-toggle="modal" data-bs-target="#ticketUpdate"
