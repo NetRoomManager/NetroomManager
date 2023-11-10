@@ -60,7 +60,7 @@
 	<div class="modal fade" id="productUpdate" data-bs-backdrop="static"
 		 data-bs-keyboard="false" tabindex="-1"
 		 aria-labelledby="staticBackdropLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg">
+		<div class="modal-dialog modal-dialog-centered modal-lg">
 			<div class="modal-content">
 				<form action="${cpath}/admin/addProduct" method="POST" enctype="multipart/form-data">
 					<div class="modal-header">
@@ -130,7 +130,7 @@
 		</div>
 	</div>
 	<div class="modal fade" id="categoryUpdate" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-		<div class="modal-dialog">
+		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content">
 				<form action="${cpath}/admin/addProductCategory" method="POST" enctype="multipart/form-data">
 					<div class="modal-header">
@@ -238,7 +238,7 @@
 	</nav>
 
 	<div class="modal fade" id="detail_check_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg">
+		<div class="modal-dialog modal-dialog-centered modal-lg">
 			<div class="modal-content">
 
 				<!-- Modal Header -->
