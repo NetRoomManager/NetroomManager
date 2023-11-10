@@ -188,8 +188,7 @@ public class CustomerController {
 
             log.info("map: " + map);
 
-            chatComponent.convertAndSendToUser("admin", "/queue/order", map);
-
+            chatComponent.saveOrder(map);
 
             orderDetailService.addDetail(orderDetail1);
         });
