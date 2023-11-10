@@ -124,18 +124,19 @@
             </div>
             <button
                     type="submit"
-                    class="btn btn-success w-100 p-3 mt-3"
+                    class="btn btn-success w-100 p-3 mt-2"
             >
                 로그인
             </button>
             <button
                     type="button"
-                    class="btn btn-warning w-100 p-3 mt-3"
+                    class="btn btn-warning w-100 p-3 mt-2"
                     data-bs-toggle="modal"
                     data-bs-target="#myModal"
             >
                 회원 가입
             </button>
+
         </form>
         <div class="mx-5 mt-3 mb-3 d-inline-block w-50">
             <h3>소셜로그인</h3>
@@ -146,7 +147,7 @@
                     src="/img/naver_circle.png"
             />
             <img
-                    onclick="javascript:kakaoLogin()"
+                    onclick="javascript:facebookLogin()"
                     class="rounded img-fluid mt-5 mb-5 mx-5"
                     style="height: 20%"
                     src="/img/kakao.webp"
@@ -157,7 +158,14 @@
                     style="height: 20%"
                     src="/img/google.png"
             />
+
+            <!-- id/password 찾기 버튼 -->
+            <div data-bs-toggle="modal" data-bs-target="#passwordResetModal">
+                <button class="btn btn-warning w-50 p-3 mt-2">ID / PASSWORD 찾기</button>
+            </div>
         </div>
+
+
         <div class="mt-3 mb-3">
             <h3>이용권 구매</h3>
             <a href="buyTicket">
@@ -169,7 +177,58 @@
                 </button>
             </a>
         </div>
+
     </div>
+
+    <!-- 모달 -->
+    <div class="modal" id="passwordResetModal">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">아이디 / 비밀번호 찾기</h4>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="d-flex modal-body">
+                    <div class="container mt-3">
+                        <form action="/auth/find-username" method="post" id="passwordResetForm">
+                            <div class="form-floating mt-3 mb-3">
+                                <input type="text" class="form-control" id="resetName" placeholder="이름" name="name" required>
+                                <label for="resetName">이름</label>
+                            </div>
+                            <div class="form-floating mt-3 mb-3">
+                                <input type="email" class="form-control" id="resetEmail" placeholder="이메일" name="email" required>
+                                <label for="resetEmail">이메일</label>
+                            </div>
+                            <button type="submit" class="btn btn-success w-100 p-3 mt-2" id="idSubmitBtn">아이디 전송</button>
+                        </form>
+                    </div>
+                    <div class="container mt-3">
+                        <form action="/auth/password-reset" method="post" id="passwordResetForm1">
+                            <div class="form-floating mt-3 mb-3">
+                                <input type="text" class="form-control" id="resetName1" placeholder="이름" name="Username" required>
+                                <label for="resetName">아이디</label>
+                            </div>
+                            <div class="form-floating mt-3 mb-3">
+                                <input type="email" class="form-control" id="resetEmail1" placeholder="이메일" name="email" required>
+                                <label for="resetEmail">이메일</label>
+                            </div>
+                            <button type="submit" class="btn btn-success w-100 p-3 mt-2" id="pwSubmitBtn">임시 비밀번호 보내기</button>
+                        </form>
+                    </div>
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">닫기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <div class="modal" id="myModal">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -211,7 +270,6 @@
                                         required
                                 />
                                 <label for="username">아이디</label>
-
                                 <span id="check_msg"></span>
                             </div>
 
@@ -225,6 +283,8 @@
                                         required
                                 />
                                 <label for="password">패스워드</label>
+
+                                <span id="password_check_msg"></span>
                             </div>
 
                             <div class="form-floating mt-3 mb-3">
@@ -296,7 +356,7 @@
 
                             <div class="form-floating mb-3 mt-3">
                                 <input type="text" class="form-control" id="lol_nick"
-                                       placeholder="리그오브레전드 닉네임" name="summoner"/> <label
+                                       placeholder="리그오브레전드 닉네임" name="lol_nick"/> <label
                                     for="lol_nick">리그오브레전드 닉네임(선택)</label>
                             </div>
 
@@ -324,9 +384,14 @@
             </div>
         </div>
     </div>
+
 </div>
 
 <script>
+    let usernameOk = false;
+    let passwordOk = false;
+    let authenticateOk = false;
+
     function naverLogin() {
         const url =
             "/oauth2/authorization/naver";
@@ -337,12 +402,12 @@
         );
     }
 
-    function kakaoLogin() {
+    function facebookLogin() {
         const url =
-            "/oauth2/authorization/kakao";
+            "/oauth2/authorization/facebook";
         window.open(
             url,
-            "카카오 로그인",
+            "페이스북 로그인",
             "width=800,height=650,left=500,top=200"
         );
     }
@@ -363,6 +428,28 @@
             .replace(/(^02.{0}|^01.{1}|[0-9]{3,4})([0-9]{3,4})([0-9]{4})/g, "$1-$2-$3");
     }
 
+    // 패스워드 검증
+    document.getElementById('password').addEventListener('keyup', function () {
+        const password = document.getElementById('password').value;
+        const specialCharRegex = /[~!@#$%^&*()_+|<>?:{}]/;
+        const lowerCaseRegex = /[a-z]/;
+        const numberRegex = /[0-9]/;
+        const joinSubmit = document.getElementById('joinSubmit')//입력받은 인증번호
+
+        if (password.length >= 8 && specialCharRegex.test(password) && lowerCaseRegex.test(password) && numberRegex.test(password)) {
+            document.getElementById('password_check_msg').classList.add("text-primary");
+            document.getElementById('password_check_msg').classList.remove("text-danger");
+            document.getElementById('password_check_msg').innerText = "유효한 비밀번호입니다.";
+            passwordOk = true;
+        } else {
+            document.getElementById('password_check_msg').classList.remove("text-primary");
+            document.getElementById('password_check_msg').classList.add("text-danger");
+            document.getElementById('password_check_msg').innerText = "비밀번호는 8자리 이상이며, 특수문자 1개 이상, 소문자 영어와 숫자로 이루어져야 합니다.";
+            joinSubmit.disabled = true;
+            passwordOk = false;
+        }
+    });
+
     document.getElementById('join_username').addEventListener('keyup', function () {
         const username = document.getElementById('join_username').value;
 
@@ -379,19 +466,19 @@
                     document.getElementById('check_msg').classList.add("text-primary")
                     document.getElementById('check_msg').classList.remove("text-danger")
                     document.getElementById('check_msg').innerText = "유효한 아이디 입니다";
+                    usernameOk = true;
                 } else {
                     document.getElementById('check_msg').classList.remove("text-primary")
                     document.getElementById('check_msg').classList.add("text-danger")
                     document.getElementById('check_msg').innerText = "중복된 아이디입니다.";
+                    usernameOk = false;
                 }
             })
             .catch((error) => {
                 console.error('Error:', error);
             });
     });
-</script>
 
-<script>
     /* 이메일 보내기 */
     const sendAuthNumber = document.getElementById('sendAuthNumber')
     sendAuthNumber.onclick = function (event){
@@ -437,12 +524,14 @@
                     document.getElementById('check_authNumber').classList.add("text-primary")
                     document.getElementById('check_authNumber').classList.remove("text-danger")
                     document.getElementById('check_authNumber').innerText = "인증번호 확인";
+                    authenticateOk = true;
                     joinSubmit.disabled = false;
                 }else{
                     document.getElementById('check_authNumber').classList.remove("text-primary")
                     document.getElementById('check_authNumber').classList.add("text-danger")
                     document.getElementById('check_authNumber').innerText = "인증번호 오류";
                     joinSubmit.disabled = true;
+                    authenticateOk = false;
                     alert('인증번호를 다시 입력해주세요')
                 }
 
@@ -462,7 +551,23 @@
             event.preventDefault();
             alert('인증번호 확인을 해주세요.')
         }
+        if(passwordOk && usernameOk && authenticateOk){
+            event.target.submit();
+        }
     })
+
+    // 이메일 인증번호 확인시 버튼 비활성화
+    document.getElementById("authNumberCheck").addEventListener("click", function() {
+        document.getElementById("authNumber").disabled = true;
+
+        // 다른 버튼 활성화 (선택적)
+        document.getElementById("sendAuthNumber").disabled = false;
+    });
+
+    // id 찾기 버튼 누르면, email로 아이디 그대로 전송하기
+
+    // 임시 비밀번호 전송 시, uuid 랜덤으로 임시 비밀번호 전송하기
+
 
 </script>
 </body>

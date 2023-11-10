@@ -89,7 +89,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .loginPage("/auth/login")
                 .successHandler((request, response, exception) -> {
                     System.out.println("로그인 성공 핸들러");
-                    response.sendRedirect("/customer/main");
+                    response.sendRedirect("/customer/seat");
                 })
                 // 실패시 핸들러
                 .failureHandler(((request, response, exception) -> {
@@ -171,19 +171,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .scope("profile", "email")
                 .build());
-        // 카카오
-        registrations.add(ClientRegistration.withRegistrationId("kakao")
-                .clientId("a051bc66b61e4ddcc2d1df8142573cdd")
-//                .clientSecret("RC9zsO3ahACbZ7b17ChJFB3VNStFtjrC")
-                .tokenUri("https://kauth.kakao.com/oauth/token")
-                .authorizationUri("https://kauth.kakao.com/oauth/authorize")
-                .redirectUri("http://localhost:8080/login/oauth2/code/kakao")
-                .userInfoUri("https://kapi.kakao.com/v2/user/me")
-                .userNameAttributeName("kakao_account")
-//                .jwkSetUri("")
-                .clientName("Kakao")
+        // 페이스북
+        registrations.add(ClientRegistration.withRegistrationId("facebook")
+                .clientId("1450673375539413")
+                .clientSecret("6aa54388d4dae6c9e9494e65482e5103")
+                .tokenUri("https://graph.facebook.com/v2.8/oauth/access_token")
+                .authorizationUri("https://www.facebook.com/v2.8/dialog/oauth")
+                .redirectUri("http://localhost:8080/login/oauth2/code/facebook")
+                .userInfoUri("https://graph.facebook.com/me?fields=id,name,email")
+                .userNameAttributeName("id")
+                .clientName("Facebook")
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                .scope("account_email")
+                .scope("email", "public_profile")
                 .build());
 
         return new InMemoryClientRegistrationRepository(registrations);
