@@ -1,18 +1,18 @@
 package com.itbank.wersocketConfig;
 
 import com.itbank.model.Message;
+import com.itbank.model.OrderList;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
+@Slf4j
 public class ChatComponent {
 
     @Autowired
@@ -48,6 +48,15 @@ public class ChatComponent {
         return redisTemplate.opsForList().range(key, 0, -1);
     }
 
+    public void saveOrder(OrderList orderList) {
+        // 레디스 키 생성
+        String key = "order:" + orderList.getId();
+
+        // 메시지 저장
+        redisTemplate.opsForList().rightPush(key, orderList);
+    }
+
+
 
     @PostConstruct
     private void initStatic() {
@@ -61,5 +70,9 @@ public class ChatComponent {
 
     public static void convertAndSendToUser(String username, String path, Map<String, String> msg) {
         messagingTemplate.convertAndSendToUser(username, path, msg);
+    }
+
+    public void convertAndSendToUser(String admin, String path, HashMap<String, Object> stringObjectHashMap) {
+        messagingTemplate.convertAndSendToUser(admin, path, stringObjectHashMap);
     }
 }

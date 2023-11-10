@@ -17,8 +17,8 @@ public class Seat { // 데이터베이스 테이블과 매핑되는 엔티티 �
     @Column(nullable = false)
     private Long seatState = 1L;    // 사용 가능 상태
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id", unique = true)
     private User user;
 
 

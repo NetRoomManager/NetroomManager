@@ -1,21 +1,17 @@
 package com.itbank.component;
-import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
+import java.util.Optional;
 import java.util.Properties;
 import java.util.Scanner;
 
-
+import com.itbank.model.User;
 import jakarta.mail.*;
+import jakarta.mail.internet.AddressException;
 import jakarta.mail.internet.InternetAddress;
 import jakarta.mail.internet.MimeMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.stereotype.Component;
-
 public class MaileComponent {
 
     private String host;
@@ -80,6 +76,86 @@ public class MaileComponent {
             return 1;
 
         } catch (MessagingException | IOException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+    // Id 찾기( name, email 일치시, email로 id 전송 )
+    public int findUserId(HashMap<String, String> param, String userId) {
+        Session mailSession = Session.getDefaultInstance(props, new Authenticator() {
+            String un = serverId;
+            String pw = serverPw;
+
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(un, pw);
+            }
+        });
+        mailSession.setDebug(true);
+
+        Message message = new MimeMessage(mailSession);
+
+        try {
+            // HTML 템플릿을 수정합니다.
+            String htmlContent = String.format(
+                    "<fieldset style=\"padding: 10px; text-align: center;\">" +
+                            "<h3>NetroomManager id는 [ <span style=\"color: blue;\">%s</span> ] 입니다</h3>" +
+                            "</fieldset>",
+                    userId
+            );
+
+            message.setFrom(new InternetAddress(serverId + "@gmail.com"));
+            message.setRecipient(Message.RecipientType.TO, new InternetAddress(param.get("receiver")));
+            message.setSubject(param.get("subject"));
+
+            message.setContent(htmlContent, "text/html;charset=utf-8");
+            Transport.send(message);
+            return 1;
+        } catch (MessagingException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+    // password 찾기
+    public int sendPw(HashMap<String, String> param) {
+        Session mailSession = Session.getDefaultInstance(props, new Authenticator() {
+            String un = serverId;
+            String pw = serverPw;
+
+            @Override
+            protected PasswordAuthentication getPasswordAuthentication() {
+                return new PasswordAuthentication(un, pw);
+            }
+        });
+        mailSession.setDebug(true);
+
+        Message message = new MimeMessage(mailSession);
+
+        try {
+            // HTML 템플릿을 수정합니다.
+            String htmlContent = "<fieldset style=\"padding: 10px; text-align: center;\">\n" +
+                    "<h3>\n" +
+                    "NetroomManager password : [ <span style=\"color: blue;\">" + param.get("content") + "</span> ] 입니다\n" +
+                    "</h3>\n" +
+                    "</fieldset>";
+
+            message.setFrom(new InternetAddress(serverId + "@gmail.com"));
+            message.setRecipient(Message.RecipientType.TO, new InternetAddress(param.get("receiver")));
+            message.setSubject(param.get("subject"));
+
+            // HTML로 설정 (수정된 부분)
+            message.setContent(
+                    htmlContent,
+                    "text/html;charset=utf-8"
+            );
+            Transport.send(message);
+            return 1;
+
+        } catch (MessagingException e) {
             e.printStackTrace();
         }
 

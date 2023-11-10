@@ -6,13 +6,16 @@ import com.itbank.repository.mybatis.DropOutUserDAO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
-import javax.persistence.EntityManager;
 import java.sql.Date;
 import java.util.*;
 
@@ -58,7 +61,7 @@ public class UserService {
 
             // 남은 시간에 유저의 시간을 관리자는 로그인 바로 시키기 위해 1분
             RemainingTime remainingTime = new RemainingTime();
-            remainingTime.setRemainingTime(15);
+            remainingTime.setRemainingTime(1000000000);
 
             // User 객체 생성
             User user = new User();
@@ -114,6 +117,7 @@ public class UserService {
             user.setName(paramUser.getName());
             user.setEmail(paramUser.getEmail());
             user.setBirth(paramUser.getBirth());
+            user.setSummoner(paramUser.getSummoner());
 
             remainingTime.setUser(user);
             user.setRemainingTime(remainingTime);
@@ -164,51 +168,55 @@ public class UserService {
     }
 
 
-    public List<UserAndLastLog> findUserAndLastLog() {
+    public Page<UserAndLastLog> findUserAndLastLog(Pageable pageable) {
         log.info("검색어 X");
-        return findUserAndLastLog("", null);
+        return findUserAndLastLog(pageable, "", null);
     }
-    public List<UserAndLastLog> findUserAndLastLog(String type, String keyword) {
+    public Page<UserAndLastLog> findUserAndLastLog(Pageable pageable, String type, String keyword) {
 
         log.info("유형: " + type);
         log.info("검색어: "+keyword);
 
         List<UserAndLastLog> list = new ArrayList<>();
-        List<User> users = null;
+        Page<User> users;
 
         switch (type) {
             // 전체검색
             case "" :
-                users = userRepository.findAllByKeyword(keyword==null ? "" : keyword);
+                users = userRepository.findAllByKeyword(keyword==null ? "" : keyword, pageable);
                 break;
             case "name":
-                users = userRepository.findAllByNameContaining(keyword);
+                users = userRepository.findAllByNameContaining(keyword, pageable);
                 break;
             case "username":
-                users = userRepository.findAllByUsernameContaining(keyword);
+                users = userRepository.findAllByUsernameContaining(keyword, pageable);
                 break;
             case "mobile":
-                users = userRepository.findAllByMobileContaining(keyword);
+                users = userRepository.findAllByMobileContaining(keyword, pageable);
                 break;
             case "email":
-                users = userRepository.findAllByEmailContaining(keyword);
+                users = userRepository.findAllByEmailContaining(keyword, pageable);
                 break;
             default:
-                users = userRepository.findAll();
+                users = userRepository.findAll(pageable);
                 break;
         }
 
-        for(User user : users) {
+        return users.map(user -> {
             UserAndLastLog userAndLastLog = new UserAndLastLog();
             userAndLastLog.setUser(user);
             Optional<UserLog> optionalUserLog = userLogService.findLatestByUser(user);
+            Optional<RemainingTime> optionalRemainingTime = remainingTimeRepository.findByUser(user);
             if(optionalUserLog.isPresent()) {
                 UserLog log = optionalUserLog.get();
                 userAndLastLog.setLastLog(log);
             }
-            list.add(userAndLastLog);
-        }
-        return list;
+            if (optionalRemainingTime.isPresent()) {
+                RemainingTime remainingTime = optionalRemainingTime.get();
+                userAndLastLog.setRemainingTime(remainingTime);
+            }
+            return userAndLastLog;
+        });
     }
 
     public List<User> findAll() {
@@ -245,8 +253,7 @@ public class UserService {
         log.info("유저 남은시간 추가 완료!");
     }
 
-
-    public Integer delete(Long id) {
-        return Integer.valueOf(dropOutUserDAO.insert(id));
+    public Optional<User> findById(Long id) {
+        return userRepository.findById(id);
     }
 }

@@ -13,8 +13,10 @@
 <!-- Principal에서 사용자의 이름을 가져옵니다. -->
 <c:set var="username" value="${principal.username}" />
 
+<c:set var="user" value="${principal.user}" />
+
 <!-- username을 출력합니다. -->
-<p>사용자 : ${principal}</p>
+<p>사용자 : ${user}</p>
 
 
 <html>

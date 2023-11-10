@@ -7,13 +7,14 @@ import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedBy;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Date;
 
 @Table(name = "user_log")
 @Entity
 @Getter
 @Setter
-public class UserLog {
+public class UserLog implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

@@ -2,28 +2,42 @@ package com.itbank.controller;
 
 import com.itbank.model.Ticket;
 import com.itbank.model.dto.ProductSalesDTO;
+import com.itbank.model.*;
 import com.itbank.model.dto.SeatInfoDTO;
+import com.itbank.repository.jpa.DropOutUserRepository;
 import com.itbank.repository.jpa.ProductRepository;
 import com.itbank.repository.jpa.ProductSalesRepository;
+import com.itbank.repository.jpa.SeatRepository;
+import com.itbank.repository.mybatis.DropOutUserDAO;
 import com.itbank.service.*;
-import com.itbank.model.ProductCategory;
-import com.itbank.model.ProductDTO;
 import com.itbank.service.ProductService;
 import com.itbank.service.UserService;
+import com.itbank.wersocketConfig.ChatComponent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.parameters.P;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import redis.clients.jedis.Jedis;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/admin")
@@ -46,7 +60,25 @@ public class AdminController {
     private SeatService seatService;
 
     @Autowired
+    private RedisTemplate<String, Object> redisTemplate;
+
+    @Autowired
     private ProductRepository productRepository;
+
+    @Autowired
+    private SeatRepository seatRepository;
+
+    @Autowired
+    private DropOutUserRepository dropOutUserRepository;
+
+    @Autowired
+    private Jedis jedis;
+
+    @Autowired
+    private ChatComponent chatComponent;
+
+    @Autowired
+    private DropOutUserDAO dropOutUserDAO;
 
     @Autowired
     private ProductSalesService productSalesService;
@@ -68,11 +100,33 @@ public class AdminController {
 
         log.info("id :" + id);
         // delete지만 insert여
-        if(userService.delete(id) != null){
-            throw new UsernameNotFoundException("삭제 실패");
-        }
+
+        User user = userService.findById(id).orElseThrow(() -> new UsernameNotFoundException("없는 유저입니다"));
+
+        DropOutUser dropOutUser = dropOutUserRepository.findByUser(user).orElseGet(() -> {
+            DropOutUser newDropOutUser = new DropOutUser();
+            newDropOutUser.setUser(user);
+            return dropOutUserRepository.save(newDropOutUser);
+        });
+
+        log.info(dropOutUser.getUser().getUsername() + ": 탈퇴완료");
+
         return "redirect:/admin/user";
     }
+
+    @GetMapping("/userUndelete/{id}")
+    public String userUndelete(@PathVariable("id") Long id) {
+        User user = userService.findById(id).orElseThrow(() -> new UsernameNotFoundException("없는 유저입니다"));
+
+        DropOutUser dropOutUser = dropOutUserRepository.findByUser(user).orElseThrow(() -> new RuntimeException("탈퇴하지 않은 유저입니다"));
+
+        int row = dropOutUserDAO.delete(dropOutUser.getId());
+
+        log.info(row + "행 복구완료");
+
+        return "redirect:/admin/user";
+    }
+
 
     // 상품목록 추가
     @PostMapping("/addProductCategory")
@@ -126,10 +180,14 @@ public class AdminController {
     public ModelAndView seat() {
         ModelAndView mav = new ModelAndView("/admin/seat_manage");
         List<SeatInfoDTO> seatList = seatService.selectSeatList();
+
+
         mav.addObject("seatList",seatList);
         mav.addObject("currentPage", "seat");
+
         return mav;
     }
+
 
     // 매출관리
     @GetMapping("/sales")
@@ -149,13 +207,68 @@ public class AdminController {
     }
 
     @PostMapping("/add_update")
-    public String add_update(@RequestParam("seat_state") Long  state, @RequestParam("hour") Integer  hour,
+    public String add_update(@RequestParam("seat_state") Long  state, @RequestParam("hour") Long  hour,
                              @RequestParam("seatId") Long  seatId){
         log.info( "state" + String.valueOf(state));
         log.info( "hour" + String.valueOf(hour));
         log.info( "seatId" + String.valueOf(seatId));
-        int result = seatService.updateSeat(state, hour, seatId);
-        log.info("result" + result);
+
+        /*
+        기존 Redis에 저장된 키의 만료시간을 불러옴
+        기존 Key를 삭제
+        새로운 시간으로 레디스 키를 저장
+        만료시간은 새로운 시간 - (이전 남은시간 - 이전 레디스 남은 만료시간)
+         */
+        if (hour == 1) {
+            hour = 60L;
+        } else if (hour == 2) {
+            hour = 120L;
+        } else if (hour == 3) {
+            hour = 180L;
+        } else if (hour == 4) {
+            hour = 240L;
+        } else if (hour == 5) {
+            hour = 300L;
+        } else if (hour == 6) {
+            hour = 360L;
+        } else {
+            hour = 0L;
+        }
+        Seat seat = seatRepository.findById(seatId).orElseThrow(() -> new IllegalArgumentException("잘못된 접근입니다."));
+        if(seat.getUser()!=null){
+            // 남은 만료시간
+            Long ttl = jedis.ttl(seat.getUser().getUsername() + " " + seat.getUser().getRemainingTime().getRemainingTime());
+            // 기존키 삭제
+            redisTemplate.delete(seat.getUser().getUsername() + " " + seat.getUser().getRemainingTime().getRemainingTime());
+
+            // 사용시간
+            Long usingTime = seat.getUser().getRemainingTime().getRemainingTime() - ttl;
+
+            log.info("사용시간: " + usingTime);
+            log.info("만료시간: " + ttl);
+
+            int time = (int) (ttl + hour);
+
+            // DB에 시간 반영
+            int result = seatService.updateSeat(state, time , seatId);
+            seat = seatRepository.findById(seat.getSeatId()).orElseThrow(() -> new IllegalArgumentException("잘못된 접근입니다."));
+
+            redisTemplate.opsForValue().set(seat.getUser().getUsername()+" "+time, time, time - usingTime, TimeUnit.SECONDS);
+
+
+            log.info("레디스에 저장한 값: " + seat.getUser().getUsername()+" "+ time);
+            log.info("DB에 저장한 값: " + seat.getUser().getRemainingTime().getRemainingTime());
+            log.info("time: " + time);
+
+            log.info("result" + result);
+
+            Message message = new Message("admin", time + "초 추가", seat.getUser().getUsername(), new Date());
+            chatComponent.saveMessage(message);
+            chatComponent.convertAndSendToUser(seat.getUser().getUsername(), "/queue/messages", message);
+        } else {
+            seatService.updateState(seatId, state);
+        }
+
 
         return "redirect:/admin/seat";
     }
@@ -228,26 +341,45 @@ public class AdminController {
 
         mav.addObject("total", ticketSalesService.selectTotal(dates));
         log.info("총액 불러옴");
+        mav.addObject("currentPage", "productsales");
 
         return mav;
     }
 
     // 회원관리
     @GetMapping("/user")
-    public ModelAndView user(String type, String keyword) {
-        log.info("유형: " + type);
-        log.info("검색어: "+keyword);
+    public ModelAndView user(@RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "10") int size, String type, String keyword) {
+        PageRequest pageable = PageRequest.of(page, size, Sort.by("id").ascending());
         ModelAndView mav = new ModelAndView("/admin/user_manage");
+        Page<UserAndLastLog> pages;
         if( type==null && keyword==null){
-            mav.addObject("list", userService.findUserAndLastLog());
+            pages = userService.findUserAndLastLog(pageable);
         }
         else {
-            mav.addObject("list",userService.findUserAndLastLog(Objects.requireNonNull(type), keyword));
+            pages = userService.findUserAndLastLog(pageable, Objects.requireNonNull(type), keyword);
         }
+        mav.addObject("page", pages);
         mav.addObject("currentPage", "user");
+        List<DropOutUser> dropOutList = dropOutUserRepository.findAll();
+        Map<Long, Boolean> dropOutMap = dropOutList.stream()
+                .collect(Collectors.toMap(
+                        dropOutUser -> dropOutUser.getUser().getId(),
+                        dropOutUser -> true));
+
+        mav.addObject("dropOutMap", dropOutMap);
         return mav;
     }
 
+    // 탈퇴회원관리
+    @GetMapping("/dropOutUser")
+    public ModelAndView dropOutUser(@RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "10") int size) {
+        PageRequest pageable = PageRequest.of(page, size, Sort.by("id").ascending());
+        ModelAndView mav = new ModelAndView("/admin/dropOutUser_manage");
+        Page<DropOutUser> dropOutUsers = dropOutUserRepository.findAll(pageable);
+        mav.addObject("page", dropOutUsers);
+        mav.addObject("currentPage", "user");
+        return mav;
+    }
 
     // 주문관리
     @GetMapping("/order")

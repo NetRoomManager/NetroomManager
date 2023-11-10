@@ -4,6 +4,7 @@ import com.itbank.config.UserPrincipal;
 import com.itbank.model.RemainingTime;
 import com.itbank.model.User;
 import com.itbank.model.UserLog;
+import com.itbank.model.dto.Summoner;
 import com.itbank.repository.jpa.RemainingTimeRepository;
 import com.itbank.repository.jpa.UserLogRepository;
 import com.itbank.repository.jpa.UserRepository;
@@ -37,6 +38,8 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
 
+    @Autowired
+    private RiotAPIService riotAPIService;
 
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
 
@@ -44,6 +47,14 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
         User customUser= userRepository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(username + "님의 정보를 찾을 수 없습니다"));
+
+        String nick = customUser.getSummoner();
+        Summoner summoner = riotAPIService.getSummoner(nick);
+        customUser.setTire(summoner.getTier() + " " + summoner.getRank());
+        userRepository.save(customUser);
+
+
+        log.info(customUser.getUsername() + "티어: " + customUser.getTire());
 
         if (customUser.getDropOutUser() != null) {
             throw new UsernameNotFoundException("탈퇴된 계정입니다");
@@ -67,9 +78,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         }
 
         log.info(username + "님의 남은 시간: " + remaningTime + "초");
-
-        // 레디스에 로드
-        redisTemplate.opsForValue().set(username + " " + remaningTime, remaningTime, remaningTime, TimeUnit.SECONDS);
 
         return new UserPrincipal(customUser);
     }

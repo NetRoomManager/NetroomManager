@@ -1,5 +1,6 @@
 package com.itbank.controller;
 
+import com.itbank.component.AddressComponent;
 import com.itbank.model.*;
 import com.itbank.model.dto.Summoner;
 import com.itbank.repository.jpa.OrderListRepository;
@@ -59,12 +60,16 @@ public class AuthController {
     @Autowired
     private RiotAPIService riotAPIService;
 
+    @Autowired
+    private AddressComponent AddressComponent;
+
     @GetMapping("/login")
     public String login() {
        /* // 임시로 좌석상태를 불러와서
         List<Object[]> seatList = seatService.selectSeatList();
         for( Object[] s : seatList){
             if(s.getClass().get == 1){  // 이용가능 좌석일 경우 login*/
+                System.out.println(AddressComponent.getLocalMacAddress());
                 return "/auth/login";
  /*           }
         }
@@ -128,7 +133,7 @@ public class AuthController {
     }
 
     @PostMapping("/join")
-    public String join(User user, HttpServletRequest request) {
+    public String join(User user) {
 
         log.info("유저 생성");
 
@@ -144,6 +149,28 @@ public class AuthController {
     public String seatTest(){
         seatService.createSeat();
         return "redirect:/";
+    }
+
+    @PostMapping("/find-username")
+    @ResponseBody
+    public String findUsername(User user) {
+        log.info(user.getEmail());
+        log.info(user.getName());
+
+        String id = authService.findUserId(user);
+        return id;
+    }
+
+    @PostMapping("/password-reset")
+    @ResponseBody
+    public String passwordReset(User user) {
+        log.info(user.getEmail());
+        log.info(String.valueOf(user.getUsername()));
+
+        String pw = authService.findUserPw(user);
+        log.info(pw);
+
+        return pw;
     }
 
     @GetMapping("/loginSuccess")

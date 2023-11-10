@@ -30,6 +30,7 @@
 	<resources mapping="/resources/**" location="/resources/" />
 	<resources mapping="/img/**" location="classpath:/img/ " />
 	<resources mapping="/css/**" location="classpath:/css/" />
+	<resources mapping="/audio/**" location="classpath:/audio/" />
 	<resources mapping="/js/**" location="classpath:/js/" />
 	<resources mapping="/upload/**" location="file:c:/upload/" />
 

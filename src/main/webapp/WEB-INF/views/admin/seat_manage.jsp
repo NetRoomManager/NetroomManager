@@ -160,16 +160,6 @@
 		return new bootstrap.Popover(popoverTriggerEl)
 	})
 
-	$(document).ready(function() {
-		$.ajax({
-			url : "header.html",
-			dataType : "html",
-			success : function(response) {
-				$("#headerContent").html(response);
-			},
-		});
-	});
-
 </script>
 
 
@@ -208,7 +198,7 @@
 					<div class="seat_remain_time card-body">
 						<pre>남은시간: </pre>
 						<pre>${seat.remainingTime}</pre>
-						<pre>유저아이디 ${seat.user_id}</pre>
+						<pre>${seat.username}</pre>
 					</div>
 					<div class="card-footer">
 							${stateCmt}
