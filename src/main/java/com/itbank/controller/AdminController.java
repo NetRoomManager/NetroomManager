@@ -1,9 +1,12 @@
 package com.itbank.controller;
 
+import com.itbank.model.Ticket;
+import com.itbank.model.dto.ProductSalesDTO;
 import com.itbank.model.*;
 import com.itbank.model.dto.SeatInfoDTO;
 import com.itbank.repository.jpa.DropOutUserRepository;
 import com.itbank.repository.jpa.ProductRepository;
+import com.itbank.repository.jpa.ProductSalesRepository;
 import com.itbank.repository.jpa.SeatRepository;
 import com.itbank.repository.mybatis.DropOutUserDAO;
 import com.itbank.service.*;
@@ -25,9 +28,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import redis.clients.jedis.Jedis;
 
+import java.util.HashMap;
+import java.util.List;
 import java.util.*;
 import javax.servlet.http.HttpServletRequest;
 import java.text.ParseException;
+import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
@@ -71,6 +78,9 @@ public class AdminController {
 
     @Autowired
     private DropOutUserDAO dropOutUserDAO;
+
+    @Autowired
+    private ProductSalesService productSalesService;
 
     // 상품관리
     @GetMapping("/product")
@@ -285,21 +295,49 @@ public class AdminController {
     }
 
 
+    // 상품 상세 매출
+    @PostMapping("/productsalesDetail")
+    @ResponseBody
+    public HashMap<String, Object> proSalesSelectOne(@RequestParam("id") Long  id){
+        log.info( "id" + id);
+        ProductSalesDTO proSalesSelectOne = productSalesService.proSalesSelectOne(id);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("dto", proSalesSelectOne);
+        map.put("ok", true);
+
+        return map;
+    }
+
+
     // 상품 매출
     @GetMapping("/productsales")
-    public String productSale(Model model) {
-        model.addAttribute("currentPage", "productsales");
-        return "/admin/product_sales_manage";
+    public ModelAndView productSale(HttpServletRequest request) throws ParseException {
+        ModelAndView mav = new ModelAndView("/admin/product_sales_manage");
+        // 매출 리스트 조인해서 리스트 보내기
+        Map<String, String> dates = productSalesService.searchMap(request);
+        List<ProductSalesDTO> proSalesList = productSalesService.proSalesAllList(dates);
+        Integer orderTotalPrice = productSalesService.selectTotal(dates);
+
+        log.info("productList.size() : " + proSalesList.size());
+        log.info("상품 매출 불러오기");
+        log.info("총액 불러옴 " + orderTotalPrice);
+        mav.addObject("currentPage","productsales");
+        mav.addObject("proSalesList",proSalesList);
+        mav.addObject("orderTotalPrice",orderTotalPrice);
+
+        return mav;
     }
 
     // 이용권 매출
     @GetMapping("/ticketsales")
     public ModelAndView ticketSale(HttpServletRequest request) throws ParseException {
         ModelAndView mav = new ModelAndView("/admin/ticket_sales_manage");
-        mav.addObject("list", ticketSalesService.selectAll(request));
+
+        Map<String, String> dates = productSalesService.searchMap(request);
+        mav.addObject("list", ticketSalesService.selectAll(dates));
         log.info("티켓매출 불러옴");
 
-        mav.addObject("total", ticketSalesService.selectTotal());
+        mav.addObject("total", ticketSalesService.selectTotal(dates));
         log.info("총액 불러옴");
         mav.addObject("currentPage", "productsales");
 
