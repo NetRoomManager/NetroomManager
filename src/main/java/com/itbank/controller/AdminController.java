@@ -255,6 +255,8 @@ public class AdminController {
             Message message = new Message("admin", time + "초 추가", seat.getUser().getUsername(), new Date());
             chatComponent.saveMessage(message);
             chatComponent.convertAndSendToUser(seat.getUser().getUsername(), "/queue/messages", message);
+        } else {
+            seatService.updateState(seatId, state);
         }
 
 

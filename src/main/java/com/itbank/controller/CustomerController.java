@@ -7,6 +7,7 @@ import com.itbank.repository.jpa.*;
 import com.itbank.repository.mybatis.ProductCategoryDAO;
 import com.itbank.repository.mybatis.ProductDAO;
 import com.itbank.service.*;
+import com.itbank.wersocketConfig.ChatComponent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -21,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import redis.clients.jedis.Jedis;
 
+import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -51,6 +53,9 @@ public class CustomerController {
 
     @Autowired
     private OrderDetailService orderDetailService;
+
+    @Autowired
+    private ChatComponent chatComponent;
 
     @Autowired
     private UserLogService userLogService;
@@ -136,13 +141,19 @@ public class CustomerController {
 
     @PostMapping("/order/addDetail")
     @ResponseBody
-    public String detailOrder(@RequestBody List<Map<String,Object>> orderDetails) {
-        System.out.println("orderDetail: " + orderDetails);
+    public String detailOrder(@RequestBody Map<String,Object> param) {
+        System.out.println("orderDetail: " + param);
 
 
         Optional<OrderList> optionalOrderList = orderListRepository.findById(paymentService.findMaxId());
         OrderList orderList;
         orderList = optionalOrderList.orElse(null);
+
+        List<Map<String, Object>> orderDetails = (List<Map<String, Object>>) param.get("menuList");
+        String payMethod = (String) param.get("pay_method");
+
+        System.out.println("list: " + orderDetails);
+        System.out.println("pay: " + payMethod);
 
         orderDetails.forEach(e -> {
             System.out.println("e: " + e.get("p_id"));
@@ -164,7 +175,20 @@ public class CustomerController {
             orderDetail1.setMemo(e.get("memo").toString());
 
 
+            HashMap<String, Object> map = new HashMap<>();
+            map.put("title", e.get("name").toString());
+            map.put("description", e.get("memo").toString());
+            map.put("price",e.get("priceValue").toString());
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy / MM / dd");
+            Date currentDate = new Date();
+            String formattedDate = dateFormat.format(currentDate);
 
+            map.put("orderDate", formattedDate);
+            map.put("payment_method", payMethod);
+
+            log.info("map: " + map);
+
+            chatComponent.convertAndSendToUser("admin", "/queue/order", map);
 
 
             orderDetailService.addDetail(orderDetail1);
@@ -177,9 +201,9 @@ public class CustomerController {
 
     @PostMapping("/buyProduct")
     @ResponseBody
-    public Map<String, Boolean> buyProduct(@RequestBody PaymentResponse paymentResponse) throws UsernameNotFoundException {
+    public Map<String, Object> buyProduct(@RequestBody PaymentResponse paymentResponse) throws UsernameNotFoundException {
 
-        Map<String, Boolean> result = new HashMap<>();
+        Map<String, Object> result = new HashMap<>();
         if(paymentResponse.isSuccess()){
             System.out.println("name:"+paymentResponse.getName());
             Payment payment = paymentService.buyProduct(paymentResponse);
@@ -199,6 +223,7 @@ public class CustomerController {
             productSalesRepository.save(productSales);
 
             result.put("success", true);
+            result.put("pay_method", paymentResponse.getPay_method().toString());
         }else{
             result.put("success",false);
         }

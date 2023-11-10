@@ -87,15 +87,22 @@ public class SeatService {
             i = seatDAO.updateSeatHour(updateSeat);
             log.info( "updateSeatHour i" + i);
         }
+
+
+        return i;
+    }
+
+    public int updateState(Long seatId, Long state) {
+        HashMap<String, Object> updateSeat = new HashMap<>();
+        updateSeat.put("seatId",seatId);
+        updateSeat.put("seatState",state);
+        Optional<Seat> seat = seatRepository.findById(seatId);
+        int i = 0;
         if(seat.isPresent() && seat.get().getUser() == null ){
             log.info( "updateSeatState state" + state);
             i = seatDAO.updateSeatState(updateSeat);
             log.info( "updateSeatState i" + i);
         }
-        else {
-            log.info( "업데이트 실패" );
-        }
-
         return i;
     }
 

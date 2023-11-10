@@ -128,7 +128,11 @@ public class PaymentService {
         String buyerName = paymentResponse.getBuyer_name();
         String buyerEmail = paymentResponse.getBuyer_email();
 
-        User user = userRepository.findByNameAndEmail(buyerName, buyerEmail).orElseThrow(() -> new UsernameNotFoundException("유저정보를 찾을 수 없습니다."));
+        System.out.println(buyerName);
+        System.out.println(buyerEmail);
+
+
+        User user = userRepository.findByEmail(buyerEmail).orElseThrow(() -> new UsernameNotFoundException("유저정보를 찾을 수 없습니다."));
 
         System.out.println("유저 가져옴");
 
