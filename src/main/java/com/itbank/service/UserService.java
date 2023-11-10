@@ -61,7 +61,7 @@ public class UserService {
 
             // 남은 시간에 유저의 시간을 관리자는 로그인 바로 시키기 위해 1분
             RemainingTime remainingTime = new RemainingTime();
-            remainingTime.setRemainingTime(15);
+            remainingTime.setRemainingTime(1000000000);
 
             // User 객체 생성
             User user = new User();

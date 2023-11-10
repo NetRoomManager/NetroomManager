@@ -469,7 +469,7 @@
         <div id="netflix"
                 class="col-sm bg-dark text-white p-3 rounded mx-1 my-1 image-container2">
             <img src="/img/netflix.jpg" class="w-100">
-            <div class="text-overlay2" id="netflix">넷플릭스</div>
+            <div class="text-overlay2">넷플릭스</div>
         </div>
     </div>
 </div>
@@ -959,10 +959,20 @@
             remainingTimeElement.textContent = formatTime(remainingTime);
         }, 1000);
 
-        function formatTime(param) {
-            let hours = Math.floor(param / 3600);
-            let minutes = Math.floor((param % 3600) / 60);
-            let seconds = param % 60;
+			 function formatTime(param) {
+
+				 if (param===300) {
+					const audio = new Audio('/audio/5.mp3');
+					audio.play();
+				 }
+				 else if (param===180) {
+					 const audio = new Audio('/audio/3.mp3');
+					 audio.play();
+				 }
+
+				 let hours = Math.floor(param / 3600);
+				 let minutes = Math.floor((param % 3600) / 60);
+				 let seconds = param % 60;
 
             return hours + "시간 " + minutes + "분 " + seconds + "초";
         }
@@ -982,6 +992,7 @@
         }
     })
 </script>
+
 
 
 </body>
