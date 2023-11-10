@@ -60,7 +60,7 @@
                     </li>
                     <li class="nav-item pe-2">
                         <button type="button" class="btn btn-light"
-                                style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .75rem; --bs-btn-font-size: 1.15rem;">                        
+                                style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .75rem; --bs-btn-font-size: 1.15rem;">
                                 <svg
                                 width="20"
                                 height="20"
@@ -90,119 +90,13 @@
             <div class="row pt-4">
                 <div id="order_container" class="row pt-4">
             <div class="row pt-4">
-                <div class="col-4">
-                    <div class="card border-warning" style="max-width: 95%;">
-                        <div class="row g-0">
-                          <div class="col text-bg-warning rounded-start">
-                            <div class="card-body text-center">
-                                <div>신규주문</div>
-                                <div class="h1">21</div>
-                                <div>판매수락</div>
-                            </div>
-                          </div>
-                          <div class="col-9">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between">
-                                    <h5 class="card-title" style="font: bold;">너구리 매운맛, 콜라(+얼음)</h5>
-                                    <p class="card-text">판매취소</p>
-                                </div>
-                              <p class="card-text">콜라는 따뜻하게 해주시고 라면은 안 맵게 해주세요</p>
-                            </div>
-                            <div class="card-footer bg-transparent">
-                                <div class="d-flex justify-content-between">
-                                    <p style="font-size: 1.5rem; font-weight: bold;">8,800<span style="font-size: 0.9rem; font-weight: 500;">(카카오페이)</span></p>
-                                    <div>
-                                        <button type="button" class="btn btn-outline-warning">준비중</button>
-                                        <button type="button" class="btn btn-outline-primary">전달완료</button>
-                                    </div>
-                                </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <p class="card-text text-end pe-5"><small class="text-body-secondary">2023 / 11 / 12</small></p>
-                </div>
-                <div class="col-4">
-                    <div class="card border-warning" style="max-width: 95%;">
-                        <div class="row g-0">
-                          <div class="col text-bg-warning rounded-start">
-                            <div class="card-body text-center">
-                                <div>신규주문</div>
-                                <div class="h1">21</div>
-                                <div>판매수락</div>
-                            </div>
-                          </div>
-                          <div class="col-9">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between">
-                                    <h5 class="card-title" style="font: bold;">너구리 매운맛, 콜라(+얼음)</h5>
-                                    <p class="card-text">판매취소</p>
-                                </div>
-                              <p class="card-text">콜라는 따뜻하게 해주시고 라면은 안 맵게 해주세요</p>
-                            </div>
-                            <div class="card-footer bg-transparent">
-                                <div class="d-flex justify-content-between">
-                                    <p style="font-size: 1.5rem; font-weight: bold;">8,800<span style="font-size: 0.9rem; font-weight: 500;">(카카오페이)</span></p>
-                                    <div>
-                                        <button type="button" class="btn btn-outline-warning">준비중</button>
-                                        <button type="button" class="btn btn-outline-primary">전달완료</button>
-                                    </div>
-                                </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <p class="card-text text-end pe-5"><small class="text-body-secondary">2023 / 11 / 12</small></p>
-                </div><div class="col-4">
-                    <div class="card border-warning" style="max-width: 95%;">
-                        <div class="row g-0">
-                          <div class="col text-bg-warning rounded-start">
-                            <div class="card-body text-center">
-                                <div>신규주문</div>
-                                <div class="h1">21</div>
-                                <div>판매수락</div>
-                            </div>
-                          </div>
-                          <div class="col-9">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between">
-                                    <h5 class="card-title" style="font: bold;">너구리 매운맛, 콜라(+얼음)</h5>
-                                    <p class="card-text">판매취소</p>
-                                </div>
-                              <p class="card-text">콜라는 따뜻하게 해주시고 라면은 안 맵게 해주세요</p>
-                            </div>
-                            <div class="card-footer bg-transparent">
-                                <div class="d-flex justify-content-between">
-                                    <p style="font-size: 1.5rem; font-weight: bold;">8,800<span style="font-size: 0.9rem; font-weight: 500;">(카카오페이)</span></p>
-                                    <div>
-                                        <button type="button" class="btn btn-outline-warning">준비중</button>
-                                        <button type="button" class="btn btn-outline-primary">전달완료</button>
-                                    </div>
-                                </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <p class="card-text text-end pe-5"><small class="text-body-secondary">2023 / 11 / 12</small></p>
-                </div>
-            </div>
-            <div class="row pt-4">
-                <div class="col-4" style="background-color: #FF8339;">
-                    <div style="width: 90%; background-color: red;">dd</div>
-                </div>
-                <div class="col-4" style="background-color: #FF8339;">
-                    <div style="width: 90%; background-color: red;">dd</div>
-                </div>
-                <div class="col-4" style="background-color: #FF8339;">
-                    <div style="width: 90%; background-color: red;">dd</div>
-                </div>
-            </div>
+
 
         </div>
 
         <script>
             const order_container = document.getElementById('order_container');
-            function addOrderCard(order) {
+            function addOrderCard(order, key) {
                 // 주문 정보 추출
                 const orderTitle = order.title; // 주문 제목
                 const orderDesc = order.description; // 주문 설명
@@ -212,7 +106,7 @@
 
                 // 카드 템플릿 생성
                 const cardTemplate = `
-                    <div class="col-4">
+                    <div class="col-4" data-key="`+key+`">
                         <div class="card border-warning" style="max-width: 95%;">
                             <div class="row g-0">
                               <div class="col text-bg-warning rounded-start">
@@ -235,7 +129,7 @@
                                         <p style="font-size: 1.5rem; font-weight: bold;">`+orderPrice+`<span style="font-size: 0.9rem; font-weight: 500;">(`+payment_method+`)</span></p>
                                         <div>
                                             <button type="button" class="btn btn-outline-warning">준비중</button>
-                                            <button type="button" class="btn btn-outline-primary">전달완료</button>
+                                            <button type="button" class="btn btn-outline-primary finishBtn">전달완료</button>
                                         </div>
                                     </div>
                                 </div>
@@ -248,20 +142,53 @@
 
                 // 카드를 row에 추가
                 order_container.innerHTML += cardTemplate; // 카드 추가
+
+                // '전달완료' 버튼에 클릭 이벤트 리스너 추가
+                const finishBtn = order_container.querySelector('.col-4:last-child .finishBtn');
+                finishBtn.addEventListener('click', deleteOrder);
             }
-            //
-            // // 주문 객체 예시
-            // const order = {
-            //     title: "너구리 매운맛, 콜라(+얼음)",
-            //     description: "콜라는 따뜻하게 해주시고 라면은 안 맵게 해주세요",
-            //     price: "8,800",
-            //     orderDate: "2023 / 11 / 12",
-            //     payment_method: "카카오페이"
-            // };
 
-            // 카드 추가 함수 호출
-            // addOrderCard(order);
 
+            fetch('/admin/getOrders')
+                .then(response => response.json())
+                .then(orderList => {
+                    for (let orders of orderList) {
+                        // 주문 정보와 주문 키 추출
+                        let orderInfo = JSON.parse(orders[0]);
+                        let orderKey = orders[1];
+                        addOrderCard(orderInfo, orderKey);
+                    }
+                });
+
+
+            function deleteOrder(event) {
+                // 주문 카드 요소 가져오기
+                const orderCard = event.target.closest('.col-4');
+                // 주문 키 가져오기
+                const orderKey = orderCard.dataset.key;
+
+                // 사용자에게 주문 삭제 확인 메시지 보여주기
+                const confirmed = confirm('해당 주문을 삭제하시겠습니까?');
+                if (confirmed) {
+                    // 주문 삭제 API 호출
+                    fetch('/admin/deleteOrder', {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ key: orderKey })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // 주문 카드 HTML에서 삭제
+                                orderCard.remove();
+                            } else {
+                                alert('주문 삭제에 실패하였습니다.');
+                            }
+                        });
+                }
+            }
         </script>
 
 </body>

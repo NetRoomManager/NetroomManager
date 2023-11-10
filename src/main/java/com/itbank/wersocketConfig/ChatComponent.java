@@ -1,12 +1,13 @@
 package com.itbank.wersocketConfig;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.itbank.model.Message;
-import com.itbank.model.OrderList;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
+import redis.clients.jedis.Jedis;
 
 import javax.annotation.PostConstruct;
 import java.util.*;
@@ -22,6 +23,9 @@ public class ChatComponent {
 
     @Autowired
     private RedisTemplate<String, Message> redisTemplate;
+
+    @Autowired
+    private Jedis jedis;
 
     public void saveMessage(Message message) {
         // 'from'과 'to'를 오름차순으로 정렬
@@ -48,14 +52,33 @@ public class ChatComponent {
         return redisTemplate.opsForList().range(key, 0, -1);
     }
 
-    public void saveOrder(OrderList orderList) {
+    public void saveOrder(HashMap<String, Object> orderList) {
         // 레디스 키 생성
-        String key = "order:" + orderList.getId();
+        String key = "order:"+UUID.randomUUID().toString().substring(0, 8);
+
+        // HashMap을 JSON으로 변환
+        ObjectMapper mapper = new ObjectMapper();
+        String jsonString = "";
+        try {
+            jsonString = mapper.writeValueAsString(orderList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         // 메시지 저장
-        redisTemplate.opsForList().rightPush(key, orderList);
+        jedis.rpush(key, jsonString);
     }
 
+    public List<List<String>> getOrders() {
+        Set<String> keys = jedis.keys("order:*");
+        List<List<String>> allOrders = new ArrayList<>();
+        for (String key : keys) {
+            List<String> orders = jedis.lrange(key, 0, -1);
+            orders.add(key);
+            allOrders.add(orders);
+        }
+        return allOrders;
+    }
 
 
     @PostConstruct
