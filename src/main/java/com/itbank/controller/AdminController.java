@@ -304,6 +304,7 @@ public class AdminController {
 
         mav.addObject("total", ticketSalesService.selectTotal());
         log.info("총액 불러옴");
+        mav.addObject("currentPage", "productsales");
 
         return mav;
     }
@@ -332,6 +333,16 @@ public class AdminController {
         return mav;
     }
 
+    // 탈퇴회원관리
+    @GetMapping("/dropOutUser")
+    public ModelAndView dropOutUser(@RequestParam(required = false, defaultValue = "0") int page, @RequestParam(required = false, defaultValue = "10") int size) {
+        PageRequest pageable = PageRequest.of(page, size, Sort.by("id").ascending());
+        ModelAndView mav = new ModelAndView("/admin/dropOutUser_manage");
+        Page<DropOutUser> dropOutUsers = dropOutUserRepository.findAll(pageable);
+        mav.addObject("page", dropOutUsers);
+        mav.addObject("currentPage", "user");
+        return mav;
+    }
 
     // 주문관리
     @GetMapping("/order")
