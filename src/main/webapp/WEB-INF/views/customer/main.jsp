@@ -240,9 +240,9 @@
             <i class="fa-solid fa-burger"></i> &nbsp;&nbsp;&nbsp;
             <p>먹거리 주문</p>
         </div>
-        <div class="header_btn">
+        <div id="main_close_btn" class="header_btn">
             <i class="fa-solid fa-power-off"></i> &nbsp;&nbsp;&nbsp;
-            <p id="main_close_btn"
+            <p
                data-bs-target="#end_of_user">사용종료</p>
         </div>
     </div>
@@ -262,7 +262,7 @@
                 no.<span>29</span>
             </p>
         </div>
-        <a href="#">자리이동</a> <a href="#"> <i class="fa-solid fa-power-off"
+        <a href="#" id="movingBtn">자리이동</a> <a href="#"> <i class="fa-solid fa-power-off"
                                              style="color: #ffffff;"></i> &nbsp;&nbsp;
         <p class="p-0 mx-0 my-0" id="close_btn">사용종료</p>
     </a>
@@ -305,7 +305,7 @@
 
     </div>
     <div class="service">
-        <a href="#">호출</a> <a onclick="openChatModal(); getMessages(); msgDel();" style="color: #eee;">메시지</a>
+        <a id="callBtn" href="#">호출</a> <a onclick="openChatModal(); getMessages(); msgDel();" style="color: #eee;">메시지</a>
         <a href="#">주문 목록</a> <a id="my_info" href="#">내 정보</a>
     </div>
 
@@ -621,19 +621,19 @@
                 gameContent.innerHTML = `
                 <h3>인기 게임 목록</h3>
                 <div class="game-images">
-                    <a href="https://www.leagueoflegends.com/ko-kr/" target="_blank"><img src="https://i.namu.wiki/i/Q2yS7PKGww04abPtNFHLS8npW_L0evvVmQkxqB0iRWA934Ecsea8rZPVZwh0eKJhj_quAfgLTCusaHCa4XVU2w.webp" class="game-image" />
-                       <span>리그오브레전드</span></a>
-                    <a href="https://playvalorant.com/ko-kr/" target="_blank">
-                        <img src="https://play-lh.googleusercontent.com/KV6LJhKnHyzT_Zlr76Qac4IG8PRqK9r-2-CCf-4zs1XDLfKSWUmkNbZlnL64IZVMzg=w240-h480-rw" class="game-image" />
-                        <span>발로란트</span>
+                    <a href="https://www.leagueoflegends.com/ko-kr/" target="_blank" class="me-4"><img src="https://i.namu.wiki/i/Q2yS7PKGww04abPtNFHLS8npW_L0evvVmQkxqB0iRWA934Ecsea8rZPVZwh0eKJhj_quAfgLTCusaHCa4XVU2w.webp" class="game-image" />
+                       <span class="fw-bold fs-6">리그오브레전드</span></a>
+                    <a href="https://playvalorant.com/ko-kr/" target="_blank" class="me-4">
+                        <img src="https://play-lh.googleusercontent.com/KV6LJhKnHyzT_Zlr76Qac4IG8PRqK9r-2-CCf-4zs1XDLfKSWUmkNbZlnL64IZVMzg=w240-h480-rw" class="game-image rounded-circle" />
+                        <span class="fw-bold fs-6">발로란트</span>
                     </a>
-                    <a href="https://lostark.game.onstove.com/" target="_blank">
-                        <img src="https://admin.youngjaecomputer.com/data/design2/CombiThumbnail_YC41" class="game-image" />
-                        <span>로스트아크</span>
+                    <a href="https://lostark.game.onstove.com/" target="_blank" class="me-4">
+                        <img src="https://admin.youngjaecomputer.com/data/design2/CombiThumbnail_YC41" class="game-image rounded-circle" />
+                        <span class="fw-bold fs-6">로스트아크</span>
                     </a>
-                    <a href="https://starcraft.blizzard.com/ko-kr/" target="_blank">
-                        <img src="https://macin.files.wordpress.com/2010/07/starcraft-ii-icon.png" class="game-image" />
-                        <span>스타크래프트</span>
+                    <a href="https://starcraft.blizzard.com/ko-kr/" target="_blank" class="me-4">
+                        <img src="https://macin.files.wordpress.com/2010/07/starcraft-ii-icon.png" class="game-image rounded-circle" />
+                        <span class="fw-bold fs-6">스타크래프트</span>
                     </a>
                 </div>
 			`;
@@ -642,19 +642,19 @@
                 gameContent.innerHTML = `
                 <h3>RPG 게임 목록</h3>
                 <div class="game-images">
-                    <a href="https://www.leagueoflegends.com/ko-kr/" target="_blank"><img src="https://i.namu.wiki/i/Q2yS7PKGww04abPtNFHLS8npW_L0evvVmQkxqB0iRWA934Ecsea8rZPVZwh0eKJhj_quAfgLTCusaHCa4XVU2w.webp" class="game-image" />
-                       <span>리그오브레전드</span></a>
-                    <a href="https://df.nexon.com/pg/duskyisland?intro=yes" target="_blank">
-                        <img src="https://play-lh.googleusercontent.com/2_M3GXptvR4z83AuWce9xAKKKhCOEZLVOeediIMRSe5hcKApDmLVefT9q8xpZZrWTB0" class="game-image" />
-                        <span>던전앤파이터</span>
+                    <a href="https://www.leagueoflegends.com/ko-kr/" target="_blank" class="me-4"><img src="https://i.namu.wiki/i/Q2yS7PKGww04abPtNFHLS8npW_L0evvVmQkxqB0iRWA934Ecsea8rZPVZwh0eKJhj_quAfgLTCusaHCa4XVU2w.webp" class="game-image" />
+                       <span class="fw-bold fs-6">리그오브레전드</span></a>
+                    <a href="https://df.nexon.com/pg/duskyisland?intro=yes" target="_blank" class="me-4">
+                        <img src="https://play-lh.googleusercontent.com/2_M3GXptvR4z83AuWce9xAKKKhCOEZLVOeediIMRSe5hcKApDmLVefT9q8xpZZrWTB0" class="game-image rounded-circle" />
+                        <span class="fw-bold fs-6">던전앤파이터</span>
                     </a>
-                    <a href="https://lostark.game.onstove.com/" target="_blank">
-                        <img src="https://admin.youngjaecomputer.com/data/design2/CombiThumbnail_YC41" class="game-image" />
-                        <span>로스트아크</span>
+                    <a href="https://lostark.game.onstove.com/" target="_blank" class="me-4">
+                        <img src="https://admin.youngjaecomputer.com/data/design2/CombiThumbnail_YC41" class="game-image rounded-circle" />
+                        <span class="fw-bold fs-6">로스트아크</span>
                     </a>
-                    <a href="https://aion.plaync.com/conts/2023/231024_update" target="_blank">
-                        <img src="https://is1-ssl.mzstatic.com/image/thumb/Purple128/v4/e3/39/e0/e339e004-a03a-cbfc-7a35-f90c871bdd21/source/512x512bb.jpg" class="game-image" />
-                        <span>아이온</span>
+                    <a href="https://aion.plaync.com/conts/2023/231024_update" target="_blank" class="me-4">
+                        <img src="https://is1-ssl.mzstatic.com/image/thumb/Purple128/v4/e3/39/e0/e339e004-a03a-cbfc-7a35-f90c871bdd21/source/512x512bb.jpg" class="game-image rounded-circle" />
+                        <span class="fw-bold fs-6">아이온</span>
                     </a>
                 </div>
 			`;
@@ -663,21 +663,21 @@
                 gameContent.innerHTML = `
                 <h3>FPS 게임 목록</h3>
                 <div class="game-images">
-                    <a href="https://playvalorant.com/ko-kr/" target="_blank">
-                        <img src="https://play-lh.googleusercontent.com/KV6LJhKnHyzT_Zlr76Qac4IG8PRqK9r-2-CCf-4zs1XDLfKSWUmkNbZlnL64IZVMzg=w240-h480-rw" class="game-image" />
-                        <span>발로란트</span>
+                    <a href="https://playvalorant.com/ko-kr/" target="_blank" class="me-4">
+                        <img src="https://play-lh.googleusercontent.com/KV6LJhKnHyzT_Zlr76Qac4IG8PRqK9r-2-CCf-4zs1XDLfKSWUmkNbZlnL64IZVMzg=w240-h480-rw" class="game-image rounded-circle" />
+                        <span class="fw-bold fs-6">발로란트</span>
                     </a>
-                    <a href="https://sa.nexon.com/" target="_blank">
-                        <img src="https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Ft1.daumcdn.net%2Fcfile%2Ftistory%2F232C4D4255432FAE0E" class="game-image" />
-                        <span>서든어택</span>
+                    <a href="https://sa.nexon.com/" target="_blank" class="me-4">
+                        <img src="https://img1.daumcdn.net/thumb/R800x0/?scode=mtistory2&fname=https%3A%2F%2Ft1.daumcdn.net%2Fcfile%2Ftistory%2F232C4D4255432FAE0E" class="game-image rounded-circle" />
+                        <span class="fw-bold fs-6">서든어택</span>
                     </a>
-                    <a href="https://overwatch.blizzard.com/ko-kr/" target="_blank">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Overwatch_circle_logo.svg" class="game-image" />
-                        <span>오버워치2</span>
+                    <a href="https://overwatch.blizzard.com/ko-kr/" target="_blank" class="me-4">
+                        <img src="https://upload.wikimedia.org/wikipedia/commons/5/55/Overwatch_circle_logo.svg" class="game-image rounded-circle" />
+                        <span class="fw-bold fs-6">오버워치2</span>
                     </a>
-                    <a href="https://pubg.game.daum.net/pubg/index.daum" target="_blank">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVIz5acMtpZp3LmVC-gylRRcNk0F83qRtp6Q&usqp=CAU" class="game-image" />
-                        <span>배틀그라운드</span>
+                    <a href="https://pubg.game.daum.net/pubg/index.daum" target="_blank" class="me-4">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVIz5acMtpZp3LmVC-gylRRcNk0F83qRtp6Q&usqp=CAU" class="game-image rounded-circle" />
+                        <span class="fw-bold fs-6">배틀그라운드</span>
                     </a>
                 </div>
 			`;
@@ -686,21 +686,21 @@
                 gameContent.innerHTML = `
                 <h3>CD 게임 목록</h3>
                 <div class="game-images">
-                    <a href="https://www.rockstargames.com/kr/gta-v" target="_blank">
-                       <img src="https://img.gta5-mods.com/q95/images/modded-cooler-gta-5-loading-screen-logo/3df0c9-2fe3a8abf83fdb39b09765ec00485e0c.png" class="game-image" />
-                       <span>GTA</span>
+                    <a href="https://www.rockstargames.com/kr/gta-v" target="_blank" class="me-4">
+                       <img src="https://img.gta5-mods.com/q95/images/modded-cooler-gta-5-loading-screen-logo/3df0c9-2fe3a8abf83fdb39b09765ec00485e0c.png" class="game-image rounded-circle" />
+                       <span class="fw-bold fs-6">GTA</span>
                     </a>
-                    <a href="https://store.epicgames.com/ko/p/among-us" target="_blank">
-                        <img src="https://o.qoo-img.com/ggpht/8ddL1kuoNUB5vUvgDVjYY3_6HwQcrg1K2fd_R8soD-e2QYj8fT9cfhfh3G0hnSruLKec" class="game-image" />
-                        <span>어몽어스</span>
+                    <a href="https://store.epicgames.com/ko/p/among-us" target="_blank" class="me-4">
+                        <img src="https://o.qoo-img.com/ggpht/8ddL1kuoNUB5vUvgDVjYY3_6HwQcrg1K2fd_R8soD-e2QYj8fT9cfhfh3G0hnSruLKec" class="game-image rounded-circle" />
+                        <span class="fw-bold fs-6">어몽어스</span>
                     </a>
-                    <a href="https://pubg.game.daum.net/pubg/index.daum" target="_blank">
-                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVIz5acMtpZp3LmVC-gylRRcNk0F83qRtp6Q&usqp=CAU" class="game-image" />
-                        <span>배틀그라운드</span>
+                    <a href="https://pubg.game.daum.net/pubg/index.daum" target="_blank" class="me-4">
+                        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRVIz5acMtpZp3LmVC-gylRRcNk0F83qRtp6Q&usqp=CAU" class="game-image rounded-circle" />
+                        <span class="fw-bold fs-6">배틀그라운드</span>
                     </a>
-                    <a href="https://fallguys.com/ko?lang=ko" target="_blank">
-                        <img src="https://cdn1.epicgames.com/offer/50118b7f954e450f8823df1614b24e80/EGS_FallGuys_Mediatonic_IC1_400x400-87f5f19c4955718799dd4f5724889c9d_400x400-87f5f19c4955718799dd4f5724889c9d?h=270&quality=medium&resize=1&w=480" class="game-image" />
-                        <span>폴가이즈</span>
+                    <a href="https://fallguys.com/ko?lang=ko" target="_blank" class="me-4">
+                        <img src="https://cdn1.epicgames.com/offer/50118b7f954e450f8823df1614b24e80/EGS_FallGuys_Mediatonic_IC1_400x400-87f5f19c4955718799dd4f5724889c9d_400x400-87f5f19c4955718799dd4f5724889c9d?h=270&quality=medium&resize=1&w=480" class="game-image rounded-circle" />
+                        <span class="fw-bold fs-6">폴가이즈</span>
                     </a>
                     <!-- 추가 게임 이미지... -->
                 </div>
@@ -791,34 +791,15 @@
 
 
     // 자리이동 눌렸을 때, 알림창 만들기
-    document.getElementById('').addEventListener('click', function () {
-        alert('원하는 좌석에서 로그인하세요!')
+    document.getElementById('movingBtn').addEventListener('click', function () {
+        alert('원하는 좌석에서 로그인하세요!');
+        window.location.href='http://localhost:8080/customer/seat';
     });
 
-	document.getElementById('main_close_btn').addEventListener('click', function () {
-		var countdownElement = document.getElementById('countdown');
-		var countdownValue = 5; // 3초 카운트다운
-
-		// 카운트다운 함수
-		function startCountdown() {
-			countdownElement.textContent = countdownValue;
-			countdownValue--;
-
-			if (countdownValue < -1) {
-				// 시간이 다 되면 모달을 닫고 메시지 표시
-				$('#end_of_user').modal('hide');
-				alert('컴퓨터가 종료됩니다.');
-			} else if (countdownValue === -1) {
-				// 로그인폼으로
-				location.href = "${cpath}/auth/loginForm.jsp";
-			}
-			else {
-				setTimeout(startCountdown, 1000);
-			}
-		}
-
-		startCountdown(); // 카운트다운 시작
-	});
+    // 호출 버튼 눌렀을 때, 간단한 알림창 만들기
+    document.getElementById('callBtn').addEventListener('click', function() {
+        alert('메세지 창 부탁드려요!!');
+    })
 </script>
 <!-- javaScript -->
 <script src="/js/script.js"></script>
