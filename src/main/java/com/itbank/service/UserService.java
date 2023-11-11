@@ -254,6 +254,12 @@ public class UserService {
         log.info("유저 남은시간 추가 완료!");
     }
 
+    public boolean checkPw(String username, String password) {
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        log.info("password: " + password);
+        return userOptional.map(user -> passwordEncoder.matches(password, user.getPassword())).orElse(false);
+    }
+
     public Optional<User> findById(Long id) {
         return userRepository.findById(id);
     }

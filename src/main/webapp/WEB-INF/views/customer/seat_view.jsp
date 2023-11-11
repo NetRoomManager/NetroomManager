@@ -128,8 +128,8 @@
 
                     <div class="seat_id card-header">좌석번호[ ${seat.seatId} ]</div>
                     <div class="seat_remain_time card-body">
-                        <pre>남은시간: </pre>
-                        <pre>${seat.remainingTime}</pre>
+                        <pre>이름: </pre>
+
                         <pre>${seat.username}</pre>
                     </div>
                     <div class="card-footer">

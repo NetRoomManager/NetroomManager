@@ -88,7 +88,7 @@
         </nav>
         <div class="container-fluid ps-5 ms-4">
             <div class="row pt-4">
-                <div id="order_container" class="row pt-4">
+                <div id="order_container" class="row pt-4 mx-2">
             <div class="row pt-4">
 
 

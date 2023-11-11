@@ -19,6 +19,34 @@
                         on p.product_category_id = c.id
                     order by id desc
     </select>
+    <select id="search" resultType="product">
+        select
+        p.id,
+        p.name,
+        c.name as productCategoryName,
+        p.price,
+        p.count,
+        p.dcRate,
+        p.img,
+        p.detail
+        from product p
+        join product_category c
+        on p.product_category_id = c.id
+        <where>
+            <choose>
+                <when test="category == 'id'">
+                    and p.id like '%' || #{keyword} || '%'
+                </when>
+                <when test="category == 'name'">
+                    and p.name like '%' || #{keyword} || '%'
+                </when>
+                <when test="category == 'productCategoryName'">
+                    and c.name like '%' || #{keyword} || '%'
+                </when>
+            </choose>
+        </where>
+        order by id desc
+    </select>
     <insert id="insertProduct" parameterType="product">
         insert into product
             (

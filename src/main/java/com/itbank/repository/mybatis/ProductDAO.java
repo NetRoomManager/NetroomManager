@@ -2,6 +2,7 @@ package com.itbank.repository.mybatis;
 
 import com.itbank.model.Product;
 import com.itbank.model.ProductDTO;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -23,4 +24,6 @@ public interface ProductDAO {
     String findFile(int id);
 
     int update(ProductDTO dto);
+
+    List<ProductDTO> search(@Param("category") String category, @Param("keyword") String keyword);
 }

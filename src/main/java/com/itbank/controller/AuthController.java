@@ -234,6 +234,13 @@ public class AuthController {
         return result;
     }
 
+    @PostMapping("/changePw")
+    public String changePw(User user){
+        log.info(user.toString());
+        authService.changePw(user);
+        return "redirect:/customer/main";
+    }
+
     @PostMapping("/checkId")
     @ResponseBody
     public Map<String, Boolean> checkId(@RequestBody User user) {
@@ -243,6 +250,21 @@ public class AuthController {
         result.put("duplicate", duplicate);
         return result;
     }
+
+    @PostMapping("/checkPw")
+    @ResponseBody
+    public Map<String, Boolean> checkPw(@RequestBody Map<String, Object> user) {
+
+        log.info("CEX");
+//
+        // 받은 유저 비밀번호로 검색해서 중복이면 true 아니면 false
+        Map<String, Boolean> result = new HashMap<>();
+        boolean duplicate = userService.checkPw(user.get("username").toString(),user.get("password").toString());
+        log.info("dup: " + duplicate);
+        result.put("duplicate", duplicate);
+        return result;
+    }
+
 
     @PostMapping("/checkAuthNumber")
     @ResponseBody

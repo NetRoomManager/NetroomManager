@@ -23,7 +23,7 @@
                 <a class="nav-link active navbar-brand" aria-current="page" href="#">NetRoom</a>
             </li>
             <li class="nav-item pe-3">
-                <a class="nav-link" href="${cpath}/admin/productsales">상품매출</a>
+                <a class="nav-link active navbar-brand" aria-current="page" href="/admin/seat">NetRoom</a>
             </li>
             <li class="nav-item pe-3">
                 <a class="nav-link" href="${cpath}/admin/ticketsales">이용권매출</a>
@@ -32,7 +32,7 @@
         <ul class="navbar-nav">
             <li class="nav-item pe-2">
                 <button type="button" class="btn btn-light"
-                        style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .75em; --bs-btn-font-size: 1.15rem;">
+                        style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .75em; --bs-btn-font-size: 1.15rem;" onclick="location.reload();">
                     <svg
                             width="20"
                             height="20"
@@ -79,15 +79,7 @@
         </ul>
     </div>
 </nav>
-<nav id="menuBar" class="nav nav-pills flex-column py-3" style="position: absolute; height: 91.6%;">
-    <a class="nav-link py-3" href="${cpath }/admin/order">주문</a>
-    <a class="nav-link py-3" href="${cpath }/admin/product">재고</a>
-    <a class="nav-link py-3 active" style="background-color: #FF8339;" aria-current="page" href="${cpath }/admin/productsales">매출</a>
-    <a class="nav-link py-3" href="${cpath}/admin/user">회원</a>
-    <a class="nav-link py-3" href="${cpath}/admin/seat">좌석</a>
-    <a
-            class="nav-link py-3 active" href="${cpath }/admin/ticket" style="background-color: #FF8339;">이용권</a>
-</nav>
+
 <div class="container pt-4">
     <form class="d-flex"  id="rangeDate" action="/admin/productsales" method="get">
         <div class="mb-3 pe-2">

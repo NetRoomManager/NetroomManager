@@ -1,6 +1,5 @@
 package com.itbank.service;
 
-import com.itbank.model.RemainingTime;
 import com.itbank.model.Seat;
 import com.itbank.model.dto.SeatInfoDTO;
 import com.itbank.repository.jpa.RemainingTimeRepository;
@@ -9,7 +8,6 @@ import com.itbank.repository.jpa.UserRepository;
 import com.itbank.repository.mybatis.SeatDAO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -40,14 +38,37 @@ public class SeatService {
 
     public void createSeat() {
 
-        for(int i = 1; i <= 24; i ++){
-            Seat seat = new Seat();
-            seat.setSeatId((long)i);
-            seat.setSeatIpAddr("192.168.112."+i);
+        String[] addList = {
+                "192.168.112.15",
+                "192.168.112.31",
+                "192.168.112.24",
+                "192.168.112.22",
+                "192.168.112.18",
+                "192.168.112.17",
+                "192.168.112.33",
+                "192.168.112.32",
+                "192.168.112.25",
+                "192.168.112.9",
+                "192.168.112.37",
+                "192.168.112.13",
+                "192.168.112.30",
+                "192.168.112.23",
+                "192.168.112.11",
+                "192.168.112.14",
+                "192.168.112.21",
+                "192.168.112.19",
+                "192.168.112.20",
+                "192.168.112.10",
+                "192.168.112.36",
+                "192.168.112.12",
+                "192.168.112.16",
+                "192.168.112.35"
+        };
 
-            if(seat.getSeatId()==1){
-                seat.setSeatIpAddr("192.168.112.15");
-            }
+        for(int i=0;i<addList.length;i++){
+            Seat seat = new Seat();
+            seat.setSeatId((long)(i+1));
+            seat.setSeatIpAddr(addList[i]);
             seatRepository.save(seat);
         }
     }

@@ -60,7 +60,7 @@
 	<div class="modal fade" id="productUpdate" data-bs-backdrop="static"
 		 data-bs-keyboard="false" tabindex="-1"
 		 aria-labelledby="staticBackdropLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg">
+		<div class="modal-dialog modal-dialog-centered modal-lg">
 			<div class="modal-content">
 				<form action="${cpath}/admin/addProduct" method="POST" enctype="multipart/form-data">
 					<div class="modal-header">
@@ -130,7 +130,7 @@
 		</div>
 	</div>
 	<div class="modal fade" id="categoryUpdate" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-		<div class="modal-dialog">
+		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content">
 				<form action="${cpath}/admin/addProductCategory" method="POST" enctype="multipart/form-data">
 					<div class="modal-header">
@@ -159,18 +159,17 @@
 	</div>
 </nav>
 <div class="container pt-4">
-	<form class="d-flex">
+	<form class="d-flex" action="${cpath}/admin/product" method="get">
 		<div class="mb-3 pe-2" style="width: 150px;">
-			<select class="form-select" aria-label="Default select example">
-				<option selected>전체</option>
-				<option value="1">전체</option>
-				<option value="2">상품번호</option>
-				<option value="3">상품명</option>
-				<option value="4">상품분류</option>
+			<select class="form-select" name="category" aria-label="Default select example">
+				<option selected value="all">전체</option>
+				<option value="id">상품번호</option>
+				<option value="name">상품명</option>
+				<option value="productCategoryName">상품분류</option>
 			</select>
 		</div>
 		<div class="mb-3 pe-2">
-			<input type="text" class="form-control" id="searchName">
+			<input type="text" class="form-control" name="keyword" id="searchName">
 		</div>
 		<div>
 			<button type="submit" class="btn btn-secondary">검색</button>
@@ -201,7 +200,7 @@
 				<td class="pt-3">${dto.id}</td>
 				<td class="pt-3">${dto.name}</td>
 				<td class="pt-3">${dto.productCategoryName}</td>
-				<td class="pt-3">${dto.price}</td>
+				<td class="pt-3">${dto.price}원</td>
 				<td class="pt-3">${dto.count}</td>
 				<td class="pt-3">금일 판매갯수</td>
 				<td>
@@ -227,9 +226,7 @@
 					<span aria-hidden="true">&laquo;</span>
 				</a>
 			</li>
-			<li class="page-item"><a class="page-link" href="#">1</a></li>
-			<li class="page-item"><a class="page-link" href="#">2</a></li>
-			<li class="page-item"><a class="page-link" href="#">3</a></li>
+
 			<li class="page-item">
 				<a class="page-link" href="#" aria-label="Next">
 					<span aria-hidden="true">&raquo;</span>
@@ -239,7 +236,7 @@
 	</nav>
 
 	<div class="modal fade" id="detail_check_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg">
+		<div class="modal-dialog modal-dialog-centered modal-lg">
 			<div class="modal-content">
 
 				<!-- Modal Header -->

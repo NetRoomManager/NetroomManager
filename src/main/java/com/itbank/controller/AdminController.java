@@ -84,9 +84,16 @@ public class AdminController {
 
     // 상품관리
     @GetMapping("/product")
-    public ModelAndView product() {
+    public ModelAndView searchProduct(@RequestParam(required = false) String category, @RequestParam(required = false) String keyword) {
         ModelAndView mav = new ModelAndView("/admin/product_manage");
-        List<ProductDTO> productList = productService.selectAllProduct();
+        List<ProductDTO> productList;
+
+        if (category != null && keyword != null) {
+            productList = productService.search(category, keyword);
+        } else {
+            productList = productService.selectAll();
+        }
+
         List<ProductCategory> productCategoryList = productService.selectAllProductCategory();
         mav.addObject("productList", productList);
         mav.addObject("productCategoryList", productCategoryList);

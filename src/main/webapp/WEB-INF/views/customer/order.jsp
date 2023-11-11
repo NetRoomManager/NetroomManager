@@ -351,8 +351,14 @@
                         .then(data => {
                             if (data.success) {
                                 alert('결제 완료!');
+                                while(movingMenu.firstChild) {
+                                    movingMenu.removeChild(movingMenu.firstChild);
+                                }
+                                menuList = [];
+                                updateTotalPrice();
                                 successCallback(data); // data.success 값을 콜백으로 전달
                                 console.log(menuList);
+                                location.reload();
                             } else {
                                 alert(`error:[${data.status}]결제요청이 승인된 경우 관리자에게 문의바랍니다.`);
                             }

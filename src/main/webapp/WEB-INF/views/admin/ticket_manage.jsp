@@ -68,7 +68,7 @@
     <%--이용권등록 모달                       --%>
     <div class="modal fade" id="ticketCreate" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
          aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <form action="/admin/ticketRegister" method="POST">
                     <div class="modal-header">
@@ -90,7 +90,7 @@
                                 <th>이용권시간</th>
                                 <td>
                                     <input class="form-control" type="number" name="time"
-                                           placeholder="분" required aria-label="default input example">
+                                           placeholder="초" required aria-label="default input example">
                                 </td>
                             </tr>
                             <tr>
@@ -115,7 +115,7 @@
     <%--이용권등록 모달                       --%>
     <div class="modal fade" id="ticketUpdate" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
          aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
                 <form action="/admin/ticketRegister" method="POST">
                     <div class="modal-header">
@@ -137,7 +137,7 @@
                                 <th>이용권시간</th>
                                 <td>
                                     <input class="form-control" type="number" id="editTicketTime" name="time"
-                                           placeholder="분" required aria-label="default input example">
+                                           placeholder="초" required aria-label="default input example">
                                 </td>
                             </tr>
                             <tr>
