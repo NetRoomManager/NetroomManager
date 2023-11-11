@@ -4,10 +4,7 @@ import com.itbank.model.Ticket;
 import com.itbank.model.dto.ProductSalesDTO;
 import com.itbank.model.*;
 import com.itbank.model.dto.SeatInfoDTO;
-import com.itbank.repository.jpa.DropOutUserRepository;
-import com.itbank.repository.jpa.ProductRepository;
-import com.itbank.repository.jpa.ProductSalesRepository;
-import com.itbank.repository.jpa.SeatRepository;
+import com.itbank.repository.jpa.*;
 import com.itbank.repository.mybatis.DropOutUserDAO;
 import com.itbank.service.*;
 import com.itbank.service.ProductService;
@@ -69,6 +66,9 @@ public class AdminController {
 
     @Autowired
     private DropOutUserRepository dropOutUserRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     @Autowired
     private Jedis jedis;
@@ -215,73 +215,48 @@ public class AdminController {
     @PostMapping("/add_update")
     public String add_update(@RequestParam("seat_state") Long state, @RequestParam("hour") Long hour,
                              @RequestParam("seatId") Long seatId) {
-        log.info("state" + String.valueOf(state));
-        log.info("hour" + String.valueOf(hour));
-        log.info("seatId" + String.valueOf(seatId));
+        log.info("state" + state);
+        log.info("hour" + hour);
+        log.info("seatId" + seatId);
 
-        /*
-        기존 Redis에 저장된 키의 만료시간을 불러옴
-        기존 Key를 삭제
-        새로운 시간으로 레디스 키를 저장
-        만료시간은 새로운 시간 - (이전 남은시간 - 이전 레디스 남은 만료시간)
-         */
-        if (hour == 1) {
-            hour = 60L;
-        } else if (hour == 2) {
-            hour = 120L;
-        } else if (hour == 3) {
-            hour = 180L;
-        } else if (hour == 4) {
-            hour = 240L;
-        } else if (hour == 5) {
-            hour = 300L;
-        } else if (hour == 6) {
-            hour = 360L;
-        } else {
-            hour = 0L;
-        }
+        // 시간을 초 단위로 변경
+        hour = hour * 3600L;
+
         Seat seat = seatRepository.findById(seatId).orElseThrow(() -> new IllegalArgumentException("잘못된 접근입니다."));
         if (seat.getUser() != null) {
-            // 남은 만료시간
-            Long ttl = jedis.ttl(seat.getUser().getUsername() + " " + seat.getUser().getRemainingTime().getRemainingTime());
-            // 기존키 삭제
-            log.info(seat.getUser().getUsername() + " " + seat.getUser().getRemainingTime().getRemainingTime() + "삭제");
-            Set<String> keys = redisTemplate.keys(seat.getUser().getUsername() + " *");
-            System.out.println("삭제할 키 : " + keys);
-            if (keys != null) {
-                for (String key : keys) {
-                    redisTemplate.delete(key);
-                }
-            }
+            // Redis에서 현재 키 찾기
+            String redisKey = seat.getUser().getUsername() + " " + seat.getUser().getRemainingTime().getRemainingTime();
+            Long remainingTime = redisTemplate.getExpire(redisKey);
 
-            // 사용시간
-            Long usingTime = seat.getUser().getRemainingTime().getRemainingTime() - ttl;
+            log.info("현재 남은시간 : " + remainingTime);
 
-            log.info("사용시간: " + usingTime);
-            log.info("만료시간: " + ttl);
+            log.info("충전할 시간 : " + hour);
 
-            int time = (int) (ttl + hour);
+            // 추가 시간을 기존의 남은 시간에 더하기
+            long newExpireTime = remainingTime + hour;
 
-            // DB에 시간 반영
-            int result = seatService.updateSeat(state, time, seatId);
-            seat = seatRepository.findById(seat.getSeatId()).orElseThrow(() -> new IllegalArgumentException("잘못된 접근입니다."));
+            // 기존 키 삭제
+            Boolean deletedKeys = redisTemplate.delete(redisKey);
+            log.info("Deleted keys: " + deletedKeys);
+            log.info("기존 키 삭제: " + redisKey);
 
-            redisTemplate.opsForValue().set(seat.getUser().getUsername() + " " + (time + usingTime), time , time - ttl, TimeUnit.SECONDS);
+            // DB에 원래 남아있던 시간 그대로 반영
+            seat.getUser().getRemainingTime().setRemainingTime((int)newExpireTime);
+            userRepository.save(seat.getUser());
+
+            // 새 만료 시간으로 새 키 생성하지만 원래 남아있던 시간은 그대로 유지
+            redisTemplate.opsForValue().set(seat.getUser().getUsername() + " " + seat.getUser().getRemainingTime().getRemainingTime(), seat.getUser(), newExpireTime, TimeUnit.SECONDS);
+            log.info("레디스에 저장한 남은 시간: " + newExpireTime);
 
 
-            log.info("레디스에 저장한 값: " + seat.getUser().getUsername() + " " + time);
-            log.info("DB에 저장한 값: " + seat.getUser().getRemainingTime().getRemainingTime());
-            log.info("time: " + time);
+            log.info("DB에 저장한 남은 시간: " + seat.getUser().getRemainingTime().getRemainingTime());
 
-            log.info("result" + result);
-
-            Message message = new Message("admin", time + "초 추가", seat.getUser().getUsername(), new Date());
+            Message message = new Message("admin", newExpireTime + "초 추가", seat.getUser().getUsername(), new Date());
             chatComponent.saveMessage(message);
             chatComponent.convertAndSendToUser(seat.getUser().getUsername(), "/queue/messages", message);
         } else {
             seatService.updateState(seatId, state);
         }
-
 
         return "redirect:/admin/seat";
     }

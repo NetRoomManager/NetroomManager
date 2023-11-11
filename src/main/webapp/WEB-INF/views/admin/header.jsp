@@ -162,8 +162,11 @@ html {
 
 	const from = '${username}';
 	let stompClient = null;
+	let loadingChatHistory = false;  // 채팅 기록을 불러오는 중인지 나타내는 플래그
 
 	function openChatRoom(username) {
+		loadingChatHistory = true;  // 채팅 기록을 불러오는 중임을 나타내기 위해 플래그를 활성화
+
 		let chatRoomDiv = document.getElementById('chat_box');
 		if (!chatRoomDiv) {
 			alert("채팅방을 찾지 못했습니다.");
@@ -187,6 +190,9 @@ html {
 
 			getMessages();
 		}
+
+		loadingChatHistory = false;  // 채팅 기록을 모두 불러왔으므로 플래그를 비활성화
+
 	}
 
 	function showMessageOutput(messageOutput) {
@@ -232,7 +238,7 @@ html {
 
 
 			// 모달이 이미 열려있지 않은 경우에만 show 메소드 호출
-			if (!modalInstance._isShown) {
+			if (!modalInstance._isShown && messageOutput.from !== 'admin') {
 				// 같은 유저로부터 받은 이전 알림 제거
 				let prevNotification = document.querySelector('.notification[data-user="' + messageOutput.from + '"]');
 				if (prevNotification) {

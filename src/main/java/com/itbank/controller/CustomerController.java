@@ -23,6 +23,10 @@ import org.springframework.web.servlet.ModelAndView;
 import redis.clients.jedis.Jedis;
 
 import java.text.SimpleDateFormat;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
 
@@ -78,51 +82,54 @@ public class CustomerController {
 
     @GetMapping("/main")
     public ModelAndView main() {
+        ModelAndView mav = new ModelAndView();
 
-        ModelAndView mav = new ModelAndView("/customer/main");
+        User user = getCurrentUser();
+        if (user != null && seatRepository.findByUser(user).isPresent()) {
+            String userKey = user.getUsername() + " " + user.getRemainingTime().getRemainingTime();
+            Long remainingTime = jedis.ttl(userKey);
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Object principal = authentication.getPrincipal();
-        log.info("Principal type: " + principal.toString());
-        UserPrincipal userPrincipal = (UserPrincipal) principal;
+            // If the key does not exist, reset it
+            if (remainingTime == -2) {
+                redisTemplate.opsForValue().set(userKey, user.getRemainingTime().getRemainingTime(), user.getRemainingTime().getRemainingTime(), TimeUnit.SECONDS);
+                remainingTime = jedis.ttl(userKey);
+            }
 
-        User user = userPrincipal.getUser();
-        user = userRepository.findByUsername(user.getUsername()).orElseThrow(()->new UsernameNotFoundException("유저 정보를 찾을 수 없습니다."));
+            // 사용 시간을 계산
+            UserLog userLog = userLogService.findLatestByUser(user).orElseThrow(() -> new IllegalArgumentException("ㅈ버그발생!!!!"));
 
-        if (user != null && user.getRemainingTime() != null && jedis.ttl(user.getUsername() + " " + user.getRemainingTime().getRemainingTime()) == -2) {
-            System.out.println(1);
-            redisTemplate.opsForValue().set(user.getUsername()+" "+user.getRemainingTime().getRemainingTime(), user.getRemainingTime().getRemainingTime(), user.getRemainingTime().getRemainingTime(), TimeUnit.SECONDS);
+            log.info("마지막 로그인 시점: " + userLog);
+
+            // loginAt 필드를 LocalDate로 변환
+            LocalDateTime loginAt = userLog.getLoginAt().toLocalDateTime();
+
+            // 사용 시간을 계산
+            long usingTime = Duration.between(loginAt, LocalDateTime.now()).getSeconds();
+
             mav.addObject("user", user);
             mav.addObject("userLog", userLogService.findLatestByUser(user).get());
-            long l = user.getRemainingTime().getRemainingTime() - jedis.ttl(user.getUsername() + " " + user.getRemainingTime().getRemainingTime());
-            log.info("사용시간: " + l);
-            log.info("DB저장시간: " + user.getRemainingTime().getRemainingTime());
-            log.info("레디스 남은시간: " +  jedis.ttl(user.getUsername() + " " + user.getRemainingTime().getRemainingTime()));
-
-            mav.addObject("usingTime", l);
-            mav.addObject("remainingTime", jedis.ttl(user.getUsername() + " " + user.getRemainingTime().getRemainingTime()));
+            mav.addObject("usingTime", usingTime);
+            mav.addObject("remainingTime", remainingTime);
 
             log.info("user: " + user);
             log.info("userLog: " + user.getUserLogs());
-        }
-        else if(seatRepository.findByUser(user).isPresent()) {
-            System.out.println(2);
-            mav.addObject("user", user);
-            mav.addObject("userLog", userLogService.findLatestByUser(user).get());
-            long l = user.getRemainingTime().getRemainingTime() - jedis.ttl(user.getUsername() + " " + user.getRemainingTime().getRemainingTime());
-            log.info("사용시간: " + l);
-            mav.addObject("usingTime", l);
-            mav.addObject("remainingTime", jedis.ttl(user.getUsername() + " " + user.getRemainingTime().getRemainingTime()));
-
-            log.info("user: " + user);
-            log.info("userLog: " + user.getUserLogs());
-        }
-        else {
-            System.out.println(3);
+            mav.setViewName("/customer/main");
+        } else {
             mav.setViewName("redirect:/customer/seat");
         }
+
         return mav;
     }
+
+    private User getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication.getPrincipal() instanceof UserPrincipal) {
+            UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+            return userRepository.findByUsername(userPrincipal.getUsername()).orElseThrow(() -> new UsernameNotFoundException("유저 정보를 찾을 수 없습니다."));
+        }
+        return null;
+    }
+
 
     @GetMapping("/seat")
     public ModelAndView seat_view() {
