@@ -50,7 +50,7 @@
                 </button>
             </li>
             <li class="nav-item pe-2">
-                <button type="button" class="btn btn-light"
+                <button type="button" class="btn btn-light" onclick="location.reload();"
                         style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .75rem; --bs-btn-font-size: 1.15rem;">
                     <svg
                             width="20"

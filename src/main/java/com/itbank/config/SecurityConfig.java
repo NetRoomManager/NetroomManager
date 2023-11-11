@@ -14,6 +14,8 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.InMemoryOAuth2AuthorizedClientService;
@@ -23,14 +25,21 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.oidc.IdTokenClaimNames;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 @Configuration
@@ -87,10 +96,31 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 // 로그인 페이지 지정
                 .loginPage("/auth/login")
-                .successHandler((request, response, exception) -> {
-                    System.out.println("로그인 성공 핸들러");
-                    response.sendRedirect("/customer/seat");
+                .successHandler(new SimpleUrlAuthenticationSuccessHandler() {
+                    @Override
+                    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+                                                        Authentication authentication) throws IOException {
+                        System.out.println("로그인 성공 핸들러");
+                        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+
+                        boolean isAdmin = authorities.stream()
+                                .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
+
+                        if (isAdmin) {
+                            SavedRequest savedRequest = new HttpSessionRequestCache().getRequest(request, response);
+                            if (savedRequest != null) {
+                                String targetUrl = savedRequest.getRedirectUrl();
+                                getRedirectStrategy().sendRedirect(request, response, targetUrl);
+                            } else {
+                                // 저장된 요청이 없는 경우 기본 URL로 리다이렉트
+                                getRedirectStrategy().sendRedirect(request, response, "/");
+                            }
+                        } else {
+                            getRedirectStrategy().sendRedirect(request, response, "/customer/seat");
+                        }
+                    }
                 })
+
                 // 실패시 핸들러
                 .failureHandler(((request, response, exception) -> {
                     if(exception instanceof AuthenticationServiceException) {
