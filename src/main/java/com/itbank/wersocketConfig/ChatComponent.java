@@ -5,8 +5,12 @@ import com.itbank.model.Message;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import redis.clients.jedis.Jedis;
 
 import javax.annotation.PostConstruct;
@@ -22,10 +26,18 @@ public class ChatComponent {
     private static SimpMessagingTemplate messagingTemplate;
 
     @Autowired
-    private RedisTemplate<String, Message> redisTemplate;
+    private RedisTemplate<String, Object> redisTemplate;
+
+    @Autowired
+    private RedisTemplate<String, Message> messageRedisTemplate;
 
     @Autowired
     private Jedis jedis;
+
+    @PostConstruct
+    private void initStatic() {
+        messagingTemplate = this.simpMessagingTemplate;
+    }
 
     public void saveMessage(Message message) {
         // 'from'과 'to'를 오름차순으로 정렬
@@ -36,7 +48,7 @@ public class ChatComponent {
         String key = "chat:" + names.get(0) + ":" + names.get(1);
 
         // 메시지 저장
-        redisTemplate.opsForList().rightPush(key, message);
+        messageRedisTemplate.opsForList().rightPush(key, message);
 
     }
 
@@ -49,7 +61,7 @@ public class ChatComponent {
         String key = "chat:" + names.get(0) + ":" + names.get(1);
 
         // 메시지 불러오기
-        return redisTemplate.opsForList().range(key, 0, -1);
+        return messageRedisTemplate.opsForList().range(key, 0, -1);
     }
 
     public void saveOrder(HashMap<String, Object> orderList) {
@@ -68,7 +80,6 @@ public class ChatComponent {
         // 메시지 저장
         jedis.rpush(key, jsonString);
     }
-
     public List<List<String>> getOrders() {
         Set<String> keys = jedis.keys("order:*");
         List<List<String>> allOrders = new ArrayList<>();
@@ -80,10 +91,16 @@ public class ChatComponent {
         return allOrders;
     }
 
+    public void saveNotification(String username) {
+        redisTemplate.opsForSet().add("notification", username);
+    }
 
-    @PostConstruct
-    private void initStatic() {
-        messagingTemplate = this.simpMessagingTemplate;
+    public Set<Object> getNotifications() {
+        return redisTemplate.opsForSet().members("notification");
+    }
+
+    public void deleteNotification(String username) {
+        redisTemplate.opsForSet().remove("notification", username);
     }
 
 
@@ -94,6 +111,7 @@ public class ChatComponent {
     public static void convertAndSendToUser(String username, String path, Map<String, String> msg) {
         messagingTemplate.convertAndSendToUser(username, path, msg);
     }
+
 
     public void convertAndSendToUser(String admin, String path, HashMap<String, Object> stringObjectHashMap) {
         messagingTemplate.convertAndSendToUser(admin, path, stringObjectHashMap);

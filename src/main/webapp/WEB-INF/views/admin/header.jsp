@@ -31,6 +31,15 @@ html {
 	font-family: "AppleSDGothicNeoR00", "Noto Sans KR", "맑은 고딕";
 	overflow: hidden;
 }
+.notification {
+	position: fixed;
+	right: 20px;
+	bottom: 20px;
+	padding: 10px;
+	background-color: #f44336;
+	color: white;
+	cursor: pointer;
+}
 .from {
 	text-align: right;
 	background-color: #d2d2d2;
@@ -221,9 +230,47 @@ html {
 				getMessages();
 			}
 
+
 			// 모달이 이미 열려있지 않은 경우에만 show 메소드 호출
 			if (!modalInstance._isShown) {
-				modalInstance.show();
+				// 같은 유저로부터 받은 이전 알림 제거
+				let prevNotification = document.querySelector('.notification[data-user="' + messageOutput.from + '"]');
+				if (prevNotification) {
+					prevNotification.remove();
+				}
+
+				// 새로운 메시지 알림 생성
+				let notification = document.createElement('div');
+				notification.className = 'notification';
+				notification.setAttribute('data-user', messageOutput.from); // 유저 정보를 속성으로 추가
+				notification.innerHTML = messageOutput.from + '님으로부터 새로운 메시지가 도착했습니다.';
+				notification.onclick = function() {
+					modalInstance.show();
+					let currentNotification = document.querySelector('.notification[data-user="' + messageOutput.from + '"]');
+					if (currentNotification) {
+						currentNotification.remove();
+					}
+				};
+
+				// AJAX 요청을 이용해 알림을 서버에 저장
+				$.ajax({
+					url: '/notification',  // 요청을 보낼 서버의 URL
+					headers: {
+						'Content-Type': 'application/json'
+					},
+					type: 'POST',  // HTTP 메소드
+					data: JSON.stringify({ 'username':  messageOutput.from }),  // 수정된 부분
+					success: function(response) {  // 응답이 성공적으로 도착했을 때 실행할 콜백 함수
+						console.log('Notification saved successfully');
+					},
+					error: function(request, status, error) {  // 요청이 실패했을 때 실행할 콜백 함수
+						console.error('Error: ', error);
+					}
+				});
+
+
+				document.body.appendChild(notification);
+
 			}
 		}
 	}
@@ -338,6 +385,61 @@ html {
 
 		return year + '-' + month + '-' + date + 'T' + hours + ':' + minutes + ':' + seconds;
 	}
+
+	window.onload = function() {
+		// Bootstrap 모달 인스턴스를 가져옵니다.
+		let modal = document.getElementById('seat_chat');
+		let modalInstance = bootstrap.Modal.getInstance(modal);
+
+		// AJAX 요청을 이용해 서버에서 모든 알림을 불러옴
+		$.ajax({
+			url: '/notification',
+			type: 'GET',
+			success: function(usernames) {
+				usernames.forEach(function(username) {
+					// 관리자로부터 온 메시지는 건너뛰기
+					if (username === 'admin') {
+						return;
+					}
+
+					let notification = document.createElement('div');
+					notification.className = 'notification';
+					notification.setAttribute('data-user', username);
+					notification.innerHTML = username + '님으로부터 새로운 메시지가 도착했습니다.';
+					notification.onclick = function() {
+						document.getElementById('to').value = username;
+
+						// 모달 인스턴스가 없는 경우 새로 생성
+						if (modalInstance === null) {
+							modalInstance = new bootstrap.Modal(modal);
+							getMessages();
+						}
+
+						// 모달이 이미 열려있지 않은 경우에만 show 메소드 호출
+						if (!modalInstance._isShown) {
+							modalInstance.show();
+							$.ajax({
+								url: '/notification/delete',
+								type: 'DELETE',
+								data: JSON.stringify({ 'username': username }),
+								contentType: 'application/json'
+							});
+							notification.remove();
+						}
+					};
+					document.body.appendChild(notification);
+				});
+			},
+			error: function(request, status, error) {
+				console.error('Error: ', error);
+			}
+		});
+
+	};
+
+
+
+
 
 	connect();
 
