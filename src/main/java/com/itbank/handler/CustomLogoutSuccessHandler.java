@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Optional;
 import java.util.Set;
 
@@ -68,7 +69,7 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
 
             if (userLog.isPresent()) {
                 UserLog log = userLog.get();
-                log.setLogoutAt(new Date(System.currentTimeMillis())); // 로그아웃 시간을 현재 시간으로 설정
+                log.setLogoutAt(new Timestamp(System.currentTimeMillis())); // 로그아웃 시간을 현재 시간으로 설정
                 userLogService.save(log); // UserLog를 데이터베이스에 저장
             }
 
