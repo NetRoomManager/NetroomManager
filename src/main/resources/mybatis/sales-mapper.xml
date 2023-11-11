@@ -39,13 +39,19 @@
         order by salesDate DESC
     </select>
 
-    <select id="selectTotal" resultType="int">
+    <select id="selectTotal" resultType="int" parameterType="map">
         select sum(s.totalprice) as orderTotalPrice
         from
         ticket_sales s,
         payment p,
         order_list o
         where s.payment_id=p.id and p.id=o.payment_id
+        <if test="startDate != null and startDate != ''">
+            AND  p.time &gt;= TO_DATE(#{startDate},'yyyy-MM-dd')
+        </if>
+        <if test="endDate != null and endDate != ''">
+            AND p.time &lt;= TO_DATE(#{endDate},'yyyy-MM-dd')+1
+        </if>
     </select>
 
 <!--    <select id="select" resultType="ticketsales">-->

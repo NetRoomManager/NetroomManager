@@ -388,6 +388,8 @@
 </div>
 
 <script>
+
+
     let usernameOk = false;
     let passwordOk = false;
     let authenticateOk = false;
@@ -526,6 +528,7 @@
                     document.getElementById('check_authNumber').innerText = "인증번호 확인";
                     authenticateOk = true;
                     joinSubmit.disabled = false;
+                    document.getElementById("authNumber").disabled = true;
                 }else{
                     document.getElementById('check_authNumber').classList.remove("text-primary")
                     document.getElementById('check_authNumber').classList.add("text-danger")
@@ -558,15 +561,20 @@
 
     // 이메일 인증번호 확인시 버튼 비활성화
     document.getElementById("authNumberCheck").addEventListener("click", function() {
-        document.getElementById("authNumber").disabled = true;
+
 
         // 다른 버튼 활성화 (선택적)
         document.getElementById("sendAuthNumber").disabled = false;
     });
+    var msg = "${msg}";
+    if(msg != ''){
+        alert(msg);
+    }
 
     // id 찾기 버튼 누르면, email로 아이디 그대로 전송하기
 
     // 임시 비밀번호 전송 시, uuid 랜덤으로 임시 비밀번호 전송하기
+
 
 
 </script>

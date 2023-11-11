@@ -123,7 +123,8 @@
                      style="width: 25%; height: 25%;" data-bs-toggle="modal"
                      data-bs-target="#seat_select_modal"
                      data-bs-id="${seat.seatId}"
-                     data-bs-userid="${seat.user_id}">
+                     data-bs-userid="${seat.user_id}"
+                     data-bs-state="${seat.seatState}">
 
                     <div class="seat_id card-header">좌석번호[ ${seat.seatId} ]</div>
                     <div class="seat_remain_time card-body">
@@ -151,7 +152,9 @@
             cards[i].addEventListener('click', function() {
                 // 좌석의 ID를 data 속성을 통해 가져와 모달의 data 속성에 저장
                 const seatId = this.getAttribute('data-bs-id');
+                const state = this.getAttribute('data-bs-state');
                 modal.setAttribute('data-selectedSeatId', seatId);
+                modal.setAttribute('data-bs-state', state);
 
                 // 모달 표시
                 const bootstrapModal = new bootstrap.Modal(modal);
@@ -160,14 +163,19 @@
         }
 
         yesButton.addEventListener('click', function() {
-            alert('좌석이 선택되었습니다.');
+            const state = modal.getAttribute('data-bs-state');
+            if(state!=1) {
+                alert('사용불가한 좌석입니다.');
+                return;
+            }
+            else {
+                // 모달의 data 속성에서 선택된 좌석 ID를 가져와 콘솔에 출력
+                const selectedSeatId = modal.getAttribute('data-selectedSeatId');
 
-            // 모달의 data 속성에서 선택된 좌석 ID를 가져와 콘솔에 출력
-            const selectedSeatId = modal.getAttribute('data-selectedSeatId');
+                location.href='/customer/seatSelector?seatId=' + selectedSeatId;
 
-            location.href='/customer/seatSelector?seatId=' + selectedSeatId;
-
-            console.log('선택된 좌석 ID: ' + selectedSeatId);
+                console.log('선택된 좌석 ID: ' + selectedSeatId);
+            }
 
             // 모달 숨김
             const bootstrapModal = bootstrap.Modal.getInstance(modal);

@@ -94,7 +94,7 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
 
             log.info("불러오기 성공! : " + time+"초");
 
-            if(time==null) { // null이면 핸들러로 들어온거임 ?time=1초 이런식으로 들어옴
+            if(time==null && request.getParameter("time")!=null) { // null이면 핸들러로 들어온거임 ?time=1초 이런식으로 들어옴
                 time = Long.valueOf((String) request.getParameter("time"));
                 log.info("파라미터로 받은 time: " + time);
             }
@@ -133,9 +133,13 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
 
 
             // 해당 유저가 사용중이던 좌석을 사용 가능한 상태로 변경
-            Seat seat = seatRepository.findByUser(userPrincipal.getUser());
-            seat.setUser(null);
-            seatRepository.save(seat);
+            Optional<Seat> optionalSeat = seatRepository.findByUser(userPrincipal.getUser());
+            if (optionalSeat.isPresent()) {
+                Seat seat = optionalSeat.get();
+                seat.setUser(null);
+                seat.setSeatState(1L);
+                seatRepository.save(seat);
+            }
         }
 
         // 로그아웃 이후에는 홈으로 보냄

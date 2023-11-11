@@ -133,15 +133,26 @@ public class AuthController {
     }
 
     @PostMapping("/join")
-    public String join(User user) {
+    public ModelAndView join(User user, HttpSession session) {
 
+        ModelAndView mav = new ModelAndView("/auth/login");
+        String msg = "";
         log.info("유저 생성");
 
-        userService.createUsers(user);
+        int join = userService.createUsers(user);
+        session.invalidate();
+        log.info("session.invalidate() : ");
 
-        log.info("유저 생성 완료!!");
-
-        return "redirect:/auth/login";
+        if(join > 0){
+            log.info("유저 생성 완료!!");
+            msg = "가입 성공! 로그인을 해주세요";
+        }
+        else{
+            log.info("유저 생성 실패!!");
+            msg = "중복되는 email 계정입니다";
+        }
+        mav.addObject("msg",msg);
+        return mav;
     }
 
     // 좌석관리
