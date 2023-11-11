@@ -116,7 +116,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                 getRedirectStrategy().sendRedirect(request, response, "/");
                             }
                         } else {
-                            getRedirectStrategy().sendRedirect(request, response, "/customer/seat");
+                            getRedirectStrategy().sendRedirect(request, response, "/customer/main");
                         }
                     }
                 })
