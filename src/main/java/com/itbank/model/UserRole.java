@@ -1,5 +1,6 @@
 package com.itbank.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -18,9 +19,11 @@ public class UserRole implements Serializable {
 
     @ManyToOne(fetch= FetchType.EAGER)
     @JoinColumn(name="user_id")
+    @JsonBackReference
     private User user;
 
     @ManyToOne(fetch=FetchType.EAGER)
     @JoinColumn(name="role_id")
+    @JsonBackReference
     private Role role;
 }

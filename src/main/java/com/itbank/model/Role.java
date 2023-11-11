@@ -1,6 +1,7 @@
 package com.itbank.model;
 
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,6 +22,7 @@ public class Role implements Serializable {
     @Column(nullable=false, unique=true)
     private String name;
 
+    @JsonManagedReference
     @OneToMany(mappedBy="role", cascade=CascadeType.ALL, fetch = FetchType.EAGER)
     private Set<UserRole> userRoles;
 }

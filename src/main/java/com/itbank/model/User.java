@@ -1,6 +1,7 @@
 package com.itbank.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 import net.minidev.json.annotate.JsonIgnore;
@@ -36,7 +37,7 @@ public class User implements Serializable {
     @Column(nullable = false)
     private String name;
 
-    @JsonIgnoreProperties("user")
+    @JsonManagedReference
     @OneToMany(mappedBy = "user", fetch = FetchType.EAGER)
     private Set<UserRole> userRoles;
 
@@ -46,11 +47,13 @@ public class User implements Serializable {
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private DropOutUser dropOutUser;
 
+    @JsonManagedReference
     @OneToMany(mappedBy = "user",  fetch = FetchType.EAGER)
     private List<UserLog> userLogs;
 
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     @PrimaryKeyJoinColumn
+    @JsonManagedReference
     private RemainingTime remainingTime;
 
     private String summoner;

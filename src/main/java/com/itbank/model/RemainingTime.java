@@ -1,5 +1,7 @@
 package com.itbank.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,6 +25,7 @@ public class RemainingTime implements Serializable {
 
     @OneToOne
     @MapsId
+    @JsonBackReference
     @JoinColumn(name = "user_id")
     private User user;
 }
