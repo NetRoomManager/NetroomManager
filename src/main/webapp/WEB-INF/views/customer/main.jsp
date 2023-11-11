@@ -330,8 +330,8 @@
             <form action="/auth/changePw" method="POST">
                 <input type="hidden" value="${username}" name="username">
                 <input type="password" placeholder="변경 할 패스워드" name="password" id="newpassword">
-                <span id="password_check_msg"></span>
-                <input type="submit" value="비밀번호 수정" class="btn btn-warning" id="btn-pw-modify btn_pw_modify">
+                <p><span id="password_check_msg"></span></p>
+                <input type="submit" value="비밀번호 수정" class="btn btn-warning" id="btn-pw-modify">
             </form>
 
         </div>
@@ -796,35 +796,12 @@
         modal.style.display = 'none';
     }
 
-    // 패스워드 검증
-    document.getElementById('newpassword').addEventListener('keyup', function () {
-        const password = document.getElementById('newpassword').value;
-        const specialCharRegex = /[~!@#$%^&*()_+|<>?:{}]/;
-        const lowerCaseRegex = /[a-z]/;
-        const numberRegex = /[0-9]/;
-        const joinSubmit = document.querySelector('.btn-pw-modify')//입력받은 인증번호
-
-        if (password.length >= 8 && specialCharRegex.test(password) && lowerCaseRegex.test(password) && numberRegex.test(password)) {
-            document.getElementById('password_check_msg').classList.add("text-primary");
-            document.getElementById('password_check_msg').classList.remove("text-danger");
-            document.getElementById('password_check_msg').innerText = "유효한 비밀번호입니다.";
-            joinSubmit.disabled = false;
-
-        } else {
-            document.getElementById('password_check_msg').classList.remove("text-primary");
-            document.getElementById('password_check_msg').classList.add("text-danger");
-            document.getElementById('password_check_msg').innerText = "비밀번호는 8자리 이상이며, 특수문자 1개 이상, 소문자 영어와 숫자로 이루어져야 합니다.";
-            joinSubmit.disabled = true;
-
-        }
-    });
-
-    const pwmodibtn = document.getElementById('btn-pw-modify');
 
     document.getElementById('password').addEventListener('keyup', function () {
         const password = document.getElementById('password').value;
         console.log(password);
         const username = document.getElementById('username').value;
+        const newpassword = document.getElementById('newpassword');
         fetch('/auth/checkPw', {
             method: 'POST',
             headers: {
@@ -846,17 +823,40 @@
                     document.getElementById('check_msg').classList.add("text-primary")
                     document.getElementById('check_msg').classList.remove("text-danger")
                     document.getElementById('check_msg').innerText = "일치";
-                    pwmodibtn.disabled = false;
+                    newpassword.readOnly = false;
                 } else {
                     document.getElementById('check_msg').classList.remove("text-primary")
                     document.getElementById('check_msg').classList.add("text-danger")
                     document.getElementById('check_msg').innerText = "불일치";
-                    pwmodibtn.disabled = true;
+                    newpassword.readOnly = true;
                 }
             })
             .catch((error) => {
                 console.error('Error:', error);
             });
+    });
+
+    const pwmodibtn = document.getElementById('btn-pw-modify');
+
+    // 패스워드 검증
+    document.getElementById('newpassword').addEventListener('keyup', function () {
+        const password = document.getElementById('newpassword').value;
+        const specialCharRegex = /[~!@#$%^&*()_+|<>?:{}]/;
+        const lowerCaseRegex = /[a-z]/;
+        const numberRegex = /[0-9]/;
+
+        if (password.length >= 8 && specialCharRegex.test(password) && lowerCaseRegex.test(password) && numberRegex.test(password)) {
+            document.getElementById('password_check_msg').classList.add("text-primary");
+            document.getElementById('password_check_msg').classList.remove("text-danger");
+            document.getElementById('password_check_msg').innerText = "유효한 비밀번호입니다.";
+            pwmodibtn.disabled = false;
+
+        } else {
+            document.getElementById('password_check_msg').classList.remove("text-primary");
+            document.getElementById('password_check_msg').classList.add("text-danger");
+            document.getElementById('password_check_msg').innerText = "비밀번호는 8자리 이상이며, 특수문자 1개 이상, 소문자 영어와 숫자로 이루어져야 합니다.";
+            pwmodibtn.disabled = true;
+        }
     });
 
 </script>
