@@ -14,6 +14,7 @@
 		<class>com.itbank.model.Payment</class>
 		<class>com.itbank.model.Ticket</class>
 		<class>com.itbank.model.TicketDetail</class>
+		<class>com.itbank.model.ProductSales</class>
 
 		<properties>
 			<property name="hibernate.dialect" value="org.hibernate.dialect.Oracle12cDialect" />

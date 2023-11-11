@@ -41,10 +41,14 @@ public class ProductSalesService {
 
     public ProductSalesDTO proSalesSelectOne(Long id) {
         // 매출상세조회
+         log.info("productSalesDAO.proSalesSelectOne(id);");
         ProductSalesDTO productSalesDTO = productSalesDAO.proSalesSelectOne(id);
+        log.info("productSalesDTO" + productSalesDTO);
         // 구매 제품 목록 리스트
+        log.info("productSalesDAO.getProductListBySalesId(id);");
         List<ProductItemDTO> productList = productSalesDAO.getProductListBySalesId(id);
         productSalesDTO.setProductList(productList);
+        log.info("productList" + productList);
         return productSalesDTO;
     }
 

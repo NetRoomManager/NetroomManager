@@ -157,6 +157,7 @@
 					 data-bs-target="#seat_detail"
 					 data-bs-id="${seat.seatId}"
 					 data-bs-username="${seat.username}"
+					 data-bs-userid="${seat.user_id}"
 					 onclick="setModalSeatId(this)">
 					<div class="seat_id card-header">좌석번호[ ${seat.seatId} ]</div>
 					<div class="seat_remain_time card-body">
@@ -193,6 +194,7 @@
 			const modalSeatId = document.getElementById('modal_seat_id');
 			modalSeatId.textContent = selectedSeat.seatId;
 			console.log('seatId: ' + selectedSeat.seatId);
+			console.log('userId: ' + selectedSeat.userId);
 
 			// '수정하기' 버튼에 data-bs-id 속성 설정
 			const changeSeatButton = document.getElementById('changeSeat');
@@ -205,7 +207,7 @@
 			if (selectedSeat.userId) {
 				// user_id가 있는 경우에는 canUseSelect 변경을 막음
 				canUseSelect.disabled = true;
-				canUseSelect.value = '2'; // 예를 들어, 사용중으로 설정
+				canUseSelect.value = '2'; // 사용중으로 설정
 				addHourSelect.disabled = false;
 			} else {
 				// user_id가 없는 경우에는 canUseSelect 변경 가능
