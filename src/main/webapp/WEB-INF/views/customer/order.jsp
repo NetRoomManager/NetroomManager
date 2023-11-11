@@ -351,6 +351,11 @@
                         .then(data => {
                             if (data.success) {
                                 alert('결제 완료!');
+                                while(movingMenu.firstChild) {
+                                    movingMenu.removeChild(movingMenu.firstChild);
+                                }
+                                menuList = [];
+                                updateTotalPrice();
                                 successCallback(data); // data.success 값을 콜백으로 전달
                                 console.log(menuList);
                             } else {
