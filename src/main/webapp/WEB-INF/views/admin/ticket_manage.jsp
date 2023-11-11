@@ -90,7 +90,7 @@
                                 <th>이용권시간</th>
                                 <td>
                                     <input class="form-control" type="number" name="time"
-                                           placeholder="분" required aria-label="default input example">
+                                           placeholder="초" required aria-label="default input example">
                                 </td>
                             </tr>
                             <tr>
@@ -137,7 +137,7 @@
                                 <th>이용권시간</th>
                                 <td>
                                     <input class="form-control" type="number" id="editTicketTime" name="time"
-                                           placeholder="분" required aria-label="default input example">
+                                           placeholder="초" required aria-label="default input example">
                                 </td>
                             </tr>
                             <tr>
@@ -182,7 +182,7 @@
                 <td class="pt-3">${ticket.id}</td>
                 <td class="pt-3">${ticket.name}</td>
                 <td class="pt-3">${ticket.price}원</td>
-                <td class="pt-3">${ticket.time}분</td>
+                <td class="pt-3">${ticket.time}초</td>
                 <td>
                     <button type="button" class="editBtn btn btn-outline-warning"
                             data-bs-toggle="modal" data-bs-target="#ticketUpdate"
