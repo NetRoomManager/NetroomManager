@@ -119,14 +119,16 @@
         background-color: #d2d2d2;
         border-radius: 10px;
         margin: 10px;
-        padding: 10px;    }
+        padding: 10px;
+    }
 
     .chat_message.to {
         text-align: left;
         background-color: #eaeaea;
         border-radius: 10px;
         margin: 10px;
-        padding: 10px;    }
+        padding: 10px;
+    }
 
     .game_modal {
         display: none; /* Hidden by default */
@@ -195,7 +197,7 @@
         top: 0;
         width: 100%;
         height: 100%;
-        background-color: rgba(0,0,0,0.7);
+        background-color: rgba(0, 0, 0, 0.7);
     }
 
     .mypage_modal-content {
@@ -220,6 +222,7 @@
     .mypage_close:hover {
         color: #000;
     }
+
     /* 입력 필드 스타일 */
     input[type="text"],
     input[type="password"] {
@@ -318,13 +321,17 @@
             </div>
             <input type="text" id="name" placeholder="이름" value="${principal.name }" readonly>
             <input type="text" id="username" placeholder="아이디" value="${username }" readonly>
-                <label for="birthday" style="font-weight: bold; ">생년월일</label>
-                <input type="date" id="birthday" name="birth" value="${principal.user.birth}" style="width: 200px; height: 35px;" readonly>
-                <input type="text" id="email" placeholder="이메일" value="${principal.email}" name="email" readonly>
-            <form action="#" method="POST">
-                <input type="password" placeholder="기존 패스워드" name="password">
-                <input type="password" placeholder="변경 할 패스워드" name="newPassword">
-                <input type="submit" value="비밀번호 수정" class="btn btn-warning" disabled>
+            <label for="birthday" style="font-weight: bold; ">생년월일</label>
+            <input type="date" id="birthday" name="birth" value="${principal.user.birth}"
+                   style="width: 200px; height: 35px;" readonly>
+            <input type="text" id="email" placeholder="이메일" value="${principal.email}" name="email" readonly>
+            <input type="password" placeholder="기존 패스워드" name="prepassword" id="password">
+            <span id="check_msg"></span>
+            <form action="/auth/changePw" method="POST">
+                <input type="hidden" value="${username}" name="username">
+                <input type="password" placeholder="변경 할 패스워드" name="password" id="newpassword">
+                <span id="password_check_msg"></span>
+                <input type="submit" value="비밀번호 수정" class="btn btn-warning" id="btn-pw-modify btn_pw_modify">
             </form>
 
         </div>
@@ -443,37 +450,37 @@
     </div>
     <div class="d-flex h-25">
         <div id="aki"
-                class="col-sm bg-dark text-white p-3 rounded mx-1 my-1 image-container2">
+             class="col-sm bg-dark text-white p-3 rounded mx-1 my-1 image-container2">
             <img src="/img/archeage.jpg" class="w-100">
             <div class="text-overlay2">아키에이지</div>
         </div>
         <div id="item_mania"
-                class="col-sm bg-dark text-white p-3 rounded mx-1 my-1 image-container2">
+             class="col-sm bg-dark text-white p-3 rounded mx-1 my-1 image-container2">
             <img src="/img/itemmania.png " class="w-100">
             <div class="text-overlay2">아이템매니아</div>
         </div>
         <div id="item_bay"
-                class="col-sm bg-dark text-white p-3 rounded mx-1 my-1 image-container2">
+             class="col-sm bg-dark text-white p-3 rounded mx-1 my-1 image-container2">
             <img src="/img/itembay.jpg " class="w-100">
             <div class="text-overlay2">아이템베이</div>
         </div>
         <div id="cart"
-                class="col-sm bg-dark text-white p-3 rounded mx-1 my-1 image-container2">
+             class="col-sm bg-dark text-white p-3 rounded mx-1 my-1 image-container2">
             <img src="/img/kartrider.jpg " class="w-100">
             <div class="text-overlay2">카트라이더</div>
         </div>
         <div id="poe"
-                class="col-sm bg-dark text-white p-3 rounded mx-1 my-1 image-container2">
+             class="col-sm bg-dark text-white p-3 rounded mx-1 my-1 image-container2">
             <img src="/img/poe.png" class="w-100">
             <div class="text-overlay2">POE</div>
         </div>
         <div id="world_of"
-                class="col-sm bg-dark text-white p-3 rounded mx-1 my-1 image-container2">
+             class="col-sm bg-dark text-white p-3 rounded mx-1 my-1 image-container2">
             <img src="/img/worldofwarship.jpg" class="w-100">
             <div class="text-overlay2">월오브워쉽</div>
         </div>
         <div id="netflix"
-                class="col-sm bg-dark text-white p-3 rounded mx-1 my-1 image-container2">
+             class="col-sm bg-dark text-white p-3 rounded mx-1 my-1 image-container2">
             <img src="/img/netflix.jpg" class="w-100">
             <div class="text-overlay2">넷플릭스</div>
         </div>
@@ -520,91 +527,91 @@
     const food_btn = document.querySelector(".food_btn");
 
     // 요금제 충전 버튼 눌렀을 때, 페이지 이동
-    charge_btn.addEventListener('click', function(){
-        window.location.href="/auth/buyTicket";
+    charge_btn.addEventListener('click', function () {
+        window.location.href = "/auth/buyTicket";
     })
 
     // 먹거리 버튼 눌렀을 때, 페이지 이동
-    food_btn.addEventListener('click', function() {
-        window.location.href="/customer/order/1";
+    food_btn.addEventListener('click', function () {
+        window.location.href = "/customer/order/1";
     })
 
 
     // 이미지를 클릭하면 새 창에서 URL 열도록 JavaScript 코드
     var imageElement = document.getElementById('mafia_image');
-    imageElement.addEventListener('click', function() {
+    imageElement.addEventListener('click', function () {
         var url = 'https://mafia42.com/#/';
         window.open(url, '_blank'); // 이미지 클릭 시 URL을 새 창에서 열기
     });
 
     var imageElement = document.getElementById('war_image');
-    imageElement.addEventListener('click', function() {
+    imageElement.addEventListener('click', function () {
         var url = 'https://play.google.com/store/apps/details?id=jp.co.ponos.battlecatskr&hl=ko&gl=US';
         window.open(url, '_blank');
     })
 
     var imageElement = document.getElementById('roblox_image');
-    imageElement.addEventListener('click', function() {
+    imageElement.addEventListener('click', function () {
         var url = 'https://www.roblox.com/';
         window.open(url, '_blank');
     })
 
     var imageElement = document.getElementById('fifa_image');
-    imageElement.addEventListener('click', function() {
+    imageElement.addEventListener('click', function () {
         var url = 'https://fconline.nexon.com/main/index';
         window.open(url, '_blank');
     })
 
     var imageElement = document.getElementById('among_image');
-    imageElement.addEventListener('click', function() {
+    imageElement.addEventListener('click', function () {
         var url = 'https://store.epicgames.com/ko/p/among-us';
         window.open(url, '_blank');
     })
 
     var imageElement = document.getElementById('maple_image');
-    imageElement.addEventListener('click', function() {
+    imageElement.addEventListener('click', function () {
         var url = 'https://maplestory.nexon.com/Home/Main';
         window.open(url, '_blank');
     })
 
     var imageElement = document.getElementById('aki');
-    imageElement.addEventListener('click', function() {
+    imageElement.addEventListener('click', function () {
         var url = 'https://game.naver.com/lounge/Archeage/home';
         window.open(url, '_blank');
     })
 
     var imageElement = document.getElementById('item_mania');
-    imageElement.addEventListener('click', function() {
+    imageElement.addEventListener('click', function () {
         var url = 'http://www.itemmania.com/';
         window.open(url, '_blank');
     })
 
     var imageElement = document.getElementById('item_bay');
-    imageElement.addEventListener('click', function() {
+    imageElement.addEventListener('click', function () {
         var url = 'https://www.itembay.com/?NaPm=ct%3Dlogy2uwa%7Cci%3Dcheckout%7Ctr%3Dds%7Ctrx%3Dnull%7Chk%3D9b0c5d6735a0d8ec7b908d6c4f23bccedc77d576';
         window.open(url, '_blank');
     })
 
     var imageElement = document.getElementById('cart');
-    imageElement.addEventListener('click', function() {
+    imageElement.addEventListener('click', function () {
         var url = 'https://kartdrift.nexon.com/kartdrift/ko/event/20230914/intro';
         window.open(url, '_blank');
     })
 
     var imageElement = document.getElementById('poe');
-    imageElement.addEventListener('click', function() {
+    imageElement.addEventListener('click', function () {
         var url = 'https://poe.game.daum.net/';
         window.open(url, '_blank');
     })
 
     var imageElement = document.getElementById('world_of');
-    imageElement.addEventListener('click', function() {
+    imageElement.addEventListener('click', function () {
         var url = 'https://worldofwarships.asia/ko/?pub_id=worldofwarships&sid=SIDgTHN0GP1ic8l_V9eLxyDnMfWfgxGHB2l1pwnepxvzoIP7NfJOnxB80SdHsoLV8_EvceE1O9RNY5w2eaDY_D-tBDjrlblgAqpbraBANr4q_D2jo_yEid6psYPxo3kzZTogbv5sNPgjVSK&enctid=cwo75h2z9uz1&lpsn=WOWS+APAC+Portal&foris=1&teclient=1698915131924951153';
         window.open(url, '_blank');
     })
 
     var imageElement = document.getElementById('netflix');
-    imageElement.addEventListener('click', function() {
+    imageElement.addEventListener('click', function () {
         var url = 'https://www.netflix.com/kr/';
         window.open(url, '_blank');
     })
@@ -733,19 +740,19 @@
 
 
     //모달 열기
-    document.getElementById("my_info").addEventListener("click", function() {
+    document.getElementById("my_info").addEventListener("click", function () {
         var modal = document.getElementById("myModal");
         modal.style.display = "block";
     });
 
     // 모달 닫기
-    document.getElementsByClassName("mypage_close")[0].addEventListener("click", function() {
+    document.getElementsByClassName("mypage_close")[0].addEventListener("click", function () {
         var modal = document.getElementById("myModal");
         modal.style.display = "none";
     });
 
     // 모달 외부 클릭 시 모달 닫기
-    window.addEventListener("click", function(event) {
+    window.addEventListener("click", function (event) {
         var modal = document.getElementById("myModal");
         if (event.target === modal) {
             modal.style.display = "none";
@@ -789,41 +796,72 @@
         modal.style.display = 'none';
     }
 
+    // 패스워드 검증
+    document.getElementById('newpassword').addEventListener('keyup', function () {
+        const password = document.getElementById('newpassword').value;
+        const specialCharRegex = /[~!@#$%^&*()_+|<>?:{}]/;
+        const lowerCaseRegex = /[a-z]/;
+        const numberRegex = /[0-9]/;
+        const joinSubmit = document.querySelector('.btn-pw-modify')//입력받은 인증번호
 
-    // 자리이동 눌렸을 때, 알림창 만들기
-    document.getElementById('').addEventListener('click', function () {
-        alert('원하는 좌석에서 로그인하세요!')
+        if (password.length >= 8 && specialCharRegex.test(password) && lowerCaseRegex.test(password) && numberRegex.test(password)) {
+            document.getElementById('password_check_msg').classList.add("text-primary");
+            document.getElementById('password_check_msg').classList.remove("text-danger");
+            document.getElementById('password_check_msg').innerText = "유효한 비밀번호입니다.";
+            joinSubmit.disabled = false;
+
+        } else {
+            document.getElementById('password_check_msg').classList.remove("text-primary");
+            document.getElementById('password_check_msg').classList.add("text-danger");
+            document.getElementById('password_check_msg').innerText = "비밀번호는 8자리 이상이며, 특수문자 1개 이상, 소문자 영어와 숫자로 이루어져야 합니다.";
+            joinSubmit.disabled = true;
+
+        }
     });
 
-	document.getElementById('main_close_btn').addEventListener('click', function () {
-		var countdownElement = document.getElementById('countdown');
-		var countdownValue = 5; // 3초 카운트다운
+    const pwmodibtn = document.getElementById('btn-pw-modify');
 
-		// 카운트다운 함수
-		function startCountdown() {
-			countdownElement.textContent = countdownValue;
-			countdownValue--;
+    document.getElementById('password').addEventListener('keyup', function () {
+        const password = document.getElementById('password').value;
+        console.log(password);
+        const username = document.getElementById('username').value;
+        fetch('/auth/checkPw', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(
+                {
+                    password: password,
+                    username: username
+                },
+            )
+        })
+            .then(response => response.json())
+            .then(data => {
 
-			if (countdownValue < -1) {
-				// 시간이 다 되면 모달을 닫고 메시지 표시
-				$('#end_of_user').modal('hide');
-				alert('컴퓨터가 종료됩니다.');
-			} else if (countdownValue === -1) {
-				// 로그인폼으로
-				location.href = "${cpath}/auth/loginForm.jsp";
-			}
-			else {
-				setTimeout(startCountdown, 1000);
-			}
-		}
+                console.log(data);
 
-		startCountdown(); // 카운트다운 시작
-	});
+                if (data.duplicate) {
+                    document.getElementById('check_msg').classList.add("text-primary")
+                    document.getElementById('check_msg').classList.remove("text-danger")
+                    document.getElementById('check_msg').innerText = "일치";
+                    pwmodibtn.disabled = false;
+                } else {
+                    document.getElementById('check_msg').classList.remove("text-primary")
+                    document.getElementById('check_msg').classList.add("text-danger")
+                    document.getElementById('check_msg').innerText = "불일치";
+                    pwmodibtn.disabled = true;
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+    });
+
 </script>
 <!-- javaScript -->
 <script src="/js/script.js"></script>
-
-
 
 
 <script>
@@ -843,22 +881,22 @@
             remainingTimeElement.textContent = formatTime(remainingTime);
         }, 1000);
 
-			 function formatTime(param) {
+        function formatTime(param) {
 
-				 // 3분남음
-				 if (remainingTime===300) {
-					const audio = new Audio('/audio/5.mp3');
-					audio.play();
-				 }
-				 // 5분 남음
-				 else if (remainingTime===180) {
-					 const audio = new Audio('/audio/3.mp3');
-					 audio.play();
-				 }
+            // 3분남음
+            if (remainingTime === 300) {
+                const audio = new Audio('/audio/5.mp3');
+                audio.play();
+            }
+            // 5분 남음
+            else if (remainingTime === 180) {
+                const audio = new Audio('/audio/3.mp3');
+                audio.play();
+            }
 
-				 let hours = Math.floor(param / 3600);
-				 let minutes = Math.floor((param % 3600) / 60);
-				 let seconds = param % 60;
+            let hours = Math.floor(param / 3600);
+            let minutes = Math.floor((param % 3600) / 60);
+            let seconds = param % 60;
 
             return hours + "시간 " + minutes + "분 " + seconds + "초";
         }
@@ -878,7 +916,6 @@
         }
     })
 </script>
-
 
 
 </body>

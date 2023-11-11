@@ -20,7 +20,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0 pt-1">
             <li class="nav-item">
-                <a class="nav-link active navbar-brand" aria-current="page" href="#">NetRoom</a>
+                <a class="nav-link active navbar-brand" aria-current="page" href="/admin/seat">NetRoom</a>
             </li>
             <li class="nav-item pe-3">
                 <a class="nav-link" href="${cpath}/admin/productsales">상품매출</a>
@@ -202,117 +202,6 @@
                     </tbody>
                 </table>
             </div>
-                            ></path>
-                            </svg>
-                        </button>
-                    </li>
-                    <li class="nav-item pe-2">
-                        <button type="button" class="btn btn-light"
-                                style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .75rem; --bs-btn-font-size: 1.15rem;">
-                                <svg
-                                width="20"
-                                height="20"
-                                viewBox="0 0 20 20"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="w-5 h-5 relative"
-                                preserveAspectRatio="none"
-                              >
-                                <path
-                                  fill-rule="evenodd"
-                                  clip-rule="evenodd"
-                                  d="M10 3.74999C6.54822 3.74999 3.75 6.54821 3.75 9.99999C3.75 13.4518 6.54822 16.25 10 16.25C13.4518 16.25 16.25 13.4518 16.25 9.99999C16.25 9.0682 16.0465 8.18565 15.6821 7.39291C15.538 7.07928 15.6753 6.70817 15.989 6.564C16.3026 6.41984 16.6737 6.55723 16.8179 6.87086C17.256 7.82403 17.5 8.88437 17.5 9.99999C17.5 14.1421 14.1421 17.5 10 17.5C5.85786 17.5 2.5 14.1421 2.5 9.99999C2.5 5.85786 5.85786 2.49999 10 2.49999V3.74999Z"
-                                  fill="black"
-                                ></path>
-                                <path
-                                  d="M10 5.58279V0.667193C10 0.402244 10.309 0.257507 10.5126 0.427123L13.4619 2.88492C13.6118 3.00986 13.6118 3.24013 13.4619 3.36506L10.5126 5.82286C10.309 5.99248 10 5.84774 10 5.58279Z"
-                                  fill="black"
-                                ></path>
-                              </svg>
-                        </button>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-        <div class="container pt-4">
-            <form class="d-flex">
-                <div class="mb-3 pe-2">
-                  <input type="date" class="form-control" id="searchRangeOne">
-                </div>
-                <p class="h3">~</p>
-                <div class="mb-3 px-2">
-                  <input type="date" class="form-control" id="searchRangeTwo">
-                </div>
-                <div>
-                    <button type="submit" class="btn btn-secondary" >기간검색</button>
-                </div>
-            </form>
-        </div>
-        <div class="container">
-            <table class="table table-hover">
-                <thead>
-                    <tr class="table-dark text-center">
-                        <th scope="col">#</th>
-                        <th scope="col">상품매출번호</th>
-                        <th scope="col">결제방식</th>
-                        <th scope="col">결제품목</th>
-                        <th scope="col">결제금액</th>
-                        <th scope="col">판매시간</th>
-                        <th scope="col">구매회원아이디</th>
-                        <th scope="col">주문번호</th>
-                        <th scope="col" colspan="2">관리</th>
-                    </tr>
-                </thead>
-                <tbody>
-                <c:forEach var="list" items="${list}">
-                    <tr class="text-center">
-                        <td class="pt-3">#</td>
-                        <td class="pt-3" >Mark</td>
-                        <td class="pt-3" >Otto</td>
-                        <td class="pt-3" >@mdo</td>
-                        <td class="pt-3" >Mark</td>
-                        <td class="pt-3" >Otto</td>
-                        <td class="pt-3" >@mdo</td>
-                        <td class="pt-3" >Mark</td>
-                        <td><button type="button" class="btn btn-outline-danger" disabled>삭제</button></td>
-                        <td><button type="button" class="btn btn-outline-warning" disabled>조회</button></td>
-                    </tr>
-                </c:forEach>
-                </tbody>
-                <tfoot>
-                    <tr class="text-center table-primary">
-                        <th class="pt-3" scope="row">
-                            총합
-                        </th>
-                        <td class="pt-3" >Mark</td>
-                        <td class="pt-3" >Otto</td>
-                        <td class="pt-3" >@mdo</td>
-                        <td class="pt-3" >Mark</td>
-                        <td class="pt-3" >Otto</td>
-                        <td class="pt-3" >@mdo</td>
-                        <td class="pt-3" >Mark</td>
-                        <td class="pt-3" >#</td>
-                        <td class="pt-3" >#</td>
-                    </tr>
-                </tfoot>
-              </table>
-            <nav aria-label="Page navigation example">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Previous">
-                            <span aria-hidden="true">&laquo;</span>
-                        </a>
-                    </li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item">
-                        <a class="page-link" href="#" aria-label="Next">
-                            <span aria-hidden="true">&raquo;</span>
-                        </a>
-                    </li>
-                </ul>
-            </nav>
         </div>
     </div>
 </div>

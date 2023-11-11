@@ -34,16 +34,13 @@ public class UserService {
     private RoleRepository roleRepository;
 
     @Autowired
-    private DropOutUserDAO dropOutUserDAO;
+    private PasswordEncoder passwordEncoder;
 
     @Autowired
     private UserRoleRepository userRoleRepository;
 
     @Autowired
     private UserLogService userLogService;
-
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @Autowired DropOutUserRepository dropOutUserRepository;
 
@@ -233,6 +230,12 @@ public class UserService {
         return userRepository.findByUsername(buyerName);
     }
 
+    public boolean checkPw(String username, String password) {
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        log.info("password: " + password);
+        return userOptional.map(user -> passwordEncoder.matches(password, user.getPassword())).orElse(false);
+    }
+
     @Transactional
     public void updateRemainingTime(User user, Ticket ticket) {
         log.info("충전할 유저: " + user.getName());
@@ -257,4 +260,6 @@ public class UserService {
     public Optional<User> findById(Long id) {
         return userRepository.findById(id);
     }
+
+
 }
