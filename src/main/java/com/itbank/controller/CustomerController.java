@@ -74,6 +74,9 @@ public class CustomerController {
     private SeatRepository seatRepository;
 
     @Autowired
+    private UserLogRepository userLogRepository;
+
+    @Autowired
     private UserRepository userRepository;
 
     @GetMapping("/chat")
@@ -263,8 +266,17 @@ public class CustomerController {
         seat.setUser(user);
         seatRepository.save(seat);
 
+
+        createUserLog(user);
+
+
         log.info(seatId + "번 좌석: 사용중");
 
         return "redirect:/customer/main";
+    }
+    private void createUserLog(User user) {
+        UserLog log = new UserLog();
+        log.setUser(user);
+        userLogRepository.save(log);
     }
 }
