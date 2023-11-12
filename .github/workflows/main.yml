@@ -22,7 +22,8 @@ jobs:
         ssh -p 32121 -o StrictHostKeyChecking=no ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} <<EOF
           sudo su -
           cd /opt/NetRoomManager/
-          git pull origin main
+          git fetch --all
+          git reset --hard origin/main
           mvn clean package
           /opt/apache-tomcat-9.0.82/bin/shutdown.sh
           rm -rf /opt/apache-tomcat-9.0.82/webapps/ROOT*
