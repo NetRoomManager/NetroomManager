@@ -14,6 +14,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.InMemoryOAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
@@ -22,14 +25,21 @@ import org.springframework.security.oauth2.client.registration.ClientRegistratio
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
 import org.springframework.security.oauth2.core.AuthorizationGrantType;
 import org.springframework.security.oauth2.core.oidc.IdTokenClaimNames;
+import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
+import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.security.web.session.HttpSessionEventPublisher;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 
 @Configuration
@@ -53,31 +63,31 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // 스프링 시큐리티 설정
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
-        // 최대 세션의 개수를 1개로 설정
         http
-            .sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-            .sessionFixation().migrateSession()
-            .maximumSessions(1).maxSessionsPreventsLogin(true);
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                .sessionFixation().migrateSession()
+                .maximumSessions(1)
+                .maxSessionsPreventsLogin(true)
+                .expiredUrl("/auth/login?error=max_session");
+
         // 웹소켓 메시지를 위한 설정
         http.cors().and().  // CORS 허용
                 csrf().disable()
                 .headers().frameOptions().sameOrigin();
 
         http.authorizeRequests()
-//                .antMatchers("/", "/auth/**", "/img/**", "/css/**", "/js/**")
-                .antMatchers("/**")
+                .antMatchers("/", "/auth/**", "/img/**", "/css/**", "/js/**", "/audio/**")
                 // 위 경로는 로그인 안해도 ㄱㄴ
                 .permitAll()
 
-//                .antMatchers("/admin/**")
+                .antMatchers("/admin/**")
 //                // ADMIN만 가능
-//                .hasRole("ADMIN")
+                .hasRole("ADMIN")
 //
-//                .antMatchers("/customer/**")
+                .antMatchers("/customer/**")
 //                // ADMIN, USER가능
-//                .hasAnyRole("USER", "ADMIN")
+                .hasAnyRole("USER", "ADMIN")
                 .anyRequest().authenticated()
                 .and()
 
@@ -87,12 +97,39 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .formLogin()
                 // 로그인 페이지 지정
                 .loginPage("/auth/login")
+                .successHandler(new SimpleUrlAuthenticationSuccessHandler() {
+                    @Override
+                    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+                                                        Authentication authentication) throws IOException {
+                        System.out.println("로그인 성공 핸들러");
+                        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+
+                        boolean isAdmin = authorities.stream()
+                                .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
+
+                        if (isAdmin) {
+                            SavedRequest savedRequest = new HttpSessionRequestCache().getRequest(request, response);
+                            if (savedRequest != null) {
+                                String targetUrl = savedRequest.getRedirectUrl();
+                                getRedirectStrategy().sendRedirect(request, response, targetUrl);
+                            } else {
+                                // 저장된 요청이 없는 경우 기본 URL로 리다이렉트
+                                getRedirectStrategy().sendRedirect(request, response, "/");
+                            }
+                        } else {
+                            System.out.println("일반유저!");
+                            getRedirectStrategy().sendRedirect(request, response, "/customer/main");
+                        }
+                    }
+                })
+
                 // 실패시 핸들러
                 .failureHandler(((request, response, exception) -> {
                     if(exception instanceof AuthenticationServiceException) {
                         response.sendRedirect("/auth/buyTicket");
-                    } else {
-                        response.sendRedirect("/login?error");
+                    }
+                    else {
+                        response.sendRedirect("/auth/login?error");
                     }
                 }))
                 // 성공시 URL
@@ -104,7 +141,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 로그아웃 URL
                 .logoutUrl("/auth/logout")
                 // 로그아웃 성공 URL
-                .logoutSuccessUrl("/")
+//                .logoutSuccessUrl("/customer/main")
                 // 로그아웃시 세션 날림
                 .invalidateHttpSession(true)
                 // 쿠키도 날림
@@ -143,7 +180,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .clientSecret("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")
                 .tokenUri("https://oauth2.googleapis.com/token")
                 .authorizationUri("https://accounts.google.com/o/oauth2/auth")
-                .redirectUri("http://localhost:8080/login/oauth2/code/google")
+                .redirectUri("http://xn--o80bl98a.kr:33380/login/oauth2/code/google")
                 .userInfoUri("https://www.googleapis.com/oauth2/v3/userinfo")
                 .userNameAttributeName(IdTokenClaimNames.SUB)
                 .jwkSetUri("https://www.googleapis.com/oauth2/v3/certs")
@@ -158,7 +195,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .clientSecret("KLHosuYDrJ")
                 .tokenUri("https://nid.naver.com/oauth2.0/token")
                 .authorizationUri("https://nid.naver.com/oauth2.0/authorize")
-                .redirectUri("http://localhost:8080/login/oauth2/code/naver")
+                .redirectUri("http://xn--o80bl98a.kr:33380/login/oauth2/code/naver")
                 .userInfoUri("https://openapi.naver.com/v1/nid/me")
                 .userNameAttributeName("response")
 //                .jwkSetUri("")
@@ -166,19 +203,18 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
                 .scope("profile", "email")
                 .build());
-        // 카카오
-        registrations.add(ClientRegistration.withRegistrationId("kakao")
-                .clientId("a051bc66b61e4ddcc2d1df8142573cdd")
-//                .clientSecret("RC9zsO3ahACbZ7b17ChJFB3VNStFtjrC")
-                .tokenUri("https://kauth.kakao.com/oauth/token")
-                .authorizationUri("https://kauth.kakao.com/oauth/authorize")
-                .redirectUri("http://localhost:8080/login/oauth2/code/kakao")
-                .userInfoUri("https://kapi.kakao.com/v2/user/me")
-                .userNameAttributeName("kakao_account")
-//                .jwkSetUri("")
-                .clientName("Kakao")
+        // 페이스북
+        registrations.add(ClientRegistration.withRegistrationId("facebook")
+                .clientId("234560662777121")
+                .clientSecret("c2883b8fa836c306177e58179873575d")
+                .tokenUri("https://graph.facebook.com/v2.8/oauth/access_token")
+                .authorizationUri("https://www.facebook.com/v2.8/dialog/oauth")
+                .redirectUri("http://xn--o80bl98a.kr:33380/login/oauth2/code/facebook")
+                .userInfoUri("https://graph.facebook.com/me?fields=id,name,email")
+                .userNameAttributeName("id")
+                .clientName("Facebook")
                 .authorizationGrantType(AuthorizationGrantType.AUTHORIZATION_CODE)
-                .scope("account_email")
+                .scope("email", "public_profile")
                 .build());
 
         return new InMemoryClientRegistrationRepository(registrations);

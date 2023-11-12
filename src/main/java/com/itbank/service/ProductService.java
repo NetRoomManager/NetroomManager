@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -100,10 +101,6 @@ public class ProductService {
         productRepository.save(product2);
     }
 
-    public List<ProductDTO> selectAllProduct() {
-        return productDAO.selectAll();
-    }
-
     public List<ProductCategory> selectAllProductCategory() {
         return productCategoryDAO.selectAll();
     }
@@ -126,5 +123,13 @@ public class ProductService {
         dto.setImg(fileName);
         int row = productDAO.update(dto);
         return id;
+    }
+
+    public List<ProductDTO> selectAll(HashMap<String, Object> param) { return productDAO.selectAll(param); }
+
+    public List<ProductDTO> search(HashMap<String, Object> param) { return productDAO.search(param); }
+
+    public int getTotal(HashMap<String, Object> param) {
+        return productDAO.getTotal(param);
     }
 }

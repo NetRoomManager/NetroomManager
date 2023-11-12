@@ -3,6 +3,7 @@ package com.itbank.model;
 import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import reactor.util.annotation.Nullable;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -18,7 +19,7 @@ public class DropOutUser {
     private Long id;
 
     @OneToOne(fetch = FetchType.EAGER, optional = true)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", unique = true)
     private User user;
 
     @CreationTimestamp

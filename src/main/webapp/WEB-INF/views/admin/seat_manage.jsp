@@ -40,7 +40,7 @@
 				</button>
 			</li>
 			<li class="nav-item pe-2">
-				<button type="button" class="btn btn-light"
+				<button type="button" class="btn btn-light" onclick="location.reload();"
 					style="-bs-btn-padding-y: .25rem; - -bs-btn-padding-x: .75rem; - -bs-btn-font-size: 1.15rem;">
 					<svg width="20" height="20" viewBox="0 0 20 20" fill="none"
 						xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 relative"
@@ -58,15 +58,6 @@
 		</ul>
 	</div>
 
-</nav>
-<nav id="menu_bar" class="nav nav-pills flex-column py-3 text-center"
-	 style="position: absolute; height: 100%;">
-	<a class="nav-link py-3" href="${cpath }/admin/order">주문</a>
-	<a class="nav-link py-3" href="${cpath }/admin/product">재고</a>
-	<a class="nav-link py-3" aria-current="page" href="${cpath }/admin/productsales">매출</a>
-	<a class="nav-link py-3" href="${cpath }/admin/user">회원</a>
-	<a class="nav-link py-3 active" href="${cpath }/admin/seat">좌석</a>
-	<a class="nav-link py-3" href="${cpath }/admin/ticket">이용권</a>
 </nav>
 
 <!-- 좌석 시간 추가, 상태  Modal -->
@@ -123,43 +114,7 @@
 
 
 
-<%--채팅 모달--%>
 
-<div class="modal fade" id="seat_chat" aria-hidden="true"
-	 data-bs-backdrop="static" data-bs-keyboard="false"
-	 aria-labelledby="seat_chatLabel2" tabindex="-1">
-	<div class="modal-dialog modal-dialog-centered">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalToggleLabel2">좌석번호</h5>
-				<button type="button" class="btn-close" data-bs-dismiss="modal"
-						aria-label="Close"></button>
-			</div>
-			<div class="modal-body">
-				<div class="chat_modal_content rounded">
-					<span>name에게 보낼 메시지</span>
-					<!-- 채팅 인터페이스 -->
-					<div id="chatBox"
-						 style="height: 300px; border: 1px solid #ccc; padding: 10px; overflow: auto;">
-						<!-- 채팅 메시지가 여기에 표시됩니다 -->
-					</div>
-					<div class="d-flex">
-						<input class="input mt-1" type="text" id="chatInput"
-							   placeholder="채팅 내용을 입력하세요" style="width: 80%">
-						<button type="button" class="btn btn-primary mt-1 mx-3"
-								style="width: 15%" onclick="sendMessage()">전송</button>
-					</div>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button class="btn btn-primary" data-bs-target="#seat_select"
-						data-bs-toggle="modal" data-bs-dismiss="modal">상태</button>
-				<button class="btn btn-danger" data-bs-target="#exampleModalToggle"
-						data-bs-toggle="modal" data-bs-dismiss="modal">닫기</button>
-			</div>
-		</div>
-	</div>
-</div>
 
 <script>
 
@@ -168,16 +123,6 @@
 	var popoverList = popoverTriggerList.map(function(popoverTriggerEl) {
 		return new bootstrap.Popover(popoverTriggerEl)
 	})
-
-	$(document).ready(function() {
-		$.ajax({
-			url : "header.html",
-			dataType : "html",
-			success : function(response) {
-				$("#headerContent").html(response);
-			},
-		});
-	});
 
 </script>
 
@@ -211,13 +156,14 @@
 					 style="width: 25%; height: 25%;" data-bs-toggle="modal"
 					 data-bs-target="#seat_detail"
 					 data-bs-id="${seat.seatId}"
+					 data-bs-username="${seat.username}"
 					 data-bs-userid="${seat.user_id}"
 					 onclick="setModalSeatId(this)">
 					<div class="seat_id card-header">좌석번호[ ${seat.seatId} ]</div>
 					<div class="seat_remain_time card-body">
 						<pre>남은시간: </pre>
 						<pre>${seat.remainingTime}</pre>
-						<pre>유저아이디 ${seat.user_id}</pre>
+						<pre>${seat.username}</pre>
 					</div>
 					<div class="card-footer">
 							${stateCmt}
@@ -230,6 +176,8 @@
 
 </div>
 <script>
+
+
 	let selectedSeat = null; // 선택한 카드 정보를 저장할 변수
 	const canUseSelect = document.getElementById('can_use');
 	const addHourSelect = document.getElementById('add_hour');
@@ -239,11 +187,16 @@
 		if (card) {
 			selectedSeat = {
 				seatId: card.getAttribute('data-bs-id'),
-				userId: card.getAttribute('data-bs-userid')
+				userId: card.getAttribute('data-bs-userid'),
+				username: card.getAttribute('data-bs-username'),
 			};
+
+			switchChatRoom(selectedSeat.username);
+
 			const modalSeatId = document.getElementById('modal_seat_id');
 			modalSeatId.textContent = selectedSeat.seatId;
 			console.log('seatId: ' + selectedSeat.seatId);
+			console.log('userId: ' + selectedSeat.userId);
 
 			// '수정하기' 버튼에 data-bs-id 속성 설정
 			const changeSeatButton = document.getElementById('changeSeat');
@@ -256,7 +209,7 @@
 			if (selectedSeat.userId) {
 				// user_id가 있는 경우에는 canUseSelect 변경을 막음
 				canUseSelect.disabled = true;
-				canUseSelect.value = '2'; // 예를 들어, 사용중으로 설정
+				canUseSelect.value = '2'; // 사용중으로 설정
 				addHourSelect.disabled = false;
 			} else {
 				// user_id가 없는 경우에는 canUseSelect 변경 가능
@@ -352,13 +305,7 @@
 					})
 
 		}
-
-
-
-
-
 	}
-
 
 </script>
 

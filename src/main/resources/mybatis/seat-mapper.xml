@@ -11,7 +11,8 @@
             s.seatIpAddr,
             s.seatState,
             u.id as user_id,
-            rt.remainingTime
+            rt.remainingTime,
+            u.username as username
         FROM
             seat s
         LEFT JOIN
@@ -29,7 +30,7 @@
 
     <update id="updateSeatHour" parameterType="map">
         UPDATE remaining_time
-        SET remainingTime = remainingTime + #{addHour}
+        SET remainingTime = #{hour}
         WHERE user_id = (
         SELECT user_id
         FROM seat

@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
-<%@ include file="header.jsp"%>
+         pageEncoding="UTF-8" %>
+<%@ include file="header.jsp" %>
 
         <title>주문관리</title>
         <style>
@@ -22,18 +22,6 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0 pt-1">
                   <li class="nav-item">
                     <a class="nav-link active navbar-brand" aria-current="page" href="${cpath}/">NetRoom</a>
-                  </li>
-                  <li class="nav-item pe-3">
-                    <a class="nav-link active" href="">주문현황</a>
-                  </li>
-                  <li class="nav-item pe-3">
-                    <a class="nav-link" href="">신규주문</a>
-                  </li>
-                  <li class="nav-item pe-3">
-                    <a class="nav-link" href="">판매취소</a>
-                  </li>
-                  <li class="nav-item pe-3">
-                    <a class="nav-link" href="">준비중</a>
                   </li>
                 </ul>
                 <ul class="navbar-nav">
@@ -59,8 +47,8 @@
                         </button>
                     </li>
                     <li class="nav-item pe-2">
-                        <button type="button" class="btn btn-light"
-                                style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .75rem; --bs-btn-font-size: 1.15rem;">                        
+                        <button type="button" class="btn btn-light" onclick="location.reload();"
+                                style="--bs-btn-padding-y: .25rem; --bs-btn-padding-x: .75rem; --bs-btn-font-size: 1.15rem;">
                                 <svg
                                 width="20"
                                 height="20"
@@ -86,331 +74,111 @@
                 </ul>
             </div>
         </nav>
-        <nav id="menuBar" class="nav nav-pills flex-column py-3" style="position: absolute; height: 91.6%;">
-            <a class="nav-link py-3 active" style="background-color: #FF8339;" aria-current="page"  href="${cpath}/admin/order">주문</a>
-            <a class="nav-link py-3" href="${cpath}/admin/product">재고</a>
-            <a class="nav-link py-3" href="${cpath}/admin/productsales">매출</a>
-            <a class="nav-link py-3" href="${cpath}/admin/user">회원</a>
-            <a class="nav-link py-3" href="${cpath}/admin/seat">좌석</a>
-            <a class="nav-link py-3" href="${cpath}/admin/ticket">이용권</a>
-        </nav>
         <div class="container-fluid ps-5 ms-4">
             <div class="row pt-4">
-                <div class="row pt-4">
-                    <div class="col-4">
-                        <div class="card border-warning" style="max-width: 95%;">
-                            <div class="row g-0">
-                              <div class="col text-bg-warning rounded-start">
-                                <div class="card-body text-center">
-                                    <div>신규주문</div>
-                                    <div class="h1">21</div>
-                                    <div>판매수락</div>
-                                </div>
-                              </div>
-                              <div class="col-9">
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between">
-                                        <h5 class="card-title" style="font: bold;">너구리 매운맛, 콜라(+얼음)</h5>
-                                        <p class="card-text">판매취소</p>
-                                    </div>
-                                  <p class="card-text">콜라는 따뜻하게 해주시고 라면은 안 맵게 해주세요</p>
-                                </div>
-                                <div class="card-footer bg-transparent">
-                                    <div class="d-flex justify-content-between">
-                                        <p style="font-size: 1.5rem; font-weight: bold;">8,800<span style="font-size: 0.9rem; font-weight: 500;">(카카오페이)</span></p>
-                                        <div>
-                                            <button type="button" class="btn btn-outline-warning" data-bs-toggle="button">준비중</button>
-                                            <button type="button" class="btn btn-outline-primary" data-bs-toggle="button">전달완료</button>
-                                        </div>
-                                    </div>                    
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <p class="card-text text-end pe-5"><small class="text-body-secondary">2023 / 11 / 12</small></p>
-                    </div>
-                    <div class="col-4">
-                        <div class="card border-warning" style="max-width: 95%;">
-                            <div class="row g-0">
-                              <div class="col text-bg-warning rounded-start">
-                                <div class="card-body text-center">
-                                    <div>신규주문</div>
-                                    <div class="h1">21</div>
-                                    <div>판매수락</div>
-                                </div>
-                              </div>
-                              <div class="col-9">
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between">
-                                        <h5 class="card-title" style="font: bold;">너구리 매운맛, 콜라(+얼음)</h5>
-                                        <p class="card-text">판매취소</p>
-                                    </div>
-                                  <p class="card-text">콜라는 따뜻하게 해주시고 라면은 안 맵게 해주세요</p>
-                                </div>
-                                <div class="card-footer bg-transparent">
-                                    <div class="d-flex justify-content-between">
-                                        <p style="font-size: 1.5rem; font-weight: bold;">8,800<span style="font-size: 0.9rem; font-weight: 500;">(카카오페이)</span></p>
-                                        <div>
-                                            <button type="button" class="btn btn-outline-warning">준비중</button>
-                                            <button type="button" class="btn btn-outline-primary">전달완료</button>
-                                        </div>
-                                    </div>                    
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <p class="card-text text-end pe-5"><small class="text-body-secondary">2023 / 11 / 12</small></p>
-                    </div><div class="col-4">
-                        <div class="card border-warning" style="max-width: 95%;">
-                            <div class="row g-0">
-                              <div class="col text-bg-warning rounded-start">
-                                <div class="card-body text-center">
-                                    <div>신규주문</div>
-                                    <div class="h1">21</div>
-                                    <div>판매수락</div>
-                                </div>
-                              </div>
-                              <div class="col-9">
-                                <div class="card-body">
-                                    <div class="d-flex justify-content-between">
-                                        <h5 class="card-title" style="font: bold;">너구리 매운맛, 콜라(+얼음)</h5>
-                                        <p class="card-text">판매취소</p>
-                                    </div>
-                                  <p class="card-text">콜라는 따뜻하게 해주시고 라면은 안 맵게 해주세요</p>
-                                </div>
-                                <div class="card-footer bg-transparent">
-                                    <div class="d-flex justify-content-between">
-                                        <p style="font-size: 1.5rem; font-weight: bold;">8,800<span style="font-size: 0.9rem; font-weight: 500;">(카카오페이)</span></p>
-                                        <div>
-                                            <button type="button" class="btn btn-outline-warning">준비중</button>
-                                            <button type="button" class="btn btn-outline-primary">전달완료</button>
-                                        </div>
-                                    </div>                    
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <p class="card-text text-end pe-5"><small class="text-body-secondary">2023 / 11 / 12</small></p>
-                    </div>
-                </div>
+                <div id="order_container" class="row pt-4 mx-2">
             <div class="row pt-4">
-                <div class="col-4">
-                    <div class="card border-warning" style="max-width: 95%;">
-                        <div class="row g-0">
-                          <div class="col text-bg-warning rounded-start">
-                            <div class="card-body text-center">
-                                <div>신규주문</div>
-                                <div class="h1">21</div>
-                                <div>판매수락</div>
-                            </div>
-                          </div>
-                          <div class="col-9">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between">
-                                    <h5 class="card-title" style="font: bold;">너구리 매운맛, 콜라(+얼음)</h5>
-                                    <p class="card-text">판매취소</p>
-                                </div>
-                              <p class="card-text">콜라는 따뜻하게 해주시고 라면은 안 맵게 해주세요</p>
-                            </div>
-                            <div class="card-footer bg-transparent">
-                                <div class="d-flex justify-content-between">
-                                    <p style="font-size: 1.5rem; font-weight: bold;">8,800<span style="font-size: 0.9rem; font-weight: 500;">(카카오페이)</span></p>
-                                    <div>
-                                        <button type="button" class="btn btn-outline-warning">준비중</button>
-                                        <button type="button" class="btn btn-outline-primary">전달완료</button>
-                                    </div>
-                                </div>                    
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <p class="card-text text-end pe-5"><small class="text-body-secondary">2023 / 11 / 12</small></p>
-                </div>
-                <div class="col-4">
-                    <div class="card border-warning" style="max-width: 95%;">
-                        <div class="row g-0">
-                          <div class="col text-bg-warning rounded-start">
-                            <div class="card-body text-center">
-                                <div>신규주문</div>
-                                <div class="h1">21</div>
-                                <div>판매수락</div>
-                            </div>
-                          </div>
-                          <div class="col-9">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between">
-                                    <h5 class="card-title" style="font: bold;">너구리 매운맛, 콜라(+얼음)</h5>
-                                    <p class="card-text">판매취소</p>
-                                </div>
-                              <p class="card-text">콜라는 따뜻하게 해주시고 라면은 안 맵게 해주세요</p>
-                            </div>
-                            <div class="card-footer bg-transparent">
-                                <div class="d-flex justify-content-between">
-                                    <p style="font-size: 1.5rem; font-weight: bold;">8,800<span style="font-size: 0.9rem; font-weight: 500;">(카카오페이)</span></p>
-                                    <div>
-                                        <button type="button" class="btn btn-outline-warning">준비중</button>
-                                        <button type="button" class="btn btn-outline-primary">전달완료</button>
-                                    </div>
-                                </div>                    
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <p class="card-text text-end pe-5"><small class="text-body-secondary">2023 / 11 / 12</small></p>
-                </div><div class="col-4">
-                    <div class="card border-warning" style="max-width: 95%;">
-                        <div class="row g-0">
-                          <div class="col text-bg-warning rounded-start">
-                            <div class="card-body text-center">
-                                <div>신규주문</div>
-                                <div class="h1">21</div>
-                                <div>판매수락</div>
-                            </div>
-                          </div>
-                          <div class="col-9">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between">
-                                    <h5 class="card-title" style="font: bold;">너구리 매운맛, 콜라(+얼음)</h5>
-                                    <p class="card-text">판매취소</p>
-                                </div>
-                              <p class="card-text">콜라는 따뜻하게 해주시고 라면은 안 맵게 해주세요</p>
-                            </div>
-                            <div class="card-footer bg-transparent">
-                                <div class="d-flex justify-content-between">
-                                    <p style="font-size: 1.5rem; font-weight: bold;">8,800<span style="font-size: 0.9rem; font-weight: 500;">(카카오페이)</span></p>
-                                    <div>
-                                        <button type="button" class="btn btn-outline-warning">준비중</button>
-                                        <button type="button" class="btn btn-outline-primary">전달완료</button>
-                                    </div>
-                                </div>                    
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <p class="card-text text-end pe-5"><small class="text-body-secondary">2023 / 11 / 12</small></p>
-                </div>
-            </div>
-            <div class="row pt-4">
-                <div class="col-4">
-                    <div class="card border-warning" style="max-width: 95%;">
-                        <div class="row g-0">
-                          <div class="col text-bg-warning rounded-start">
-                            <div class="card-body text-center">
-                                <div>신규주문</div>
-                                <div class="h1">21</div>
-                                <div>판매수락</div>
-                            </div>
-                          </div>
-                          <div class="col-9">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between">
-                                    <h5 class="card-title" style="font: bold;">너구리 매운맛, 콜라(+얼음)</h5>
-                                    <p class="card-text">판매취소</p>
-                                </div>
-                              <p class="card-text">콜라는 따뜻하게 해주시고 라면은 안 맵게 해주세요</p>
-                            </div>
-                            <div class="card-footer bg-transparent">
-                                <div class="d-flex justify-content-between">
-                                    <p style="font-size: 1.5rem; font-weight: bold;">8,800<span style="font-size: 0.9rem; font-weight: 500;">(카카오페이)</span></p>
-                                    <div>
-                                        <button type="button" class="btn btn-outline-warning">준비중</button>
-                                        <button type="button" class="btn btn-outline-primary">전달완료</button>
-                                    </div>
-                                </div>                    
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <p class="card-text text-end pe-5"><small class="text-body-secondary">2023 / 11 / 12</small></p>
-                </div>
-                <div class="col-4">
-                    <div class="card border-warning" style="max-width: 95%;">
-                        <div class="row g-0">
-                          <div class="col text-bg-warning rounded-start">
-                            <div class="card-body text-center">
-                                <div>신규주문</div>
-                                <div class="h1">21</div>
-                                <div>판매수락</div>
-                            </div>
-                          </div>
-                          <div class="col-9">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between">
-                                    <h5 class="card-title" style="font: bold;">너구리 매운맛, 콜라(+얼음)</h5>
-                                    <p class="card-text">판매취소</p>
-                                </div>
-                              <p class="card-text">콜라는 따뜻하게 해주시고 라면은 안 맵게 해주세요</p>
-                            </div>
-                            <div class="card-footer bg-transparent">
-                                <div class="d-flex justify-content-between">
-                                    <p style="font-size: 1.5rem; font-weight: bold;">8,800<span style="font-size: 0.9rem; font-weight: 500;">(카카오페이)</span></p>
-                                    <div>
-                                        <button type="button" class="btn btn-outline-warning">준비중</button>
-                                        <button type="button" class="btn btn-outline-primary">전달완료</button>
-                                    </div>
-                                </div>                    
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <p class="card-text text-end pe-5"><small class="text-body-secondary">2023 / 11 / 12</small></p>
-                </div><div class="col-4">
-                    <div class="card border-warning" style="max-width: 95%;">
-                        <div class="row g-0">
-                          <div class="col text-bg-warning rounded-start">
-                            <div class="card-body text-center">
-                                <div>신규주문</div>
-                                <div class="h1">21</div>
-                                <div>판매수락</div>
-                            </div>
-                          </div>
-                          <div class="col-9">
-                            <div class="card-body">
-                                <div class="d-flex justify-content-between">
-                                    <h5 class="card-title" style="font: bold;">너구리 매운맛, 콜라(+얼음)</h5>
-                                    <p class="card-text">판매취소</p>
-                                </div>
-                              <p class="card-text">콜라는 따뜻하게 해주시고 라면은 안 맵게 해주세요</p>
-                            </div>
-                            <div class="card-footer bg-transparent">
-                                <div class="d-flex justify-content-between">
-                                    <p style="font-size: 1.5rem; font-weight: bold;">8,800<span style="font-size: 0.9rem; font-weight: 500;">(카카오페이)</span></p>
-                                    <div>
-                                        <button type="button" class="btn btn-outline-warning">준비중</button>
-                                        <button type="button" class="btn btn-outline-primary">전달완료</button>
-                                    </div>
-                                </div>                    
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <p class="card-text text-end pe-5"><small class="text-body-secondary">2023 / 11 / 12</small></p>
-                </div>
-            </div>
-            <div class="row pt-4">
-                <div class="col-4" style="background-color: #FF8339;">
-                    <div style="width: 90%; background-color: red;">dd</div>
-                </div>
-                <div class="col-4" style="background-color: #FF8339;">
-                    <div style="width: 90%; background-color: red;">dd</div>
-                </div>
-                <div class="col-4" style="background-color: #FF8339;">
-                    <div style="width: 90%; background-color: red;">dd</div>
-                </div>
-            </div>
+
 
         </div>
 
         <script>
-            $(document).ready(function () {
-                $.ajax({
-                    url: "header.html",
-                    dataType: "html",
-                    success: function (response) {
-                        $("#headerContent").html(response);
-                    },
+            const order_container = document.getElementById('order_container');
+            function addOrderCard(order, key) {
+                // 주문 정보 추출
+                const orderTitle = order.title; // 주문 제목
+                const orderDesc = order.description; // 주문 설명
+                const orderPrice = order.price; // 주문 가격
+                const orderDate = order.orderDate; // 주문 날짜
+                const payment_method = order.payment_method;   // 결제방식
+
+                // 카드 템플릿 생성
+                const cardTemplate = `
+                    <div class="col-4" data-key="`+key+`">
+                        <div class="card border-warning" style="max-width: 95%;">
+                            <div class="row g-0">
+                              <div class="col text-bg-warning rounded-start">
+                                <div class="card-body text-center">
+                                    <div>신규주문</div>
+                                    <div class="h1">21</div>
+                                    <div>판매수락</div>
+                                </div>
+                              </div>
+                              <div class="col-9">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <h5 class="card-title" style="font: bold;">`+orderTitle+`</h5>
+                                        <p class="card-text"></p>
+                                    </div>
+                                  <p class="card-text">`+orderDesc+`</p>
+                                </div>
+                                <div class="card-footer bg-transparent">
+                                    <div class="d-flex justify-content-between">
+                                        <p style="font-size: 1.5rem; font-weight: bold;">`+orderPrice+`<span style="font-size: 0.9rem; font-weight: 500;">(`+payment_method+`)</span></p>
+                                        <div>
+                                            <button type="button" class="btn btn-outline-warning">준비중</button>
+                                            <button type="button" class="btn btn-outline-primary finishBtn">전달완료</button>
+                                        </div>
+                                    </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <p class="card-text text-end pe-5"><small class="text-body-secondary">`+orderDate+`</small></p>
+                    </div>
+                `;
+
+                // 카드를 row에 추가
+                order_container.innerHTML += cardTemplate; // 카드 추가
+
+                // '전달완료' 버튼에 클릭 이벤트 리스너 추가
+                const finishBtns = order_container.querySelectorAll('.finishBtn');
+                finishBtns.forEach(btn => btn.addEventListener('click', deleteOrder));
+
+            }
+
+
+            fetch('/admin/getOrders')
+                .then(response => response.json())
+                .then(orderList => {
+                    for (let orders of orderList) {
+                        // 주문 정보와 주문 키 추출
+                        let orderInfo = JSON.parse(orders[0]);
+                        let orderKey = orders[1];
+                        addOrderCard(orderInfo, orderKey);
+                    }
                 });
-            });
+
+
+            function deleteOrder(event) {
+                // 주문 카드 요소 가져오기
+                const orderCard = event.target.closest('.col-4');
+                // 주문 키 가져오기
+                const orderKey = orderCard.dataset.key;
+
+                // 사용자에게 주문 삭제 확인 메시지 보여주기
+                const confirmed = confirm('해당 주문을 삭제하시겠습니까?');
+                if (confirmed) {
+                    // 주문 삭제 API 호출
+                    fetch('/admin/deleteOrder', {
+                        method: 'DELETE',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ key: orderKey })
+                    })
+                        .then(response => response.json())
+                        .then(data => {
+                            if (data.success) {
+                                // 주문 카드 HTML에서 삭제
+                                orderCard.remove();
+                            } else {
+                                alert('주문 삭제에 실패하였습니다.');
+                            }
+                        });
+                }
+            }
         </script>
-    </body>
+
+</body>
 </html>

@@ -1,16 +1,11 @@
 package com.itbank.controller;
 
+import com.itbank.component.AddressComponent;
 import com.itbank.model.*;
+import com.itbank.model.dto.Summoner;
 import com.itbank.repository.jpa.OrderListRepository;
 import com.itbank.repository.jpa.TicketSalesRepository;
-import com.itbank.service.PaymentService;
-import com.itbank.service.UserDetailsServiceImpl;
-import com.itbank.service.UserService;
-import com.itbank.model.PaymentResponse;
-import com.itbank.model.Ticket;
-import com.itbank.model.User;
 import com.itbank.service.*;
-import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -22,9 +17,13 @@ import org.springframework.security.web.context.HttpSessionSecurityContextReposi
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 @Controller
 @Slf4j
@@ -58,6 +57,11 @@ public class AuthController {
     @Autowired
     private SeatService seatService;
 
+    @Autowired
+    private RiotAPIService riotAPIService;
+
+    @Autowired
+    private AddressComponent AddressComponent;
 
     @GetMapping("/login")
     public String login() {
@@ -65,6 +69,7 @@ public class AuthController {
         List<Object[]> seatList = seatService.selectSeatList();
         for( Object[] s : seatList){
             if(s.getClass().get == 1){  // 이용가능 좌석일 경우 login*/
+//                System.out.println(AddressComponent.getLocalMacAddress());
                 return "/auth/login";
  /*           }
         }
@@ -128,15 +133,26 @@ public class AuthController {
     }
 
     @PostMapping("/join")
-    public String join(User user, HttpServletRequest request) {
+    public ModelAndView join(User user, HttpSession session) {
 
+        ModelAndView mav = new ModelAndView("redirect:/auth/login");
+        String msg = "";
         log.info("유저 생성");
 
-        userService.createUsers(user);
+        int join = userService.createUsers(user);
+        session.invalidate();
+        log.info("session.invalidate() : ");
 
-        log.info("유저 생성 완료!!");
-
-        return "redirect:/auth/login";
+        if(join > 0){
+            log.info("유저 생성 완료!!");
+            msg = "가입 성공! 로그인을 해주세요";
+        }
+        else{
+            log.info("유저 생성 실패!!");
+            msg = "중복되는 email 계정입니다";
+        }
+        mav.addObject("msg",msg);
+        return mav;
     }
 
     // 좌석관리
@@ -144,6 +160,28 @@ public class AuthController {
     public String seatTest(){
         seatService.createSeat();
         return "redirect:/";
+    }
+
+    @PostMapping("/find-username")
+    @ResponseBody
+    public String findUsername(User user) {
+        log.info(user.getEmail());
+        log.info(user.getName());
+
+        String id = authService.findUserId(user);
+        return id;
+    }
+
+    @PostMapping("/password-reset")
+    @ResponseBody
+    public String passwordReset(User user) {
+        log.info(user.getEmail());
+        log.info(String.valueOf(user.getUsername()));
+
+        String pw = authService.findUserPw(user);
+        log.info(pw);
+
+        return pw;
     }
 
     @GetMapping("/loginSuccess")
@@ -196,6 +234,13 @@ public class AuthController {
         return result;
     }
 
+    @PostMapping("/changePw")
+    public String changePw(User user){
+        log.info(user.toString());
+        authService.changePw(user);
+        return "redirect:/customer/main";
+    }
+
     @PostMapping("/checkId")
     @ResponseBody
     public Map<String, Boolean> checkId(@RequestBody User user) {
@@ -205,6 +250,21 @@ public class AuthController {
         result.put("duplicate", duplicate);
         return result;
     }
+
+    @PostMapping("/checkPw")
+    @ResponseBody
+    public Map<String, Boolean> checkPw(@RequestBody Map<String, Object> user) {
+
+        log.info("CEX");
+//
+        // 받은 유저 비밀번호로 검색해서 중복이면 true 아니면 false
+        Map<String, Boolean> result = new HashMap<>();
+        boolean duplicate = userService.checkPw(user.get("username").toString(),user.get("password").toString());
+        log.info("dup: " + duplicate);
+        result.put("duplicate", duplicate);
+        return result;
+    }
+
 
     @PostMapping("/checkAuthNumber")
     @ResponseBody
@@ -243,5 +303,11 @@ public class AuthController {
         }
 
         return msg;
+    }
+
+    @GetMapping("/summoner/{lolid}")
+    @ResponseBody
+    public Summoner getSummonerTire(@PathVariable("lolid") String lolid) {
+        return riotAPIService.getSummoner(lolid);
     }
 }

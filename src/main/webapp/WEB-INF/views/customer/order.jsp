@@ -322,9 +322,9 @@
         var seconds = today.getSeconds();  // 초
         var milliseconds = today.getMilliseconds();
 
-        var makeMerchantUid = hours + minutes + seconds + milliseconds + "";
+        var makeMerchantUid = hours.toString() + minutes.toString() + seconds.toString() + milliseconds.toString();
 
-        console.log(makeMerchantUid);
+        console.log("결제 고유번호: " + makeMerchantUid);
 
         IMP.init("imp64247670"); // 가맹점 식별코드
 
@@ -351,8 +351,14 @@
                         .then(data => {
                             if (data.success) {
                                 alert('결제 완료!');
-                                successCallback(data.success); // data.success 값을 콜백으로 전달
+                                while(movingMenu.firstChild) {
+                                    movingMenu.removeChild(movingMenu.firstChild);
+                                }
+                                menuList = [];
+                                updateTotalPrice();
+                                successCallback(data); // data.success 값을 콜백으로 전달
                                 console.log(menuList);
+                                location.reload();
                             } else {
                                 alert(`error:[${data.status}]결제요청이 승인된 경우 관리자에게 문의바랍니다.`);
                             }
@@ -381,20 +387,27 @@
             console.log('res: ' + res);
             paymentCallback(res, success => {
                 // success 값을 이용하여 원하는 작업 수행
-                console.log(success);
+                console.log('콜백함수에 들어옴: ' + success);
 
-                const url = '/customer/order/addDetail';
+                if(success.success) {
+                    console.log('order_detail 추가');
 
-                fetch(url, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json;charset=utf-8'
-                    },
-                    body: JSON.stringify(menuList),
-                })
-                    .then(res => res.text())
-                    .then(data => console.log('Controller에서 받은 데이터: ' + data));
+                    const url = '/customer/order/addDetail';
 
+                    fetch(url, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json;charset=utf-8'
+                        },
+                        body: JSON.stringify({
+                            menuList:menuList,
+                            pay_method:success.pay_method,
+                        }),
+                    })
+                        .then(res => res.text())
+                        .then(data => console.log('Controller에서 받은 데이터: ' + data));
+
+                }
             });
         });
     }
@@ -612,7 +625,160 @@
 
 
 </script>
-<script src="../js/script.js"></script>
+<script src="/js/script.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script>
+
+    const from = '${username}';
+    let stompClient = null;
+
+    function openChatRoom(username) {
+        let chatRoomDiv = document.getElementById('chat_box');
+        if (!chatRoomDiv) {
+            alert("채팅방을 찾지 못했습니다.");
+        } else {
+            // 채팅창 생성
+            let chatInput = document.getElementById('message');
+            if (!chatInput) {
+                alert("채팅 입력창을 찾지 못했습니다.");
+            } else {
+                // 전송 버튼 생성
+                let sendButton = document.createElement('button');
+                sendButton.innerText = 'Send';
+
+                // 전송 버튼 클릭 이벤트 핸들러
+                sendButton.onclick = function() {
+                    let message = chatInput.value;
+                    send(username, message);
+                    chatRoomDiv.innerHTML += from + ': ' + message + ' (' + getCurrentTime() + ')<br>';
+                };
+            }
+        }
+    }
+
+    function showMessageOutput(messageOutput) {
+        let chatRoomDiv = document.getElementById('chat_box');
+        if (!chatRoomDiv) {
+            alert("채팅방을 찾지 못했습니다.");
+        } else {
+            // 새로운 메시지 추가
+            let messageDiv = document.createElement('div');
+            messageDiv.className = 'chat_message ' + (messageOutput.from === from ? 'from' : 'to');
+            messageDiv.innerHTML = messageOutput.from + ': ' + messageOutput.message + ' (' + messageOutput.time + ')';
+            chatRoomDiv.appendChild(messageDiv);
+
+            // 스크롤을 채팅창의 가장 아래로 내립니다.
+            chatRoomDiv.scrollTop = chatRoomDiv.scrollHeight;
+
+            // 모달창이 열려있지 않을 때만 알림을 띄웁니다.
+            if (modal.style.display !== 'inline-block') {
+                document.getElementById('alert').style.display = 'block';
+            }
+        }
+    }
+
+    function msgDel() {
+        document.getElementById('alert').style.display = 'none';
+    }
+
+
+
+
+    function connect() {
+        let socket = new SockJS('/chat');
+        stompClient = Stomp.over(socket);
+
+        stompClient.connect({}, function(frame) {
+            stompClient.subscribe('/user/queue/alert', function(param) {
+                const message = JSON.parse(param.body);
+                let msg = message.msg;
+                let time = message.time;
+                location.href='/auth/logout?time='+time;
+                alert(msg);
+            });
+
+            stompClient.subscribe('/user/queue/messages', function(messageOutput) {
+                showMessageOutput(JSON.parse(messageOutput.body));
+            });
+        });
+    }
+
+    function send(to, message) {
+        if (!to) {
+            to = document.getElementById('to').value;
+        }
+
+        if (!message) {
+            message = document.getElementById('message').value;
+        }
+
+        const msg = {
+            'from': from,
+            'message': message,
+            'to': to,
+            'time': getCurrentTime()
+        };
+        stompClient.send("/app/chat", {}, JSON.stringify(msg));
+
+        // 메시지를 보낸 후에 화면에 최신 메시지를 출력합니다.
+        showMessageOutput(msg);
+
+        document.getElementById('message').value = '';
+        document.getElementById('message').focus();
+    }
+
+    function getMessages() {
+        // 상대방의 아이디를 'to' 입력창으로부터 가져옵니다.
+        let to = document.getElementById('to').value;
+
+        // Fetch API를 사용하여 서버로부터 메시지를 가져옵니다.
+        fetch('/sync/' + to)
+            .then(response => response.json())
+            .then(data => {
+                // 서버로부터 받은 메시지를 시간 순으로 정렬합니다.
+                data.sort((a, b) => (a.time > b.time) ? 1 : ((b.time > a.time) ? -1 : 0));
+
+                // chat_box 내용을 초기화합니다.
+                let chatRoomDiv = document.getElementById('chat_box');
+                chatRoomDiv.innerHTML = '';
+
+                // 모든 메시지를 화면에 출력합니다.
+                for (let i = 0; i < data.length; i++) {
+                    showMessageOutput(data[i]);
+                }
+            })
+            .catch(error => console.error('Error:', error));
+    }
+
+
+
+
+
+    function getCurrentTime() {
+        let current = new Date();
+        let year = current.getFullYear();
+        let month = current.getMonth() + 1;
+        let date = current.getDate();
+        let hours = current.getHours();
+        let minutes = current.getMinutes();
+        let seconds = current.getSeconds();
+
+        // 1자리 수를 2자리 수로 바꾸기
+        month = (month < 10) ? '0' + month : month;
+        date = (date < 10) ? '0' + date : date;
+        hours = (hours < 10) ? '0' + hours : hours;
+        minutes = (minutes < 10) ? '0' + minutes : minutes;
+        seconds = (seconds < 10) ? '0' + seconds : seconds;
+
+        return year + '-' + month + '-' + date + 'T' + hours + ':' + minutes + ':' + seconds;
+    }
+
+    connect();
+</script>
 </body>
 
 </html>

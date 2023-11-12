@@ -1,14 +1,13 @@
 package com.itbank.service;
 
-import com.itbank.model.RemainingTime;
 import com.itbank.model.Seat;
 import com.itbank.model.dto.SeatInfoDTO;
 import com.itbank.repository.jpa.RemainingTimeRepository;
 import com.itbank.repository.jpa.SeatRepository;
+import com.itbank.repository.jpa.UserRepository;
 import com.itbank.repository.mybatis.SeatDAO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -30,20 +29,46 @@ public class SeatService {
     @Autowired
     private SeatDAO seatDAO;
 
+    @Autowired
+    private UserRepository userRepository;
+
     public SeatService(SeatDAO seatDAO) {
         this.seatDAO = seatDAO;
     }
 
     public void createSeat() {
 
-        for(int i = 1; i <= 24; i ++){
-            Seat seat = new Seat();
-            seat.setSeatId((long)i);
-            seat.setSeatIpAddr("192.168.112."+i);
+        String[] addList = {
+                "192.168.112.15",
+                "192.168.112.31",
+                "192.168.112.24",
+                "192.168.112.22",
+                "192.168.112.18",
+                "192.168.112.17",
+                "192.168.112.33",
+                "192.168.112.32",
+                "192.168.112.25",
+                "192.168.112.9",
+                "192.168.112.37",
+                "192.168.112.13",
+                "192.168.112.30",
+                "192.168.112.23",
+                "192.168.112.11",
+                "192.168.112.14",
+                "192.168.112.21",
+                "192.168.112.19",
+                "192.168.112.20",
+                "192.168.112.10",
+                "192.168.112.36",
+                "192.168.112.12",
+                "192.168.112.16",
+                "192.168.112.35"
+        };
 
-            if(seat.getSeatId()==1){
-                seat.setSeatIpAddr("192.168.112.15");
-            }
+        for(int i=0;i<addList.length;i++){
+            Seat seat = new Seat();
+            seat.setSeatId((long)(i+1));
+            seat.setSeatIpAddr(addList[i]);
             seatRepository.save(seat);
         }
     }
@@ -77,45 +102,28 @@ public class SeatService {
 
         if(seat.isPresent() && hour > 0 && seat.get().getUser() != null ){    // 시간추가
             log.info( "updateSeatHour state" + state);
-            Long addHour = 60L;
-            switch (hour) {
-                case 1:
-                    addHour = 60L;
-                    break;
-                case 2:
-                    addHour = 120L;
-                    break;
-                case 3:
-                    addHour = 180L;
-                    break;
-                case 4:
-                    addHour = 240L;
-                    break;
-                case 5:
-                    addHour = 300L;
-                    break;
-                case 6:
-                    addHour = 360L;
-                    break;
-                default:
-                    addHour = 0L;
-                    break;
-            }
-            updateSeat.put("addHour",addHour);
-            log.info( "updateSeatHour addHour" + addHour);
+
+            updateSeat.put("hour",hour);
+            log.info( "updateSeatHour addHour" + hour);
             i = seatDAO.updateSeatHour(updateSeat);
             log.info( "updateSeatHour i" + i);
         }
+
+
+        return i;
+    }
+
+    public int updateState(Long seatId, Long state) {
+        HashMap<String, Object> updateSeat = new HashMap<>();
+        updateSeat.put("seatId",seatId);
+        updateSeat.put("seatState",state);
+        Optional<Seat> seat = seatRepository.findById(seatId);
+        int i = 0;
         if(seat.isPresent() && seat.get().getUser() == null ){
             log.info( "updateSeatState state" + state);
             i = seatDAO.updateSeatState(updateSeat);
             log.info( "updateSeatState i" + i);
         }
-
-        else {
-            log.info( "업데이트 실패" );
-        }
-
         return i;
     }
 

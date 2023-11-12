@@ -1,14 +1,16 @@
 package com.itbank.service;
 
 import com.itbank.model.*;
-import com.itbank.repository.jpa.RemainingTimeRepository;
-import com.itbank.repository.jpa.RoleRepository;
-import com.itbank.repository.jpa.UserRepository;
-import com.itbank.repository.jpa.UserRoleRepository;
+import com.itbank.repository.jpa.*;
+import com.itbank.repository.mybatis.DropOutUserDAO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +34,9 @@ public class UserService {
     private RoleRepository roleRepository;
 
     @Autowired
+    private DropOutUserDAO dropOutUserDAO;
+
+    @Autowired
     private UserRoleRepository userRoleRepository;
 
     @Autowired
@@ -39,6 +44,8 @@ public class UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Autowired DropOutUserRepository dropOutUserRepository;
 
     public void createAdmin(User paramUser) {
 
@@ -54,7 +61,7 @@ public class UserService {
 
             // 남은 시간에 유저의 시간을 관리자는 로그인 바로 시키기 위해 1분
             RemainingTime remainingTime = new RemainingTime();
-            remainingTime.setRemainingTime(15);
+            remainingTime.setRemainingTime(1000000000);
 
             // User 객체 생성
             User user = new User();
@@ -84,7 +91,7 @@ public class UserService {
         }
     }
 
-    public void createUsers(User paramUser) {
+    public int createUsers(User paramUser) {
 
         log.info("유저를 생성합니다");
 
@@ -110,6 +117,7 @@ public class UserService {
             user.setName(paramUser.getName());
             user.setEmail(paramUser.getEmail());
             user.setBirth(paramUser.getBirth());
+            user.setSummoner(paramUser.getSummoner());
 
             remainingTime.setUser(user);
             user.setRemainingTime(remainingTime);
@@ -125,9 +133,10 @@ public class UserService {
         }
         // 중복 가입 처리
         catch (DataIntegrityViolationException e) {
-            throw new ResponseStatusException(
-                    HttpStatus.BAD_REQUEST, "이미 가입된 정보입니다",  e);
-        }
+/*            throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "이미 가입된 정보입니다",  e);*/
+            return 0;
+        }return 1;
     }
 
     public void testAdmin() {
@@ -160,51 +169,55 @@ public class UserService {
     }
 
 
-    public List<UserAndLastLog> findUserAndLastLog() {
+    public Page<UserAndLastLog> findUserAndLastLog(Pageable pageable) {
         log.info("검색어 X");
-        return findUserAndLastLog("", null);
+        return findUserAndLastLog(pageable, "", null);
     }
-    public List<UserAndLastLog> findUserAndLastLog(String type, String keyword) {
+    public Page<UserAndLastLog> findUserAndLastLog(Pageable pageable, String type, String keyword) {
 
         log.info("유형: " + type);
         log.info("검색어: "+keyword);
 
         List<UserAndLastLog> list = new ArrayList<>();
-        List<User> users = null;
+        Page<User> users;
 
         switch (type) {
             // 전체검색
             case "" :
-                users = userRepository.findAllByKeyword(keyword==null ? "" : keyword);
+                users = userRepository.findAllByKeyword(keyword==null ? "" : keyword, pageable);
                 break;
             case "name":
-                users = userRepository.findAllByNameContaining(keyword);
+                users = userRepository.findAllByNameContaining(keyword, pageable);
                 break;
             case "username":
-                users = userRepository.findAllByUsernameContaining(keyword);
+                users = userRepository.findAllByUsernameContaining(keyword, pageable);
                 break;
             case "mobile":
-                users = userRepository.findAllByMobileContaining(keyword);
+                users = userRepository.findAllByMobileContaining(keyword, pageable);
                 break;
             case "email":
-                users = userRepository.findAllByEmailContaining(keyword);
+                users = userRepository.findAllByEmailContaining(keyword, pageable);
                 break;
             default:
-                users = userRepository.findAll();
+                users = userRepository.findAll(pageable);
                 break;
         }
 
-        for(User user : users) {
+        return users.map(user -> {
             UserAndLastLog userAndLastLog = new UserAndLastLog();
             userAndLastLog.setUser(user);
             Optional<UserLog> optionalUserLog = userLogService.findLatestByUser(user);
+            Optional<RemainingTime> optionalRemainingTime = remainingTimeRepository.findByUser(user);
             if(optionalUserLog.isPresent()) {
                 UserLog log = optionalUserLog.get();
                 userAndLastLog.setLastLog(log);
             }
-            list.add(userAndLastLog);
-        }
-        return list;
+            if (optionalRemainingTime.isPresent()) {
+                RemainingTime remainingTime = optionalRemainingTime.get();
+                userAndLastLog.setRemainingTime(remainingTime);
+            }
+            return userAndLastLog;
+        });
     }
 
     public List<User> findAll() {
@@ -241,5 +254,13 @@ public class UserService {
         log.info("유저 남은시간 추가 완료!");
     }
 
+    public boolean checkPw(String username, String password) {
+        Optional<User> userOptional = userRepository.findByUsername(username);
+        log.info("password: " + password);
+        return userOptional.map(user -> passwordEncoder.matches(password, user.getPassword())).orElse(false);
+    }
 
+    public Optional<User> findById(Long id) {
+        return userRepository.findById(id);
+    }
 }

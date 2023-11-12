@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC
+        "//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!-- mapper의 namespace는 연결할 dao 인터페이스의 "풀네임"을 작성한다. -->
+<mapper namespace="com.itbank.repository.mybatis.ProductSalesDAO">
+    <select id="proSalesAllSelect" resultType="productsales" parameterType="map">
+        SELECT
+        ps.id AS id,
+        pm.name AS paymentMethod,
+        ol.ordertotalprice AS orderTotalPrice,
+        p.time AS salesDate,
+        u.username AS username,
+        p.id AS paymentId
+        FROM
+        product_sales ps
+        JOIN
+        payment p ON ps.payment_id = p.id
+        JOIN
+        payment_method pm ON p.paymentMethod_id = pm.id
+        JOIN
+        order_list ol ON p.id = ol.payment_id
+        JOIN
+        users u ON ol.user_id = u.id
+        <where>
+            <if test="startDate != null and startDate != ''">
+                AND p.time &gt;= TO_DATE(#{startDate},'yyyy-MM-dd')
+            </if>
+            <if test="endDate != null and endDate != ''">
+                AND p.time &lt;= TO_DATE(#{endDate}, 'yyyy-MM-dd') + 1
+            </if>
+        </where>
+        order by salesDate DESC
+    </select>
+
+
+    <select id="selectTotal" resultType="int" parameterType="map">
+        select sum(ps.totalprice) as orderTotalPrice
+        from
+        product_sales ps
+        JOIN
+        payment p ON ps.payment_id = p.id
+        JOIN
+        order_list ol ON p.id = ol.payment_id
+        <where>
+            <if test="startDate != null and startDate != ''">
+                p.time &gt;= TO_DATE(#{startDate},'yyyy-MM-dd')
+            </if>
+            <if test="endDate != null and endDate != ''">
+                <if test="startDate != null and startDate != ''">
+                    AND
+                </if>
+                p.time &lt;= TO_DATE(#{endDate}, 'yyyy-MM-dd') + 1
+            </if>
+        </where>
+    </select>
+
+    <select id="proSalesSelectOne" resultType="productsales" parameterType="Long">
+        SELECT
+        ps.id AS id,
+        p.id AS paymentId,
+        u.username AS username,
+        ol.orderTotalPrice AS orderTotalPrice,
+        pm.name AS paymentMethod,
+        p.time AS salesDate,
+        od.memo AS memo
+        FROM
+        product_sales ps
+        JOIN
+        payment p ON ps.payment_id = p.id
+        JOIN
+        payment_method pm ON p.paymentMethod_id = pm.id
+        JOIN
+        order_list ol ON p.id = ol.payment_id
+        JOIN
+        users u ON ol.user_id = u.id
+        JOIN
+        order_detail od ON ol.payment_id = od.order_id
+        JOIN
+        product pr ON od.product_id = pr.id
+        WHERE
+        ps.id = #{id}
+        and ROWNUM = 1
+
+    </select>
+
+    <select id="getProductListBySalesId" resultType="productItem" parameterType="Long">
+        SELECT
+        pr.price AS price,
+        od.count AS count,
+        pr.name AS productName
+        FROM
+        product_sales ps
+        JOIN payment p ON ps.payment_id = p.id
+        JOIN order_list ol ON p.id = ol.payment_id
+        JOIN order_detail od ON ol.payment_id = od.order_id
+        JOIN product pr ON od.product_id = pr.id
+        WHERE
+        ps.id = #{id}
+    </select>
+
+</mapper>

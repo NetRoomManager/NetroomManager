@@ -4,20 +4,103 @@
         "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.itbank.repository.mybatis.ProductDAO">
-    <select id="selectAll" resultType="product">
-                select
-                p.id,
-                p.name,
-                c.name as productCategoryName,
-                p.price,
-                p.count,
-                p.dcRate,
-                p.img,
-                p.detail
-                    from product p
-                    join product_category c
-                        on p.product_category_id = c.id
-                    order by id desc
+    <select id="getTotal" parameterType="map" resultType="int">
+        SELECT count(*)
+        FROM (
+        SELECT
+        p.id,
+        p.name,
+        c.name as productCategoryName,
+        p.price,
+        p.count,
+        p.dcRate,
+        p.img,
+        p.detail,
+        ROW_NUMBER() OVER (ORDER BY p.id DESC) rn
+        FROM product p
+        JOIN product_category c
+        ON p.product_category_id = c.id
+        <where>
+            <choose>
+                <when test="category == 'all'">
+                    AND
+                    p.id like '%' || #{keyword} || '%'
+                    OR
+                    p.name like '%' || #{keyword} || '%'
+                    OR
+                    c.name like '%' || #{keyword} || '%'
+                </when>
+                <when test="category == 'id'">
+                    AND p.id like '%' || #{keyword} || '%'
+                </when>
+                <when test="category == 'name'">
+                    AND p.name like '%' || #{keyword} || '%'
+                </when>
+                <when test="category == 'productCategoryName'">
+                    AND c.name like '%' || #{keyword} || '%'
+                </when>
+            </choose>
+        </where>
+        )
+    </select>
+    <select id="selectAll" resultType="product" parameterType="map">
+        SELECT *
+        FROM (
+        SELECT
+        p.id,
+        p.name,
+        c.name as productCategoryName,
+        p.price,
+        p.count,
+        p.dcRate,
+        p.img,
+        p.detail,
+        ROW_NUMBER() OVER (ORDER BY p.id DESC) rn
+        FROM product p
+        JOIN product_category c
+        ON p.product_category_id = c.id
+        )
+        WHERE rn BETWEEN #{start} AND #{end}
+    </select>
+    <select id="search" resultType="product" parameterType="map">
+        SELECT *
+        FROM (
+        SELECT
+        p.id,
+        p.name,
+        c.name as productCategoryName,
+        p.price,
+        p.count,
+        p.dcRate,
+        p.img,
+        p.detail,
+        ROW_NUMBER() OVER (ORDER BY p.id DESC) rn
+        FROM product p
+        JOIN product_category c
+        ON p.product_category_id = c.id
+        <where>
+            <choose>
+                <when test="category == 'all'">
+                    AND
+                    p.id like '%' || #{keyword} || '%'
+                    OR
+                    p.name like '%' || #{keyword} || '%'
+                    OR
+                    c.name like '%' || #{keyword} || '%'
+                </when>
+                <when test="category == 'id'">
+                    AND p.id like '%' || #{keyword} || '%'
+                </when>
+                <when test="category == 'name'">
+                    AND p.name like '%' || #{keyword} || '%'
+                </when>
+                <when test="category == 'productCategoryName'">
+                    AND c.name like '%' || #{keyword} || '%'
+                </when>
+            </choose>
+        </where>
+        )
+        WHERE rn BETWEEN #{start} AND #{end}
     </select>
     <insert id="insertProduct" parameterType="product">
         insert into product

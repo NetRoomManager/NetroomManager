@@ -41,7 +41,13 @@
 <body>
 <nav class="navbar navbar-expand-sm navbar-dark bg-dark p-3">
     <div class="container-fluid d-flex">
-        <a class="navbar-brand" href="/auth/login">NetRoom PC방</a>
+        <c:if test="${not empty principal}">
+            <a class="navbar-brand" href="/customer/main">NetRoom PC방</a>
+        </c:if>
+        <c:if test="${empty principal}">
+            <a class="navbar-brand" href="/auth/login">NetRoom PC방</a>
+        </c:if>
+
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mynavbar">
             <span class="navbar-toggler-icon"></span>
         </button>

@@ -77,5 +77,10 @@
 		<session-timeout>1440</session-timeout>
 	</session-config>
 
+	<error-page>
+		<exception-type>java.lang.Exception</exception-type>
+		<location>/WEB-INF/views/auth/error.jsp</location>
+	</error-page>
+
 
 </web-app>

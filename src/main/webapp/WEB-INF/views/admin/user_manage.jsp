@@ -4,17 +4,7 @@
 <!-- 회원관리 페이지 -->
 
 <style>
-    #menu_bar {
-        background-color: #ffa500
-    }
 
-    #menu_bar > a {
-        color: #ffffff;
-    }
-
-    #product_update table > tbody > tr > th {
-        padding-top: 15px;
-    }
 </style>
 
 <div id="headerContent"></div>
@@ -22,11 +12,11 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0 pt-1">
             <li class="nav-item"><a class="nav-link active navbar-brand"
-                                    aria-current="page" href="#">NetRoom</a></li>
-            <li class="nav-item pe-3"><a class="nav-link" href="#">재고현황</a>
+                                    aria-current="page" href="${cpath}/">NetRoom</a></li>
+            <li class="nav-item pe-3"><a class="nav-link" href="${cpath}/admin/user">전체회원</a>
             </li>
-            <li class="nav-item pe-3"><a class="nav-link"
-                                         data-bs-toggle="modal" data-bs-target="#productUpdate">상품등록</a></li>
+            <li class="nav-item pe-3"><a class="nav-link" href="${cpath}/admin/dropOutUser">탈퇴회원</a>
+            </li>
         </ul>
         <ul class="navbar-nav">
             <li class="nav-item pe-2">
@@ -45,7 +35,7 @@
                 </button>
             </li>
             <li class="nav-item pe-2">
-                <button type="button" class="btn btn-light"
+                <button type="button" class="btn btn-light"  onclick="location.reload();"
                         style="-bs-btn-padding-y: .25rem; - -bs-btn-padding-x: .75rem; - -bs-btn-font-size: 1.15rem;">
                     <svg width="20" height="20" viewBox="0 0 20 20" fill="none"
                          xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 relative"
@@ -62,93 +52,12 @@
             </li>
         </ul>
     </div>
-    <div class="modal fade" id="productUpdate" data-bs-backdrop="static"
-         data-bs-keyboard="false" tabindex="-1"
-         aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-                <form action="">
-                    <div class="modal-header">
-                        <h3 class="modal-title">상품등록</h3>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body container">
-                        <div class="row justify-content-center align-items-center mb-3">
-                            <div class="col-6 text-center">
-                                <img id="preview" class="img-thumbnail mb-2"
-                                     src="../img/1422005677144.png" alt="예시 이미지"
-                                     style="max-width: 200px; max-height: 200px;"> <input
-                                    class="form-control form-control-sm" id="image" name="image"
-                                    accept="image/*" type="file">
-                            </div>
-                        </div>
-                        <table class="table table-borderless">
-                            <tbody>
-                            <tr>
-                                <th>제품/이용권</th>
-                                <td><select class="form-select"
-                                            aria-label="Default select example">
-                                    <option selected>이용권 선택 시 시간 필수</option>
-                                    <option value="1">제품</option>
-                                    <option value="2">이용권</option>
-                                </select></td>
-                                <th>사용시간</th>
-                                <td><input class="form-control" type="text"
-                                           placeholder="Default input" aria-label="default input example">
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>상품분류</th>
-                                <td><input class="form-control" type="text"
-                                           placeholder="Default input" aria-label="default input example">
-                                </td>
-                                <th colspan="2">상품설명</th>
-                            </tr>
-                            <tr>
-                                <th>상품명</th>
-                                <td><input class="form-control" type="text"
-                                           placeholder="Default input" aria-label="default input example">
-                                </td>
-                                <td colspan="2" rowspan="2" class="form-floating"><textarea
-                                        class="form-control" placeholder="Leave a comment here"
-                                        id="floatingTextarea" style="height: 90px;"></textarea> <label
-                                        for="floatingTextarea">Comments</label></td>
-                            </tr>
-                            <tr>
-                                <th>가격</th>
-                                <td><input class="form-control" type="text"
-                                           placeholder="Default input" aria-label="default input example">
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary"
-                                data-bs-dismiss="modal">취소
-                        </button>
-                        <button type="button" class="btn btn-primary">등록</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</nav>
-<nav id="menu_bar" class="nav nav-pills flex-column py-3 text-center"
-     style="position: absolute; height: 100%;">
-    <a class="nav-link py-3" href="${cpath }/admin/order">주문</a>
-    <a class="nav-link py-3" href="${cpath }/admin/product">재고</a>
-    <a class="nav-link py-3"
-       aria-current="page" href="${cpath }/admin/productsales">매출</a> <a
-        class="nav-link py-3  active" href="${cpath }/admin/user" style="background-color: #FF8339;">회원</a> <a
-        class="nav-link py-3" href="${cpath }/admin/seat">좌석</a> <a
-        class="nav-link py-3" href="${cpath }/admin/ticket">이용권</a>
 </nav>
 
 <div class="container pt-4">
     <form class="d-flex">
         <div class="mb-3 pe-2" style="width: 150px;">
+            <label></label>
             <select name="type" class="form-select" aria-label="Default select example">
                 <option selected value="">전체</option>
                 <option value="name"  ${param.type=='name' ? 'selected' : ''}>유저이름</option>
@@ -160,7 +69,7 @@
         <div class="mb-3 pe-2">
             <label for="searchName"></label><input type="text" class="form-control" id="searchName" name="keyword"  value="${param.keyword}">
         </div>
-        <div>
+        <div class="mb-3 pt-4">
             <button type="submit" class="btn btn-secondary">검색</button>
         </div>
     </form>
@@ -181,162 +90,49 @@
         </tr>
         </thead>
         <tbody>
-        <c:forEach var="dto" items="${list}">
+        <c:forEach var="dto" items="${page.content}">
             <tr class="text-center">
                 <td class="pt-3">${dto.user.id}</td>
                 <td class="pt-3">${dto.user.name}</td>
-                <td class="pt-3">${dto.user.username}</td>
-                <td class="pt-3">남은시가</td>
+                <td class="pt-3">${fn:escapeXml(UtilsComponent.truncateString(dto.user.username, 10))}</td>
+                <td class="pt-3">${(dto.remainingTime.remainingTime)}초</td>
                 <td class="pt-3">${dto.lastLog.loginAt}</td>
                 <td class="pt-3">${not empty dto.user.mobile ? dto.user.mobile : '모바일 정보 없음'}</td>
                 <td class="pt-3">${dto.user.email}</td>
                 <td class="pt-3">${not empty dto.user.birth ? dto.user.birth : '생일 정보 없음'}</td>
                 <td>
-                    <button type="button" class="btn btn-outline-danger">탈퇴</button>
+                    <c:if test="${dropOutMap[dto.user.id] != null}">
+                        <a href="/admin/userUndelete/${dto.user.id}"><button type="button" class="btn btn-outline-primary">복구</button></a>
+                    </c:if>
+                    <c:if test="${dropOutMap[dto.user.id] == null}">
+                        <a href="/admin/userdelete/${dto.user.id}"><button type="button" class="btn btn-outline-danger">탈퇴</button></a>
+                    </c:if>
+
                 </td>
             </tr>
         </c:forEach>
         </tbody>
     </table>
-    <div class="modal" id="myModal">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-
-                <!-- Modal Header -->
-                <div class="modal-header">
-                    <h4 class="modal-title">상세조회</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-                </div>
-
-                <!-- Modal body -->
-                <div class="modal-body">
-                    <div class="row">
-                        <div class="col-6 text-center">
-                            <img id="preview" class="img-thumbnail mb-2"
-                                 src="../img/1422005677144.png" alt="예시 이미지"
-                                 style="max-width: 200px; max-height: 200px;">
-                        </div>
-                        <div class="col-6">
-                            <table class="table table-borderless">
-                                <tbody>
-                                <tr>
-                                    <th>상품번호</th>
-                                    <td><input class="form-control form-control-sm"
-                                               type="text" placeholder="Default input"
-                                               aria-label="default input example"></td>
-                                </tr>
-                                <tr>
-                                    <th>상품명</th>
-                                    <td><input class="form-control form-control-sm"
-                                               type="text" placeholder="Default input"
-                                               aria-label="default input example"></td>
-                                </tr>
-                                <tr>
-                                    <th>상품분류</th>
-                                    <td><input class="form-control form-control-sm"
-                                               type="text" placeholder="Default input"
-                                               aria-label="default input example"></td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-6">
-                            <table class="table table-borderless">
-                                <tbody>
-                                <tr>
-                                    <th>가격</th>
-                                    <td><input class="form-control form-control-sm"
-                                               type="text" placeholder="Default input"
-                                               aria-label="default input example"></td>
-                                </tr>
-                                <tr>
-                                    <th>할인율</th>
-                                    <td><input class="form-control form-control-sm"
-                                               type="text" placeholder="Default input"
-                                               aria-label="default input example"></td>
-                                </tr>
-                                <tr>
-                                    <th>현재재고</th>
-                                    <td><input class="form-control form-control-sm"
-                                               type="text" placeholder="Default input"
-                                               aria-label="default input example"></td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="col-6">
-                            <table class="table table-borderless">
-                                <tbody>
-                                <tr>
-                                    <th>금일 판매갯수</th>
-                                    <td><input class="form-control form-control-sm"
-                                               type="text" placeholder="Default input"
-                                               aria-label="default input example"></td>
-                                </tr>
-                                <tr>
-                                    <th>평균 판매갯수</th>
-                                    <td><input class="form-control form-control-sm"
-                                               type="text" placeholder="Default input"
-                                               aria-label="default input example"></td>
-                                </tr>
-                                <tr>
-                                    <th>소진 예상일</th>
-                                    <td><input class="form-control form-control-sm"
-                                               type="text" placeholder="Default input"
-                                               aria-label="default input example"></td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Modal footer -->
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-danger"
-                            data-bs-dismiss="modal">Close
-                    </button>
-                </div>
-
-            </div>
-        </div>
-    </div>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            <li class="page-item">
+                <a class="page-link" href="/admin/user?page=0&size=10" aria-label="Previous">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+            <c:forEach var="page" begin="0" end="${page.totalPages - 1}">
+                <li class="page-item"><a class="page-link  ${param.page == page ? 'bg-primary text-white' : ''}" href="/admin/user?page=${page}&size=10" >${page+1}</a></li>
+            </c:forEach>
+            <li class="page-item">
+                <a class="page-link" href="/admin/user?page=${page.totalPages - 1}&size=10" aria-label="Next">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
 </div>
 <script>
-    var popoverTriggerList = [].slice.call(document
-        .querySelectorAll('[data-bs-toggle="popover"]'))
-    var popoverList = popoverTriggerList.map(function (popoverTriggerEl) {
-        return new bootstrap.Popover(popoverTriggerEl)
-    })
 
-    $(document).ready(function () {
-        $.ajax({
-            url: "header.html",
-            dataType: "html",
-            success: function (response) {
-                $("#headerContent").html(response);
-            },
-        });
-    });
-    var imageInput = document.getElementById('image');
-    imageInput.addEventListener('change', previewImage);
-
-    function previewImage(event) {
-        var input = event.target;
-        var preview = document.getElementById('preview');
-
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-
-            reader.onload = function () {
-                preview.src = reader.result;
-            };
-
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
 </script>
 </body>
 </html>

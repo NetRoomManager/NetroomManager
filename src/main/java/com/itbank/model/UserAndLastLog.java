@@ -12,4 +12,5 @@ import lombok.Setter;
 public class UserAndLastLog {
     private User user;
     private UserLog lastLog;
+    private RemainingTime remainingTime;
 }

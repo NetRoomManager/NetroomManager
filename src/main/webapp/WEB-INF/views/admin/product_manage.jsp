@@ -4,25 +4,10 @@
 <!-- 상품관리 페이지 -->
 <%--${productList.get(0).productCategoryName}--%>
 <style>
-	#menu_bar {
-		background-color: #ffa500
-	}
-
-	#menu_bar>a {
-		color: #ffffff;
-	}
-
 	#product_update table>tbody>tr>th {
 		padding-top: 15px;
 	}
 
-	.hover_element {
-		cursor: pointer;
-	}
-
-	.hover_element:hover {
-		cursor: pointer;
-	}
 </style>
 
 <div id="headerContent"></div>
@@ -55,7 +40,7 @@
 				</button>
 			</li>
 			<li class="nav-item pe-2">
-				<button type="button" class="btn btn-light"
+				<button type="button" class="btn btn-light" onclick="location.reload();"
 						style="-bs-btn-padding-y: .25rem; - -bs-btn-padding-x: .75rem; - -bs-btn-font-size: 1.15rem;">
 					<svg width="20" height="20" viewBox="0 0 20 20" fill="none"
 						 xmlns="http://www.w3.org/2000/svg" class="w-5 h-5 relative"
@@ -75,7 +60,7 @@
 	<div class="modal fade" id="productUpdate" data-bs-backdrop="static"
 		 data-bs-keyboard="false" tabindex="-1"
 		 aria-labelledby="staticBackdropLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg">
+		<div class="modal-dialog modal-dialog-centered modal-lg">
 			<div class="modal-content">
 				<form action="${cpath}/admin/addProduct" method="POST" enctype="multipart/form-data">
 					<div class="modal-header">
@@ -87,9 +72,9 @@
 						<div class="row justify-content-center align-items-center mb-3">
 							<div class="col-6 text-center">
 								<img id="preview" class="img-thumbnail mb-2"
-									 src="../img/nuguri.webp" alt="예시 이미지"
+									 src="/img/nuguri.webp" alt="예시 이미지"
 									 style="max-width: 200px; max-height: 200px;">
-								<input class="form-control form-control-sm" id="image" name="upload" accept="image/*" type="file">
+								<input class="form-control form-control-sm" id="image" name="upload" accept="image/*" type="file" required>
 							</div>
 						</div>
 						<table class="table table-borderless">
@@ -129,7 +114,7 @@
 							</tr>
 							<tr>
 								<td colspan="4" rowspan="4" class="form-floating">
-									<textarea class="form-control" name="detail" placeholder="Leave a comment here" id="floatingTextarea" style="height: 90px;"></textarea>
+									<textarea class="form-control" name="detail" placeholder="Leave a comment here" id="floatingTextarea" style="height: 90px;" required></textarea>
 									<label for="floatingTextarea">Comments</label>
 								</td>
 							</tr>
@@ -145,7 +130,7 @@
 		</div>
 	</div>
 	<div class="modal fade" id="categoryUpdate" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-		<div class="modal-dialog">
+		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content">
 				<form action="${cpath}/admin/addProductCategory" method="POST" enctype="multipart/form-data">
 					<div class="modal-header">
@@ -173,53 +158,18 @@
 		</div>
 	</div>
 </nav>
-<nav id="menu_bar" class="nav nav-pills flex-column py-3 text-center"
-	 style="position: absolute; height: 100%;">
-	<a class="nav-link py-3" href="${cpath }/admin/order">주문</a>
-	<a class="nav-link py-3 active" href="${cpath }/admin/product" style="background-color: #FF8339;">재고</a>
-	<a class="nav-link py-3"
-	   aria-current="page" href="${cpath }/admin/productsales">매출</a> <a
-		class="nav-link py-3" href="${cpath }/admin/user">회원</a> <a
-		class="nav-link py-3" href="${cpath }/admin/seat">좌석</a> <a
-		class="nav-link py-3" href="${cpath }/admin/ticket">이용권</a>
-</nav>
-
 <div class="container pt-4">
-	<form class="d-flex">
+	<form class="d-flex" action="${cpath}/admin/product" method="get">
 		<div class="mb-3 pe-2" style="width: 150px;">
-			<select class="form-select" aria-label="Default select example">
-				<option selected>전체</option>
-				<option value="1">전체</option>
-				<option value="2">가격</option>
-				<option value="3">현재 재고</option>
-				<option value="4">금일 판매갯수</option>
+			<select class="form-select" name="category" aria-label="Default select example">
+				<option selected value="all" ${param.category=='all' ? 'selected' : ''}>전체</option>
+				<option value="id" ${param.category=='id' ? 'selected' : ''}>상품번호</option>
+				<option value="name" ${param.category=='name' ? 'selected' : ''}>상품명</option>
+				<option value="productCategoryName" ${param.category=='productCategoryName' ? 'selected' : ''}>상품분류</option>
 			</select>
 		</div>
 		<div class="mb-3 pe-2">
-			<input type="number" class="form-control" id="searchRangeOne">
-		</div>
-		<p class="h3">~</p>
-		<div class="mb-3 px-2">
-			<input type="number" class="form-control" id="searchRangeTwo">
-		</div>
-		<div>
-			<button type="submit" class="btn btn-secondary">검색</button>
-		</div>
-	</form>
-</div>
-<div class="container">
-	<form class="d-flex">
-		<div class="mb-3 pe-2" style="width: 150px;">
-			<select class="form-select" aria-label="Default select example">
-				<option selected>전체</option>
-				<option value="1">전체</option>
-				<option value="2">상품번호</option>
-				<option value="3">상품명</option>
-				<option value="4">상품분류</option>
-			</select>
-		</div>
-		<div class="mb-3 pe-2">
-			<input type="text" class="form-control" id="searchName">
+			<input type="text" class="form-control" name="keyword" id="searchName" value="${param.keyword}">
 		</div>
 		<div>
 			<button type="submit" class="btn btn-secondary">검색</button>
@@ -250,8 +200,8 @@
 				<td class="pt-3">${dto.id}</td>
 				<td class="pt-3">${dto.name}</td>
 				<td class="pt-3">${dto.productCategoryName}</td>
-				<td class="pt-3">${dto.price}</td>
-				<td class="pt-3">현재재고</td>
+				<td class="pt-3">${dto.price}원</td>
+				<td class="pt-3">${dto.count}</td>
 				<td class="pt-3">금일 판매갯수</td>
 				<td>
 					<button id="view_product_${status.index}" type="button" name="${dto.id}" class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#detail_check_modal">조회</button>
@@ -269,8 +219,37 @@
 		</tbody>
 	</table>
 
+
+	<nav aria-label="Page navigation example">
+		<ul class="pagination justify-content-center">
+			<li class="page-item" ${page.number == 0 ? 'disabled' : ''}>
+				<a class="page-link" href="${requestURI}?${queryString}${not empty queryString ? '&' : ''}pageNum=1" aria-label="Previous">
+					<span aria-hidden="true">&laquo;</span>
+				</a>
+			</li>
+
+			<c:forEach var="i" begin="1" end="${page.totalPages}">
+				<li class="page-item" ${page.number+1 == i ? 'active' : ''}>
+					<a class="page-link" href="${requestURI}?${queryString}${not empty queryString ? '&' : ''}pageNum=${i}" aria-label="${i}">
+						<span aria-hidden="true">${i}</span>
+					</a>
+				</li>
+			</c:forEach>
+
+			<li class="page-item" ${page.number+1 == page.totalPages ? 'disabled' : ''}>
+				<a class="page-link" href="${requestURI}?${queryString}${not empty queryString ? '&' : ''}pageNum=${page.totalPages}" aria-label="Next">
+					<span aria-hidden="true">&raquo;</span>
+				</a>
+			</li>
+		</ul>
+	</nav>
+
+
+
+
+
 	<div class="modal fade" id="detail_check_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg">
+		<div class="modal-dialog modal-dialog-centered modal-lg">
 			<div class="modal-content">
 
 				<!-- Modal Header -->
@@ -287,7 +266,7 @@
 							<img id="productImg" class="img-thumbnail mb-2"
 								 src="" alt="예시 이미지"
 								 style="max-width: 200px; max-height: 200px;">
-							<input class="form-control form-control-sm" id="updateImg" name="upload" accept="image/*" type="file">
+							<input class="form-control form-control-sm" id="updateImg" name="upload" accept="image/*" type="file" required>
 						</div>
 						<div class="col-6">
 							<table class="table table-borderless">
@@ -407,7 +386,6 @@
 		}
 	}
 </script>
-
 <script>
 
 	async function openView(id) {

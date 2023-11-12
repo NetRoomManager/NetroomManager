@@ -2,8 +2,10 @@ package com.itbank.handler;
 
 import com.itbank.config.UserPrincipal;
 import com.itbank.model.RemainingTime;
+import com.itbank.model.Seat;
 import com.itbank.model.UserLog;
 import com.itbank.repository.jpa.RemainingTimeRepository;
+import com.itbank.repository.jpa.SeatRepository;
 import com.itbank.service.UserLogService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.util.Optional;
 import java.util.Set;
 
@@ -32,6 +35,9 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;
+
+    @Autowired
+    private SeatRepository seatRepository;
 
     @Override
     public void onLogoutSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -63,7 +69,7 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
 
             if (userLog.isPresent()) {
                 UserLog log = userLog.get();
-                log.setLogoutAt(new Date(System.currentTimeMillis())); // 로그아웃 시간을 현재 시간으로 설정
+                log.setLogoutAt(new Timestamp(System.currentTimeMillis())); // 로그아웃 시간을 현재 시간으로 설정
                 userLogService.save(log); // UserLog를 데이터베이스에 저장
             }
 
@@ -89,7 +95,7 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
 
             log.info("불러오기 성공! : " + time+"초");
 
-            if(time==null) { // null이면 핸들러로 들어온거임 ?time=1초 이런식으로 들어옴
+            if(time==null && request.getParameter("time")!=null) { // null이면 핸들러로 들어온거임 ?time=1초 이런식으로 들어옴
                 time = Long.valueOf((String) request.getParameter("time"));
                 log.info("파라미터로 받은 time: " + time);
             }
@@ -126,6 +132,15 @@ public class CustomLogoutSuccessHandler implements LogoutSuccessHandler {
             }
             log.info("남은시간 저장 완료!");
 
+
+            // 해당 유저가 사용중이던 좌석을 사용 가능한 상태로 변경
+            Optional<Seat> optionalSeat = seatRepository.findByUser(userPrincipal.getUser());
+            if (optionalSeat.isPresent()) {
+                Seat seat = optionalSeat.get();
+                seat.setUser(null);
+                seat.setSeatState(1L);
+                seatRepository.save(seat);
+            }
         }
 
         // 로그아웃 이후에는 홈으로 보냄

@@ -5,6 +5,7 @@ import com.itbank.model.*;
 import com.itbank.repository.jpa.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -98,15 +99,24 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         SocialLogin socialLogin = socialLoginRepository.findByProviderId(providerId).orElseGet(() -> {
 
             // 고유아이디
-            String username = providerId;
             // 비밀번호 UUID넣기
             String password = passwordEncoder.encode(UUID.randomUUID().toString());
             // 폰번호
 //            String mobile = oauth2User.getAttribute("mobile");
-            String mobile = null;
+            String mobile;
+            if(oauth2User.getAttribute("mobile")!=null) {
+                mobile = oauth2User.getAttribute("mobile");
+            } else {
+                mobile = null;
+            }
             // 생일
 //            Date birth = oauth2User.getAttribute("birth");
-            Date birth = null;
+            Date birth;
+            if (oauth2User.getAttribute("birth")!=null) {
+                birth = oauth2User.getAttribute("birth");
+            } else {
+                birth = null;
+            }
             // 이름
             String name = oauth2User.getAttribute("name");
             // 이메일
@@ -122,9 +132,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
             });
 
             // User 객체 생성 or 불러오기 / 만약 불러와진다면 해당 계정은 소셜유저와 연동됨
-            User user = userRepository.findByEmailOrMobile(email, mobile).orElseGet(() -> {
+            User user = userRepository.findByEmailAndEmailIsNotNullOrMobileAndMobileIsNotNull(email, mobile).orElseGet(() -> {
                 User newUser = new User();
-                newUser.setUsername(username);
+                newUser.setUsername(providerId);
                 newUser.setPassword(password); // 소셜로그인 유저는 비밀번호가 없음 -> UUID를 해싱처리해서 일반유저로 로그인 X
                 newUser.setMobile(mobile);
                 newUser.setName(name);
@@ -170,6 +180,9 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         else if("google".equals(provider)){
             // 구글 고유번호 key : sub
             providerId = oauth2User.getAttribute("sub");
+        }
+        else if("facebook".equals(provider)){
+            providerId = oauth2User.getAttribute("id");
         }
         else {
             throw new ProviderException("알 수 없는 서비스 입니다");

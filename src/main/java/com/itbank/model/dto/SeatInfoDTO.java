@@ -13,5 +13,6 @@ public class SeatInfoDTO {
     private Integer seatState;
     private Long user_id;
     private Long remainingTime;
+    private String username;
 
 }
