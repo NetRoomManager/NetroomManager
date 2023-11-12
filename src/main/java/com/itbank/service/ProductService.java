@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -124,7 +125,11 @@ public class ProductService {
         return id;
     }
 
-    public List<ProductDTO> selectAll() { return productDAO.selectAll(); }
+    public List<ProductDTO> selectAll(HashMap<String, Object> param) { return productDAO.selectAll(param); }
 
-    public List<ProductDTO> search(String category, String keyword) { return productDAO.search(category, keyword); }
+    public List<ProductDTO> search(HashMap<String, Object> param) { return productDAO.search(param); }
+
+    public int getTotal(HashMap<String, Object> param) {
+        return productDAO.getTotal(param);
+    }
 }

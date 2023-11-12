@@ -69,7 +69,7 @@ public class AuthController {
         List<Object[]> seatList = seatService.selectSeatList();
         for( Object[] s : seatList){
             if(s.getClass().get == 1){  // 이용가능 좌석일 경우 login*/
-                System.out.println(AddressComponent.getLocalMacAddress());
+//                System.out.println(AddressComponent.getLocalMacAddress());
                 return "/auth/login";
  /*           }
         }
@@ -135,7 +135,7 @@ public class AuthController {
     @PostMapping("/join")
     public ModelAndView join(User user, HttpSession session) {
 
-        ModelAndView mav = new ModelAndView("/auth/login");
+        ModelAndView mav = new ModelAndView("redirect:/auth/login");
         String msg = "";
         log.info("유저 생성");
 

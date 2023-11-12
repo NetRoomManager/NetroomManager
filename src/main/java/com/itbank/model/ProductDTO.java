@@ -18,7 +18,21 @@ public class ProductDTO {
     private String detail;
     private String img;
     private Integer count;
-
     private MultipartFile upload;
     private String productCategoryName;
+    @Override
+    public String toString() {
+        return "ProductDTO{" +
+                "id=" + id +
+                ", productCategoryId=" + productCategoryId +
+                ", name='" + name + '\'' +
+                ", price=" + price +
+                ", dcRate=" + dcRate +
+                ", updateAt=" + updateAt +
+                ", detail='" + detail + '\'' +
+                ", img='" + img + '\'' +
+                ", count=" + count +
+                ", productCategoryName='" + productCategoryName + '\'' +
+                '}';
+    }
 }

@@ -72,7 +72,7 @@
 						<div class="row justify-content-center align-items-center mb-3">
 							<div class="col-6 text-center">
 								<img id="preview" class="img-thumbnail mb-2"
-									 src="../img/nuguri.webp" alt="예시 이미지"
+									 src="/img/nuguri.webp" alt="예시 이미지"
 									 style="max-width: 200px; max-height: 200px;">
 								<input class="form-control form-control-sm" id="image" name="upload" accept="image/*" type="file" required>
 							</div>
@@ -162,14 +162,14 @@
 	<form class="d-flex" action="${cpath}/admin/product" method="get">
 		<div class="mb-3 pe-2" style="width: 150px;">
 			<select class="form-select" name="category" aria-label="Default select example">
-				<option selected value="all">전체</option>
-				<option value="id">상품번호</option>
-				<option value="name">상품명</option>
-				<option value="productCategoryName">상품분류</option>
+				<option selected value="all" ${param.category=='all' ? 'selected' : ''}>전체</option>
+				<option value="id" ${param.category=='id' ? 'selected' : ''}>상품번호</option>
+				<option value="name" ${param.category=='name' ? 'selected' : ''}>상품명</option>
+				<option value="productCategoryName" ${param.category=='productCategoryName' ? 'selected' : ''}>상품분류</option>
 			</select>
 		</div>
 		<div class="mb-3 pe-2">
-			<input type="text" class="form-control" name="keyword" id="searchName">
+			<input type="text" class="form-control" name="keyword" id="searchName" value="${param.keyword}">
 		</div>
 		<div>
 			<button type="submit" class="btn btn-secondary">검색</button>
@@ -219,21 +219,34 @@
 		</tbody>
 	</table>
 
+
 	<nav aria-label="Page navigation example">
 		<ul class="pagination justify-content-center">
-			<li class="page-item">
-				<a class="page-link" href="#" aria-label="Previous">
+			<li class="page-item" ${page.number == 0 ? 'disabled' : ''}>
+				<a class="page-link" href="${requestURI}?${queryString}${not empty queryString ? '&' : ''}pageNum=1" aria-label="Previous">
 					<span aria-hidden="true">&laquo;</span>
 				</a>
 			</li>
 
-			<li class="page-item">
-				<a class="page-link" href="#" aria-label="Next">
+			<c:forEach var="i" begin="1" end="${page.totalPages}">
+				<li class="page-item" ${page.number+1 == i ? 'active' : ''}>
+					<a class="page-link" href="${requestURI}?${queryString}${not empty queryString ? '&' : ''}pageNum=${i}" aria-label="${i}">
+						<span aria-hidden="true">${i}</span>
+					</a>
+				</li>
+			</c:forEach>
+
+			<li class="page-item" ${page.number+1 == page.totalPages ? 'disabled' : ''}>
+				<a class="page-link" href="${requestURI}?${queryString}${not empty queryString ? '&' : ''}pageNum=${page.totalPages}" aria-label="Next">
 					<span aria-hidden="true">&raquo;</span>
 				</a>
 			</li>
 		</ul>
 	</nav>
+
+
+
+
 
 	<div class="modal fade" id="detail_check_modal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
 		<div class="modal-dialog modal-dialog-centered modal-lg">

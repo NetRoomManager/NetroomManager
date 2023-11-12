@@ -13,6 +13,7 @@ import com.itbank.wersocketConfig.ChatComponent;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -84,22 +85,70 @@ public class AdminController {
 
     // 상품관리
     @GetMapping("/product")
-    public ModelAndView searchProduct(@RequestParam(required = false) String category, @RequestParam(required = false) String keyword) {
+    public ModelAndView searchProduct(
+            @RequestParam(required = false) String category,
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false, defaultValue = "1") Integer pageNum,
+            @RequestParam(required = false, defaultValue = "10") Integer pageSize,
+            HttpServletRequest request) {
         ModelAndView mav = new ModelAndView("/admin/product_manage");
-        List<ProductDTO> productList;
 
-        if (category != null && keyword != null) {
-            productList = productService.search(category, keyword);
-        } else {
-            productList = productService.selectAll();
+        // 파라미터들을 모델에 추가
+        mav.addObject("category", category);
+        mav.addObject("keyword", keyword);
+        mav.addObject("pageNum", pageNum);
+        mav.addObject("pageSize", pageSize);
+
+        // requestURI 와 queryString 도 모델에 추가
+        String requestURI = request.getRequestURI();
+
+        // 모든 파라미터를 가져와서 재구성
+        StringBuilder queryString = new StringBuilder();
+        Enumeration<String> params = request.getParameterNames();
+        while (params.hasMoreElements()) {
+            String paramName = params.nextElement();
+            if (!paramName.equals("pageNum")) { // pageNum 파라미터는 제외
+                String paramValue = request.getParameter(paramName);
+                queryString.append(paramName).append("=").append(paramValue).append("&");
+            }
         }
 
+        mav.addObject("requestURI", requestURI);
+        mav.addObject("queryString", queryString.toString());
+
+        HashMap<String, Object> param = new HashMap<>();
+        if (pageNum <= 0) {
+            pageNum = 1;
+        }
+        int start = (pageNum - 1) * pageSize + 1;
+        int end = pageNum * pageSize;
+        param.put("start", start);
+        param.put("end", end);
+
+        List<ProductDTO> productList;
+        int total;
+
+        if (category != null && keyword != null) {
+            param.put("category", category);
+            param.put("keyword", keyword);
+            total = productService.getTotal(param);
+            productList = productService.search(param);
+        } else {
+            productList = productService.selectAll(param);
+            total = productService.getTotal(param);
+        }
+
+        Page<ProductDTO> page = new PageImpl<>(productList, PageRequest.of(pageNum - 1, pageSize), total);
         List<ProductCategory> productCategoryList = productService.selectAllProductCategory();
+
         mav.addObject("productList", productList);
         mav.addObject("productCategoryList", productCategoryList);
         mav.addObject("currentPage", "product");
+        mav.addObject("page", page);
+
         return mav;
     }
+
 
     @GetMapping("/userdelete/{id}")
     public String userDelete(@PathVariable("id") Long id) {

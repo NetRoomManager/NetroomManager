@@ -5,11 +5,12 @@ import com.itbank.model.ProductDTO;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Repository
 public interface ProductDAO {
-    List<ProductDTO> selectAll();
+    List<ProductDTO> selectAll(HashMap<String, Object> param);
 
     int insertProduct(ProductDTO dto);
 
@@ -25,5 +26,7 @@ public interface ProductDAO {
 
     int update(ProductDTO dto);
 
-    List<ProductDTO> search(@Param("category") String category, @Param("keyword") String keyword);
+    List<ProductDTO> search(HashMap<String, Object> param);
+
+    int getTotal(HashMap<String, Object> param);
 }
