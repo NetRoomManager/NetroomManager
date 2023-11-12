@@ -23,7 +23,7 @@
                 <a class="nav-link active navbar-brand" aria-current="page" href="#">NetRoom</a>
             </li>
             <li class="nav-item pe-3">
-                <a class="nav-link active navbar-brand" aria-current="page" href="/admin/seat">NetRoom</a>
+                <a class="nav-link" href="${cpath}/admin/productsales">상품매출</a>
             </li>
             <li class="nav-item pe-3">
                 <a class="nav-link" href="${cpath}/admin/ticketsales">이용권매출</a>

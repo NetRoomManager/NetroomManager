@@ -85,14 +85,14 @@
 <div id="particles-js" style="z-index: -1"></div>
 <!-- 좌석이미지 -->
 <div
-        class="container"
+        class="container "
         style="
-                background-image: url('/img/1422005677144.png');
+                background-image: url('/img/2e55bdb7bf16f3ed.png');
                 background-size: 100%;
                 background-repeat: no-repeat;
-                background-position: center;
+                background-position: center center;
                 width: auto;
-                height: 550px;
+                height: 700px;
             "
 ></div>
 <!-- 컨테이너 -->
