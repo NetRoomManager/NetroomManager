@@ -96,20 +96,20 @@ canvas {
 </head>
 <body style="height: 90%; overflow: hidden;">
 	<div id="particles-js" style="z-index: -1"></div>
-	<nav class="navbar navbar-expand-sm bg-info navbar-dark">
-		<div class="container-fluid">
-			<ul class="navbar-nav">
-				<li class="nav-item"><a class="nav-link active"
-					href="${cpath }/">Home</a></li>
-				<li class="nav-item"><a class="nav-link"
-					href="${cpath }/customer/customer_main.jsp">유저 메인페이지</a></li>
-				<li class="nav-item"><a class="nav-link"
-					href="${cpath }/customer/customer_order.jsp">유저 주문 페이지</a></li>
-				<li class="nav-item"><a class="nav-link"
-					href="${cpath }/customer/error.jsp">에러페이지</a></li>
-			</ul>
-		</div>
-	</nav>
+<%--	<nav class="navbar navbar-expand-sm bg-info navbar-dark">--%>
+<%--		<div class="container-fluid">--%>
+<%--			<ul class="navbar-nav">--%>
+<%--				<li class="nav-item"><a class="nav-link active"--%>
+<%--					href="${cpath }/">Home</a></li>--%>
+<%--				<li class="nav-item"><a class="nav-link"--%>
+<%--					href="${cpath }/customer/customer_main.jsp">유저 메인페이지</a></li>--%>
+<%--				<li class="nav-item"><a class="nav-link"--%>
+<%--					href="${cpath }/customer/customer_order.jsp">유저 주문 페이지</a></li>--%>
+<%--				<li class="nav-item"><a class="nav-link"--%>
+<%--					href="${cpath }/customer/error.jsp">에러페이지</a></li>--%>
+<%--			</ul>--%>
+<%--		</div>--%>
+<%--	</nav>--%>
 
 	<!-- particles.js / 배경 -->
 	<script

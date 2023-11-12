@@ -23,18 +23,6 @@
                   <li class="nav-item">
                     <a class="nav-link active navbar-brand" aria-current="page" href="${cpath}/">NetRoom</a>
                   </li>
-                  <li class="nav-item pe-3">
-                    <a class="nav-link active" href="">주문현황</a>
-                  </li>
-                  <li class="nav-item pe-3">
-                    <a class="nav-link" href="">신규주문</a>
-                  </li>
-                  <li class="nav-item pe-3">
-                    <a class="nav-link" href="">판매취소</a>
-                  </li>
-                  <li class="nav-item pe-3">
-                    <a class="nav-link" href="">준비중</a>
-                  </li>
                 </ul>
                 <ul class="navbar-nav">
                     <li class="nav-item pe-2">
@@ -120,7 +108,7 @@
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between">
                                         <h5 class="card-title" style="font: bold;">`+orderTitle+`</h5>
-                                        <p class="card-text">판매취소</p>
+                                        <p class="card-text"></p>
                                     </div>
                                   <p class="card-text">`+orderDesc+`</p>
                                 </div>
