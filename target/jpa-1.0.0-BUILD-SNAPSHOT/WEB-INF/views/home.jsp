@@ -25,7 +25,7 @@
 </head>
 <body>
 
-<h1>${version}</h1>
+<h1>CI/CD테스트2 : ${version}</h1>
 
 
 <ul>

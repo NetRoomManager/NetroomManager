@@ -78,8 +78,7 @@
 	</session-config>
 
 	<error-page>
-		<exception-type>java.lang.Exception</exception-type>
-		<location>/WEB-INF/views/auth/error.jsp</location>
+		<location>/error</location>
 	</error-page>
 
 

@@ -76,4 +76,10 @@
 	<session-config>
 		<session-timeout>1440</session-timeout>
 	</session-config>
+
+	<error-page>
+		<location>/error</location>
+	</error-page>
+
+
 </web-app>
