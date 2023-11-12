@@ -132,8 +132,9 @@
                 order_container.innerHTML += cardTemplate; // 카드 추가
 
                 // '전달완료' 버튼에 클릭 이벤트 리스너 추가
-                const finishBtn = order_container.querySelector('.col-4:last-child .finishBtn');
-                finishBtn.addEventListener('click', deleteOrder);
+                const finishBtns = order_container.querySelectorAll('.finishBtn');
+                finishBtns.forEach(btn => btn.addEventListener('click', deleteOrder));
+
             }
 
 
