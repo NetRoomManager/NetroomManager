@@ -354,7 +354,7 @@
                                 while(movingMenu.firstChild) {
                                     movingMenu.removeChild(movingMenu.firstChild);
                                 }
-                                menuList = [];
+                                // menuList = [];
                                 updateTotalPrice();
                                 successCallback(data); // data.success 값을 콜백으로 전달
                                 console.log(menuList);
