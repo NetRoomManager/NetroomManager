@@ -13,7 +13,7 @@ import java.text.SimpleDateFormat;
 @Slf4j
 public class FileComponent {
     private SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
-    private String saveDirectory = "C:\\upload";
+    private String saveDirectory = "/upload";
 
     public FileComponent() {
         File dir = new File(saveDirectory);
