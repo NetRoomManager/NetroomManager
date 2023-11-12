@@ -23,6 +23,6 @@ public class HomeController {
 	public String home(Model model) {
 		model.addAttribute("version", testDAO.getVersion());
 		log.info("home");
-		return "home";
+		return "redirect:/customer/main";
 	}
 }
