@@ -94,8 +94,8 @@
             <tr class="text-center">
                 <td class="pt-3">${dto.user.id}</td>
                 <td class="pt-3">${dto.user.name}</td>
-                <td class="pt-3">${dto.user.username}</td>
-                <td class="pt-3">${(dto.remainingTime.remainingTime) / 60}분</td>
+                <td class="pt-3">${fn:escapeXml(UtilsComponent.truncateString(dto.user.username, 10))}</td>
+                <td class="pt-3">${(dto.remainingTime.remainingTime)}초</td>
                 <td class="pt-3">${dto.lastLog.loginAt}</td>
                 <td class="pt-3">${not empty dto.user.mobile ? dto.user.mobile : '모바일 정보 없음'}</td>
                 <td class="pt-3">${dto.user.email}</td>
@@ -132,6 +132,7 @@
     </nav>
 </div>
 <script>
+
 </script>
 </body>
 </html>
