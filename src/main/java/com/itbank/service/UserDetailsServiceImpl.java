@@ -60,9 +60,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new UsernameNotFoundException("탈퇴된 계정입니다");
         }
 
-        // 유저 로그 추가
-        createUserLog(customUser);
-
         // 유저의 남은 시간을 불러옴
         RemainingTime remainingTime = remainingTimeRepository.findById(customUser.getId()).orElseGet(() -> {
             RemainingTime newRemainingTime = new RemainingTime();
@@ -80,12 +77,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
         log.info(username + "님의 남은 시간: " + remaningTime + "초");
 
         return new UserPrincipal(customUser);
-    }
-
-    private void createUserLog(User user) {
-        UserLog log = new UserLog();
-        log.setUser(user);
-        userLogRepository.save(log);
     }
 }
 

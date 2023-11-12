@@ -63,13 +63,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     // 스프링 시큐리티 설정
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-
-        // 최대 세션의 개수를 1개로 설정
         http
-            .sessionManagement()
-            .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
-            .sessionFixation().migrateSession()
-            .maximumSessions(1).maxSessionsPreventsLogin(true);
+                .sessionManagement()
+                .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                .sessionFixation().migrateSession()
+                .maximumSessions(1)
+                .maxSessionsPreventsLogin(true)
+                .expiredUrl("/auth/login?error=max_session");
+
         // 웹소켓 메시지를 위한 설정
         http.cors().and().  // CORS 허용
                 csrf().disable()
@@ -116,6 +117,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                 getRedirectStrategy().sendRedirect(request, response, "/");
                             }
                         } else {
+                            System.out.println("일반유저!");
                             getRedirectStrategy().sendRedirect(request, response, "/customer/main");
                         }
                     }

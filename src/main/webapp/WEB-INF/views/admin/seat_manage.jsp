@@ -176,6 +176,8 @@
 
 </div>
 <script>
+
+
 	let selectedSeat = null; // 선택한 카드 정보를 저장할 변수
 	const canUseSelect = document.getElementById('can_use');
 	const addHourSelect = document.getElementById('add_hour');

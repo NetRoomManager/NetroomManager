@@ -34,15 +34,31 @@ html {
 	font-family: "AppleSDGothicNeoR00", "Noto Sans KR", "맑은 고딕";
 	overflow: hidden;
 }
-.notification {
+#notification-container {
 	position: fixed;
 	right: 20px;
 	bottom: 20px;
+	max-width: 500px;
+	max-height: 500px;  /* 최대 높이를 제한해서 알림이 화면을 넘어가지 않게 합니다. */
+	overflow: auto;  /* 알림이 너무 많이 쌓이면 스크롤바가 나타나게 합니다. */
+	display: flex;
+	flex-direction: column-reverse;  /* 새로운 알림이 위로 쌓이게 합니다. */
+	padding: 10px;
+	background-color: #f44336;  /* 알림의 배경색을 설정합니다. */
+	color: white;  /* 알림의 글자색을 설정합니다. */
+	border-radius: 5px;  /* 알림의 모서리를 둥글게 만듭니다. */
+	box-shadow: 0px 0px 10px rgba(0,0,0,0.5);  /* 알림에 그림자를 추가합니다. */
+}
+
+.notification {
 	padding: 10px;
 	background-color: #f44336;
 	color: white;
 	cursor: pointer;
+	margin-top: 10px;  /* add some margin between notifications */
 }
+
+
 .from {
 	text-align: right;
 	background-color: #d2d2d2;
@@ -157,11 +173,26 @@ html {
 	<a class="nav-link py-3 ${currentPage eq 'ticket' ? 'active' : ''}" href="${cpath }/admin/ticket">이용권</a>
 </nav>
 
+<div id="notification-container"></div>
+
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script>
+	let isModalOpen = false;  // 채팅 모달이 열려있는지 나타내는 변수 추가
+
+	let flag = false;
+
+	$('#seat_chat').on('shown.bs.modal', function (e) {
+		// 채팅 모달이 열릴 때 'isModalOpen' 변수를 true로 설정
+		isModalOpen = true;
+	});
+
+	$('#seat_chat').on('hidden.bs.modal', function (e) {
+		// 채팅 모달이 닫힐 때 'isModalOpen' 변수를 false로 설정
+		isModalOpen = false;
+	});
 
 	const from = '${username}';
 	let stompClient = null;
@@ -241,23 +272,49 @@ html {
 
 
 			// 모달이 이미 열려있지 않은 경우에만 show 메소드 호출
-			if (!modalInstance._isShown && messageOutput.from !== 'admin') {
+			if (!modalInstance._isShown && messageOutput.from !== 'admin' && !isModalOpen && !loadingChatHistory && !flag) {
 				// 같은 유저로부터 받은 이전 알림 제거
 				let prevNotification = document.querySelector('.notification[data-user="' + messageOutput.from + '"]');
 				if (prevNotification) {
 					prevNotification.remove();
 				}
 
-				// 새로운 메시지 알림 생성
+				let username = messageOutput.from;
+
+				// 알림 생성
 				let notification = document.createElement('div');
 				notification.className = 'notification';
-				notification.setAttribute('data-user', messageOutput.from); // 유저 정보를 속성으로 추가
-				notification.innerHTML = messageOutput.from + '님으로부터 새로운 메시지가 도착했습니다.';
+				notification.setAttribute('data-user', username);
+				notification.innerHTML = username + '님으로부터 새로운 메시지가 도착했습니다.';
+
 				notification.onclick = function() {
-					modalInstance.show();
-					let currentNotification = document.querySelector('.notification[data-user="' + messageOutput.from + '"]');
-					if (currentNotification) {
-						currentNotification.remove();
+					document.getElementById('to').value = username;  // 'to' 입력 항목의 값을 클릭한 알림의 사용자 이름으로 설정
+
+					// 모달 인스턴스가 없는 경우 새로 생성
+					if (modalInstance === null) {
+						modalInstance = new bootstrap.Modal(modal);
+					}
+
+					// 모달이 이미 열려있지 않은 경우에만 show 메소드 호출
+					if (!modalInstance._isShown) {
+						modalInstance.show();
+						$.ajax({
+							url: '/notification/delete',
+							type: 'DELETE',
+							data: JSON.stringify({ 'username': username }),
+							contentType: 'application/json'
+						});
+
+						// 알림 제거
+						notification.remove();
+
+						// 알림이 없으면 container를 숨김
+						if (container.childElementCount === 0) {
+							container.style.display = 'none';
+						}
+
+						// 채팅방을 열고 메시지를 불러옵니다.
+						getMessages();
 					}
 				};
 
@@ -278,10 +335,13 @@ html {
 				});
 
 
-				document.body.appendChild(notification);
+				let container = document.getElementById('notification-container');
+				container.style.display = 'block';  // 알림이 추가될 때만 container를 보이게 합니다.
+				container.appendChild(notification);
+			}
+
 
 			}
-		}
 	}
 
 
@@ -351,10 +411,14 @@ html {
 					let chatRoomDiv = document.getElementById('chat_box');
 					chatRoomDiv.innerHTML = '';
 
+					flag = true;
+
 					// 모든 메시지를 화면에 출력합니다.
 					for (let i = 0; i < data.length; i++) {
 						showMessageOutput(data[i]);
 					}
+
+					flag = false;
 				})
 				.catch(error => console.error('Error:', error));
 	}
@@ -405,23 +469,26 @@ html {
 			url: '/notification',
 			type: 'GET',
 			success: function(usernames) {
+				let container = document.getElementById('notification-container');
+
 				usernames.forEach(function(username) {
 					// 관리자로부터 온 메시지는 건너뛰기
 					if (username === 'admin') {
 						return;
 					}
 
+					// 알림 생성
 					let notification = document.createElement('div');
 					notification.className = 'notification';
 					notification.setAttribute('data-user', username);
 					notification.innerHTML = username + '님으로부터 새로운 메시지가 도착했습니다.';
+
 					notification.onclick = function() {
-						document.getElementById('to').value = username;
+						document.getElementById('to').value = username;  // 'to' 입력 항목의 값을 클릭한 알림의 사용자 이름으로 설정
 
 						// 모달 인스턴스가 없는 경우 새로 생성
 						if (modalInstance === null) {
 							modalInstance = new bootstrap.Modal(modal);
-							getMessages();
 						}
 
 						// 모달이 이미 열려있지 않은 경우에만 show 메소드 호출
@@ -433,23 +500,36 @@ html {
 								data: JSON.stringify({ 'username': username }),
 								contentType: 'application/json'
 							});
+
+							// 알림 제거
 							notification.remove();
+
+							// 알림이 없으면 container를 숨김
+							if (container.childElementCount === 0) {
+								container.style.display = 'none';
+							}
+
+							// 채팅방을 열고 메시지를 불러옵니다.
+							getMessages();
 						}
 					};
-					document.body.appendChild(notification);
+
+					// 알림 추가
+					container.style.display = 'block';  // 알림이 추가될 때만 container를 보이게 합니다.
+					container.appendChild(notification);
 				});
+
+				// 알림이 없으면 container를 숨김
+				if (container.childElementCount === 0) {
+					container.style.display = 'none';
+				}
 			},
 			error: function(request, status, error) {
 				console.error('Error: ', error);
 			}
 		});
-
+		connect();
 	};
 
-
-
-
-
-	connect();
 
 </script>

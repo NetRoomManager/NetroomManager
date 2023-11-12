@@ -299,7 +299,7 @@
             <a href="/auth/buyTicket">PC방 이용권</a>
         </div>
         <div class="tire">
-            <p class="p-0 mx-0 my-0">${user.tire}</p>
+            <p class="p-0 mx-0 my-0">${(user.tire=='null null' or user.tire==null) ? '티어정보없음' : user.tire}</p>
         </div>
         <div class="kakaopay">
             <a href="#"> <img src="/img/kakao-pay.png" alt="카카오페이">

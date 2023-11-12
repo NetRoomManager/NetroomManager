@@ -63,9 +63,7 @@ public class OAuth2LoginSuccessHandler extends SavedRequestAwareAuthenticationSu
 
                 User user = optionalUser.get();
 
-                UserLog userLog = new UserLog();
-                userLog.setUser(user);
-                userLogRepository.save(userLog);
+
 
                 log.info("남은 시간을 불러오는중");
                 RemainingTime remainingTime = remainingTimeRepository.findById(user.getId()).orElseGet(() -> {
