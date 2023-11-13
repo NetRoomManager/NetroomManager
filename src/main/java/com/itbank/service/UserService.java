@@ -107,7 +107,7 @@ public class UserService {
             RemainingTime remainingTime = new RemainingTime();
 
             log.info("테스트용으로 15초 설정(삭제해야함)");
-            remainingTime.setRemainingTime(15);
+            remainingTime.setRemainingTime(0);
 
             // User 객체 생성
             User user = new User();
