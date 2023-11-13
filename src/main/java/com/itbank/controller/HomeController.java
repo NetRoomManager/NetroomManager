@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @Slf4j
@@ -24,5 +26,10 @@ public class HomeController {
 		model.addAttribute("version", testDAO.getVersion());
 		log.info("home");
 		return "redirect:/customer/main";
+	}
+
+	@RequestMapping("/error")
+	public String error() {
+		return "/auth/error";
 	}
 }

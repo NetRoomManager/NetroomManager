@@ -107,12 +107,12 @@ public class ProductService {
 
     public ProductDTO selectOne(int id) { return productDAO.selectOne(id); }
 
-    public int deleteProduct(int id) {
+    public void deleteProduct(int id) {
         String fileName = productDAO.findFile(id);
         if(fileName != null) {
             fileComponent.deleteFile(fileName);
         }
-        return productDAO.deleteProduct(id);
+        productRepository.deleteById((long) id);
     }
 
     public int updateProduct(ProductDTO dto) {

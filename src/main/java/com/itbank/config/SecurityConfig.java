@@ -108,14 +108,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                                 .anyMatch(authority -> authority.getAuthority().equals("ROLE_ADMIN"));
 
                         if (isAdmin) {
-                            SavedRequest savedRequest = new HttpSessionRequestCache().getRequest(request, response);
-                            if (savedRequest != null) {
-                                String targetUrl = savedRequest.getRedirectUrl();
-                                getRedirectStrategy().sendRedirect(request, response, targetUrl);
-                            } else {
-                                // 저장된 요청이 없는 경우 기본 URL로 리다이렉트
-                                getRedirectStrategy().sendRedirect(request, response, "/");
-                            }
+                            // 저장된 요청이 없는 경우 기본 URL로 리다이렉트
+                            getRedirectStrategy().sendRedirect(request, response, "/admin/seat");
                         } else {
                             System.out.println("일반유저!");
                             getRedirectStrategy().sendRedirect(request, response, "/customer/main");

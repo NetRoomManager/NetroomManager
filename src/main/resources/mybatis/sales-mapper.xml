@@ -13,7 +13,8 @@
         p.time as salesDate,
         u.username as username,
         p.id as paymentId,
-        t.name as ticketName
+        t.name as ticketName,
+        m.name as paymentMethod
         FROM
         ticket_sales s
         JOIN

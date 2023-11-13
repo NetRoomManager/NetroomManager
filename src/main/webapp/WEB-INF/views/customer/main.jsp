@@ -759,55 +759,6 @@
         }
     });
 
-
-    const infoDiv = document.querySelector(".info");
-    const titleDiv = document.querySelector('.title');
-    const infoHeight = infoDiv.style.height;
-
-    const infoList = document.querySelectorAll('.info > div:not(.title)');
-    const hiddenBtn = document.getElementById('btn_hidden');
-    const modal = document.getElementById('main_chat_modal');
-
-    const msgBtn = document.getElementById('msgBtn');
-
-    hiddenBtn.onclick = () => {
-        console.log('123');
-        infoList.forEach(div => {
-            console.log(div);
-            let cl = div.classList;
-            console.log(cl);
-            if (cl.contains('hidden')) {
-                div.classList.remove('hidden');
-                infoDiv.style.height = '700px';
-            } else {
-                div.classList.add('hidden');
-                infoDiv.style.height = '30px';
-            }
-        })
-    }
-
-    // 모달창 여는 함수
-    function openChatModal() {
-        console.log("123");
-        modal.style.display = 'inline-block';
-    }
-
-    function closeChatModal() {
-        modal.style.display = 'none';
-    }
-
-    // 자리이동 눌렸을 때, 알림창 만들기
-    document.getElementById('movingBtn').addEventListener('click', function () {
-        alert('원하는 좌석에서 로그인하세요!');
-        window.location.href='/customer/seat';
-    });
-
-    // 호출 버튼 눌렀을 때, 간단한 알림창 만들기
-    document.getElementById('callBtn').addEventListener('click', function() {
-        alert('메세지 창 부탁드려요!!');
-    })
-
-
     document.getElementById('password').addEventListener('keyup', function () {
         const password = document.getElementById('password').value;
         console.log(password);
@@ -869,6 +820,59 @@
             pwmodibtn.disabled = true;
         }
     });
+
+
+    const infoDiv = document.querySelector(".info");
+    const titleDiv = document.querySelector('.title');
+    const infoHeight = infoDiv.style.height;
+
+    const infoList = document.querySelectorAll('.info > div:not(.title)');
+    const hiddenBtn = document.getElementById('btn_hidden');
+    const modal = document.getElementById('main_chat_modal');
+
+    const msgBtn = document.getElementById('msgBtn');
+
+    hiddenBtn.onclick = () => {
+        infoList.forEach(div => {
+            console.log(div);
+            let cl = div.classList;
+            console.log(cl);
+            if (cl.contains('hidden')) {
+                div.classList.remove('hidden');
+                infoDiv.style.height = '700px';
+            } else {
+                div.classList.add('hidden');
+                infoDiv.style.height = '30px';
+            }
+        })
+    }
+
+
+
+    // 모달창 여는 함수
+    function openChatModal() {
+        modal.style.display = 'inline-block';
+    }
+
+    function closeChatModal() {
+        modal.style.display = 'none';
+    }
+
+    // 자리이동 눌렸을 때, 알림창 만들기
+    document.getElementById('movingBtn').addEventListener('click', function () {
+        alert('원하는 좌석에서 로그인하세요!');
+        window.location.href='/customer/seat';
+    });
+
+    // 호출 버튼 눌렀을 때, 간단한 알림창 만들기
+    document.getElementById('callBtn').addEventListener('click', function() {
+        alert('메세지 창 부탁드려요!!');
+    })
+
+
+
+
+
 
 </script>
 <!-- javaScript -->

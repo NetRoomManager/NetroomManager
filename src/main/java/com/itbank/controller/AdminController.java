@@ -42,6 +42,9 @@ import java.util.stream.Collectors;
 public class AdminController {
 
     @Autowired
+    private TicketRepository ticketRepository;
+
+    @Autowired
     private ProductService productService;
 
     @Autowired
@@ -223,9 +226,8 @@ public class AdminController {
     // 상품삭제
     @GetMapping("/deleteProduct/{id}")
     public String deleteProduct(@PathVariable("id") int id) {
-//        int row = productService.deleteProduct(id);
-
-        productRepository.deleteById((long) id);
+        productService.deleteProduct(id);
+        log.info("상품아이디: " + id);
 
         return "redirect:/admin/product";
     }
@@ -327,8 +329,7 @@ public class AdminController {
     @GetMapping("/deleteTicket/{ticketId}")
     public String deleteTicket(@PathVariable int ticketId) {
         log.info(ticketId + "번 이용권 삭제");
-        int i = ticketService.deleteTicket(ticketId);
-        log.info(i + "개의 이용권을 삭제하였습니다");
+        ticketRepository.deleteById((long) ticketId);
         return "redirect:/admin/ticket";
     }
 

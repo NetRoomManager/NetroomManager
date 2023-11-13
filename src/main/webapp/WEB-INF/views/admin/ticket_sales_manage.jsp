@@ -124,13 +124,12 @@
             <th class="pt-3" scope="row">
                 총합
             </th>
-            <td class="pt-3">#</td>
-            <td class="pt-3">#</td>
+            <td class="pt-3"></td>
+            <td class="pt-3"></td>
             <td class="pt-3">${total}원</td>
-            <td class="pt-3">#</td>
-            <td class="pt-3">#</td>
-            <td class="pt-3">#</td>
-            <td class="pt-3">#</td>
+            <td class="pt-3"></td>
+            <td class="pt-3"></td>
+            <td class="pt-3"></td>
 
         </tr>
         </tfoot>

@@ -27,7 +27,9 @@ public class Product {
 
     @PreRemove
     private void preRemove() {
-        orderDetail.setProduct(null);
+        if(orderDetail!=null) {
+            orderDetail.setProduct(null);
+        }
     }
 
     @Column(nullable = false)
