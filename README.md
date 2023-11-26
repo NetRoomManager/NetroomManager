@@ -16,6 +16,7 @@
 -   ### 카카오톡
 -   ### 디스코드 : [Team1]("https://discord.gg/48UWVX4X")
 -   ### 노션 : [Notion]("https://alder-talon-aab.notion.site/1c47383ddec647e78b38cad8157528d7?pvs=4")
+-   ### PPT : [발표자료]("https://www.canva.com/design/DAF1QJWISvY/8drEySz118loFgIIoNW8Qg/edit?utm_content=DAF1QJWISvY&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton")
 
 ## ⏰ 진행 기간
 
